@@ -14,6 +14,8 @@
 
 from flask import Flask, redirect, url_for, current_app
 
+from oauth2 import oauth2
+
 
 def create_app(config, debug=False, testing=False, config_overrides=None):
     app = Flask(__name__)
@@ -39,6 +41,8 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
         return 'ok', 200
 
     # Register all blueprints
+    app.register_blueprint(oauth2)
+
     from .crud import crud
     app.register_blueprint(crud, url_prefix='/books')
 

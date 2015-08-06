@@ -19,7 +19,9 @@ You can create and manage projects at https://console.developers.google.com
 """
 
 # The secret key is used by Flask to encrypt session cookies.
+# [START secret_key]
 SECRET_KEY = 'secret'
+# [END secret_key]
 
 # There are three different ways to store the data in the application.
 # You can choose 'datastore', 'cloudsql', or 'mongodb'. Be sure to
@@ -63,3 +65,18 @@ MONGO_URI = \
 CLOUD_STORAGE_BUCKET = 'your-bucket-name'
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+# OAuth2 configuration.
+# This can be generated from the Google Developers Console at
+# https://console.developers.google.com/project/_/apiui/credential.
+# Note that you will need to add all URLs that your application uses as
+# authorized redirect URIs. For example, typically you would add the following:
+#
+#  * http://localhost:8080/oauth2callback
+#  * https://<your-app-id>.appspot.com/oauth2callback.
+#
+# If you receive a invalid redirect URI error review you settings to ensure
+# that the current URI is allowed.
+OAUTH2_CLIENT_ID = \
+    'your-client-id'
+OAUTH2_CLIENT_SECRET = 'your-client-secret'

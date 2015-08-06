@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from flask import Blueprint, current_app, redirect, render_template, request, \
-    url_for
+    session, url_for
+
+import oauth2
 
 from bookshelf import get_model, storage
 
@@ -21,7 +23,6 @@ from bookshelf import get_model, storage
 crud = Blueprint('crud', __name__)
 
 
-# [START upload_image_file]
 def upload_image_file(file):
     """
     Upload the user-uploaded file to Google Cloud Storage and retrieve its
@@ -40,7 +41,6 @@ def upload_image_file(file):
         "Uploaded file %s as %s.", file.filename, public_url)
 
     return public_url
-# [END upload_image_file]
 
 
 @crud.route("/")
@@ -54,32 +54,52 @@ def list():
         next_page_token=next_page_token)
 
 
+# [START list_mine]
+@crud.route("/mine")
+@oauth2.required
+def list_mine():
+    token = request.args.get('page_token', None)
+
+    books, next_page_token = get_model().list_by_user(
+        user_id=session['profile']['id'],
+        cursor=token)
+
+    return render_template(
+        "list.html",
+        books=books,
+        next_page_token=next_page_token)
+# [END list_mine]
+
+
 @crud.route('/<id>')
 def view(id):
     book = get_model().read(id)
     return render_template("view.html", book=book)
 
 
+# [START add]
 @crud.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
 
         # If an image was uploaded, update the data to point to the new image.
-        # [START image_url]
         image_url = upload_image_file(request.files.get('image'))
-        # [END image_url]
 
-        # [START image_url2]
         if image_url:
             data['imageUrl'] = image_url
-        # [END image_url2]
+
+        # If the user is logged in, associate their profile with the new book.
+        if 'profile' in session:
+            data['createdBy'] = session['profile']['displayName']
+            data['createdById'] = session['profile']['id']
 
         book = get_model().create(data)
 
         return redirect(url_for('.view', id=book['id']))
 
     return render_template("form.html", action="Add", book={})
+# [END add]
 
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
