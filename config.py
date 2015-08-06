@@ -18,10 +18,10 @@ Update this file with the values for your specific Google Cloud project.
 You can create and manage projects at https://console.developers.google.com
 """
 
+import os
+
 # The secret key is used by Flask to encrypt session cookies.
-# [START secret_key]
 SECRET_KEY = 'secret'
-# [END secret_key]
 
 # There are three different ways to store the data in the application.
 # You can choose 'datastore', 'cloudsql', or 'mongodb'. Be sure to
@@ -80,3 +80,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 OAUTH2_CLIENT_ID = \
     'your-client-id'
 OAUTH2_CLIENT_SECRET = 'your-client-secret'
+
+# [START log_path]
+# Log files are stored in this path.
+# When running on Google App Engine Managed VMs, the environment variable
+# LOG_PATH is set by app.yaml. Otherwise, the current working directory is
+# used.
+LOG_PATH = os.environ.get('LOG_PATH', '.')
+# [END log_path]

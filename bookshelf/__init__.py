@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
+import os
+
 from flask import Flask, redirect, url_for, current_app
 
 from oauth2 import oauth2
@@ -26,6 +29,10 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
 
     if config_overrides:
         app.config.update(config_overrides)
+
+    # Configure logging
+    if not app.testing:
+        setup_logging(app)
 
     # Setup the data model.
     with app.app_context():
@@ -71,3 +78,34 @@ def get_model():
             "Please specify datastore, cloudsql, or mongodb")
 
     return model
+
+
+# [START setup_logging]
+def setup_logging(app):
+    log_path = app.config.get('LOG_PATH')
+
+    # Handler that outputs all logs to the console
+    console_handler = logging.StreamHandler()
+
+    # This handler outputs all logs into general.log
+    general_handler = logging.FileHandler(
+        os.path.join(log_path, 'general.log'))
+    general_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(name)-12s: %(levelname)s: %(message)s '
+        '[in %(pathname)s:%(lineno)d]'
+    ))
+
+    # Configure root logger with the above handlers.
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.NOTSET)
+    root_logger.addHandler(general_handler)
+
+    # The console handler isn't used in production because cloud logging
+    # automatically collects stderr. If you log to both stderr and general.log
+    # there would be duplicate logs in the log viewer. This also allows you to
+    # easily check for any top-level exceptions or application crashes by
+    # viewing just the stderr log without all of the noise from the general
+    # log.
+    if app.debug:
+        root_logger.addHandler(console_handler)
+# [END setup_logging]

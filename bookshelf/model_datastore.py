@@ -56,7 +56,6 @@ def list(limit=10, cursor=None):
     return entities, cursor if len(entities) == limit else None
 
 
-# [START list_by_user]
 def list_by_user(user_id, limit=10, cursor=None):
     ds = get_client()
     query = ds.query(
@@ -69,7 +68,6 @@ def list_by_user(user_id, limit=10, cursor=None):
     entities, more_results, cursor = it.next_page()
     entities = builtin_list(map(from_datastore, entities))
     return entities, cursor if len(entities) == limit else None
-# [END list_by_user]
 
 
 def read(id):

@@ -37,7 +37,6 @@ def get_credentials():
     return Credentials.new_from_json(serialized)
 
 
-# [START required]
 def required(f):
     """Decorator to require OAuth2 credentials for a view.
 
@@ -54,10 +53,8 @@ def required(f):
         else:
             return f(*args, **kwargs)
     return decr
-# [END required]
 
 
-# [START request_user_info]
 def _request_user_info(credentials):
     """
     Makes an HTTP request to the Google+ API to retrieve the user's basic
@@ -75,10 +72,8 @@ def _request_user_info(credentials):
 
     profile = json.loads(content)
     return profile
-# [END request_user_info]
 
 
-# [START make_flow]
 def _make_flow():
     # Generate a CSRF token to prevent malicious requests.
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -93,10 +88,8 @@ def _make_flow():
         state=state,
         approval_prompt='force',
         redirect_uri=url_for("oauth2.callback", _external=True))
-# [END make_flow]
 
 
-# [START login]
 @oauth2.route('/login')
 def login():
     return_url = request.args.get('return_url')
@@ -107,7 +100,6 @@ def login():
     flow = _make_flow()
     auth_url = flow.step1_get_authorize_url()
     return redirect(auth_url)
-# [END login]
 
 
 @oauth2.route('/logout')
@@ -117,7 +109,6 @@ def logout():
     return redirect(request.referrer or '/')
 
 
-# [START callback]
 @oauth2.route('/oauth2callback')
 def callback():
     # Check the CSRF token.
@@ -140,4 +131,3 @@ def callback():
     session['profile'] = _request_user_info(credentials)
 
     return redirect(session.pop('oauth2return', '/'))
-# [END callback]
