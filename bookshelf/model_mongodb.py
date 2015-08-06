@@ -28,7 +28,6 @@ def _id(id):
     return id
 
 
-# [START from_mongo]
 def from_mongo(data):
     """
     Translates the MongoDB dictionary format into the format that's expected
@@ -39,7 +38,6 @@ def from_mongo(data):
 
     data['id'] = str(data['_id'])
     return data
-# [END from_mongo]
 
 
 def init_app(app):
@@ -56,25 +54,19 @@ def list(limit=10, cursor=None):
     return (books, next_page)
 
 
-# [START read]
 def read(id):
     result = mongo.db.books.find_one(_id(id))
     return from_mongo(result)
-# [END read]
 
 
-# [START create]
 def create(data):
     new_id = mongo.db.books.insert(data)
     return read(new_id)
-# [END create]
 
 
-# [START update]
 def update(data, id):
     mongo.db.books.update({'_id': _id(id)}, data)
     return read(id)
-# [END update]
 
 
 def delete(id):
