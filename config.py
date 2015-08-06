@@ -81,10 +81,8 @@ OAUTH2_CLIENT_ID = \
     'your-client-id'
 OAUTH2_CLIENT_SECRET = 'your-client-secret'
 
-# [START log_path]
 # Log files are stored in this path.
 # When running on Google App Engine Managed VMs, the environment variable
 # LOG_PATH is set by app.yaml. Otherwise, the current working directory is
 # used.
 LOG_PATH = os.environ.get('LOG_PATH', '.')
-# [END log_path]

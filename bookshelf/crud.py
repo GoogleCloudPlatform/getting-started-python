@@ -17,7 +17,7 @@ from flask import Blueprint, current_app, redirect, render_template, request, \
 
 import oauth2
 
-from bookshelf import get_model, storage
+from bookshelf import get_model, storage, tasks
 
 
 crud = Blueprint('crud', __name__)
@@ -93,6 +93,11 @@ def add():
 
         book = get_model().create(data)
 
+        # [START enqueue]
+        q = tasks.get_books_queue()
+        q.enqueue(tasks.process_book, book['id'])
+        # [END enqueue]
+
         return redirect(url_for('.view', id=book['id']))
 
     return render_template("form.html", action="Add", book={})
@@ -111,6 +116,9 @@ def edit(id):
             data['imageUrl'] = image_url
 
         book = get_model().update(data, id)
+
+        q = tasks.get_books_queue()
+        q.enqueue(tasks.process_book, book['id'])
 
         return redirect(url_for('.view', id=book['id']))
 

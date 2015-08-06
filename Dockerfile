@@ -35,4 +35,11 @@ ADD . /app
 EXPOSE 8080
 CMD []
 
-ENTRYPOINT . /env/bin/activate; python main.py
+# ENTRYPOINT . /env/bin/activate; python main.py
+
+# [START entrypoint]
+# Instead of the default entry point, we'll use Honcho. Honcho is a python port
+# of the Foreman process manager. $PROCESSES is set by app.yaml / worker.yaml
+# to control which processes Honcho will start.
+ENTRYPOINT . /env/bin/activate; /env/bin/honcho start -f /app/procfile $PROCESSES
+# [END entrypoint]

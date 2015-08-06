@@ -42,5 +42,16 @@ def create_app():
 app, host, port = create_app()
 
 
+# [START books_queue]
+# Make the queue available at the top-level, this allows you to run
+# `psqworker main.books_queue`. We have to use the app's context because
+# it contains all the configuration for plugins.
+# If you were using another task queue, such as celery or rq, you can use this
+# section to configure your queues to work with Flask.
+with app.app_context():
+    books_queue = bookshelf.tasks.get_books_queue()
+# [END books_queue]
+
+
 if __name__ == '__main__':
     app.run(host, port)

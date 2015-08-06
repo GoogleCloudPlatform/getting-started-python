@@ -80,7 +80,6 @@ def get_model():
     return model
 
 
-# [START setup_logging]
 def setup_logging(app):
     log_path = app.config.get('LOG_PATH')
 
@@ -108,4 +107,3 @@ def setup_logging(app):
     # log.
     if app.debug:
         root_logger.addHandler(console_handler)
-# [END setup_logging]
