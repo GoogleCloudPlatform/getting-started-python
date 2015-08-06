@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START worker]
 runtime: custom
 vm: true
 api_version: 1
@@ -44,4 +43,3 @@ env_variables:
   PYTHON_ENV: production
   # Used to configure logging to Google Cloud Logging.
   LOG_PATH: /var/log/app_engine/custom_logs
-# [END worker]

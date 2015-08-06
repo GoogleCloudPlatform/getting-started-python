@@ -36,7 +36,6 @@ beta_settings:
     https://www.googleapis.com/auth/userinfo.email,
     https://www.googleapis.com/auth/cloud-platform
 
-# [START env_variables]
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of
   # processes for this App Engine module. For the default module, only the
@@ -46,4 +45,3 @@ env_variables:
   PYTHON_ENV: production
   # Used to configure logging to Google Cloud Logging.
   LOG_PATH: /var/log/app_engine/custom_logs
-# [END env_variables]

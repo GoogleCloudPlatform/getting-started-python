@@ -15,7 +15,11 @@
 import bookshelf
 import config
 import unittest
+import mock
 from nose.plugins.attrib import attr
+
+
+from bookshelf import tasks
 
 
 class IntegrationBase(unittest.TestCase):
@@ -50,6 +54,11 @@ class IntegrationBase(unittest.TestCase):
 
         self.model.create = tracking_create
 
+        # Monkey-patch get_books_queue to prevents pubsub events
+        # from firing
+        self.original_get_books_queue = tasks.get_books_queue
+        tasks.get_books_queue = mock.Mock()
+
     def tearDown(self):
 
         # Delete all items that we created during tests.
@@ -57,6 +66,7 @@ class IntegrationBase(unittest.TestCase):
             list(map(self.model.delete, self.ids_to_delete))
 
         self.model.create = self.original_create
+        tasks.get_books_queue = self.original_get_books_queue
 
 
 @attr('slow')
@@ -97,6 +107,16 @@ class CrudTestsMixin(object):
             body = rv.data.decode('utf-8')
             assert 'Book 1' in body, "Should show both books"
             assert 'Book 2' in body, "Should show both books"
+
+        with self.app.test_client() as c:
+            with c.session_transaction() as session:
+                session['profile'] = {'id': 'abc'}
+
+            rv = c.get('/books/mine')
+            assert rv.status == '200 OK'
+            body = rv.data.decode('utf-8')
+            assert 'Book 1' in body, "Should show book 1"
+            assert 'Book 2' not in body, "Should not show both books"
 
     def testAddAndView(self):
         data = {

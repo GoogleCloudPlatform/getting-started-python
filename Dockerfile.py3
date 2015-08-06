@@ -19,12 +19,12 @@ ENV LANG=C.UTF-8
 
 RUN apt-get update -y && \
     apt-get install --no-install-recommends -y -q \
-        build-essential python python-dev python-pip \
+        build-essential python3.4 python3.4-dev python3-pip \
         git libffi-dev ca-certificates openssl libssl-dev && \
     apt-get clean && \
     rm /var/lib/apt/lists/*_*
 
-RUN pip install -U pip && pip install virtualenv
+RUN pip3 install -U pip && pip install virtualenv
 
 WORKDIR /app
 RUN virtualenv /env
@@ -34,10 +34,4 @@ ADD . /app
 
 EXPOSE 8080
 CMD []
-
-# ENTRYPOINT . /env/bin/activate; python main.py
-
-# Instead of the default entry point, we'll use Honcho. Honcho is a python port
-# of the Foreman process manager. $PROCESSES is set by app.yaml / worker.yaml
-# to control which processes Honcho will start.
 ENTRYPOINT . /env/bin/activate; /env/bin/honcho start -f /app/procfile $PROCESSES
