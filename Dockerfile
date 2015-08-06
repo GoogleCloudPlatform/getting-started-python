@@ -12,6 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START docker]
-FROM google/python-runtime
-# [END docker]
+FROM debian:jessie
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+RUN apt-get update -y && \
+    apt-get install --no-install-recommends -y -q \
+        build-essential python python-dev python-pip \
+        git libffi-dev ca-certificates openssl libssl-dev && \
+    apt-get clean && \
+    rm /var/lib/apt/lists/*_*
+
+RUN pip install -U pip && pip install virtualenv
+
+WORKDIR /app
+RUN virtualenv /env
+ADD requirements.txt /app/requirements.txt
+RUN /env/bin/pip install -r /app/requirements.txt
+ADD . /app
+
+EXPOSE 8080
+CMD []
+
+ENTRYPOINT . /env/bin/activate; python main.py

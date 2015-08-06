@@ -12,38 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file specifies your Python application's runtime configuration
-# including URL routing, versions, static file uploads, etc. See
-# https://developers.google.com/appengine/docs/python/config/appconfig
-# for details.
-
-# TODO: Enter your application id below. If you have signed up
-# using cloud.google.com/console use the "project id" for your application
-# id.
-
-# [START runtime]
+# This file specifies your Python application's runtime configuration.
+# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
 runtime: custom
 vm: true
 api_version: 1
 module: default
-# [END runtime]
 
-# [START resources]
 resources:
   cpu: .5
   memory_gb: 1.3
   disk_size_gb: 10
-# [END resources]
 
-# [START scaling]
 automatic_scaling:
   min_num_instances: 1
   max_num_instances: 5
   cool_down_period_sec: 60
   cpu_utilization:
     target_utilization: 0.5
-# [END scaling]
 
-handlers:
-- url: .*
-  script: main.app
+beta_settings:
+  service_account_scopes: >
+    https://www.googleapis.com/auth/userinfo.email,
+    https://www.googleapis.com/auth/cloud-platform
+
+env_variables:
+  # Used in main.py to determine whether or not to run in debug mode.
+  PYTHON_ENV: production

@@ -12,26 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START app]
-from flask import Flask
+import os
+
+import bookshelf
+import config
 
 
-app = Flask(__name__)
+def create_app():
+    # Environment configuration
+    env = os.environ.get('PYTHON_ENV', 'development')
+    port = 8080
+
+    # Production environment configuration.
+    if env == 'production':
+        host = '0.0.0.0'
+        debug = False
+    # Local environment configuration.
+    else:
+        host = '127.0.0.1'
+        debug = True
+
+    # Create the application, passing in any configuration needed from the
+    # environment.
+    app = bookshelf.create_app(config, debug=debug)
+
+    return app, host, port
 
 
-@app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
-
-
-# [START health]
-@app.route('/_ah/health')
-def health_check():
-    return 'ok'
-# [END health]
+app, host, port = create_app()
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-# [END app]
+    app.run(host, port)
