@@ -93,10 +93,8 @@ def add():
 
         book = get_model().create(data)
 
-        # [START enqueue]
         q = tasks.get_books_queue()
         q.enqueue(tasks.process_book, book['id'])
-        # [END enqueue]
 
         return redirect(url_for('.view', id=book['id']))
 

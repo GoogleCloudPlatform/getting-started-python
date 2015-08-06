@@ -21,7 +21,6 @@ import psq
 from bookshelf import get_model, storage
 
 
-# [START get_books_queue]
 def get_books_queue():
     client = pubsub.Client(
         project=current_app.config['PROJECT_ID'])
@@ -32,10 +31,8 @@ def get_books_queue():
     # models.
     return psq.Queue(
         client, 'books', extra_context=current_app.app_context)
-# [END get_books_queue]
 
 
-# [START process_book]
 def process_book(book_id):
     """
     Handles an individual Bookshelf message by looking it up in the
@@ -79,10 +76,8 @@ def process_book(book_id):
             "{}.jpg".format(book['title']))
 
     model.update(book, book_id)
-# [END process_book]
 
 
-# [START query_books_api]
 def query_books_api(title):
     """
     Queries the Google Books API to find detailed information about the book
@@ -103,7 +98,6 @@ def query_books_api(title):
     except ValueError:
         logging.info("Unexpected response from books API: {}".format(r))
         return None
-# [END queue_books_api]
 
 
 def download_and_upload_image(src, dst_filename):
