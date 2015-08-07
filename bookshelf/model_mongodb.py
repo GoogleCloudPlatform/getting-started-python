@@ -43,7 +43,7 @@ def from_mongo(data):
 def init_app(app):
     mongo.init_app(app)
 
-
+# [START list]
 def list(limit=10, cursor=None):
     cursor = int(cursor) if cursor else 0
 
@@ -52,6 +52,7 @@ def list(limit=10, cursor=None):
 
     next_page = cursor + limit if len(books) == limit else None
     return (books, next_page)
+# [END list]
 
 
 def list_by_user(user_id, limit=10, cursor=None):
