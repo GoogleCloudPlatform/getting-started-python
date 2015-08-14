@@ -16,28 +16,26 @@
 set -x
 
 ZONE=us-central1-f
+gcloud config set compute/zone $ZONE
 
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
 SERVICE=frontend-web-service
-AUTOSCALER=frontend-web-autoscaler
 
+gcloud compute instance-groups managed stop-autoscaling $GROUP --zone $ZONE
 
-gcloud preview autoscaler --zone $ZONE delete $AUTOSCALER
+gcloud compute forwarding-rules delete $SERVICE-http-rule --global 
 
-gcloud compute forwarding-rules delete $SERVICE-http-rule --global
+gcloud compute target-http-proxies delete $SERVICE-proxy 
 
-gcloud compute target-http-proxies delete $SERVICE-proxy
+gcloud compute url-maps delete $SERVICE-map 
 
-gcloud compute url-maps delete $SERVICE-map
-
-gcloud compute backend-services delete $SERVICE
+gcloud compute backend-services delete $SERVICE 
 
 gcloud compute http-health-checks delete ah-health-check
 
-gcloud preview managed-instance-groups --zone $ZONE delete $GROUP
+gcloud compute instance-groups managed delete $GROUP  
 
-# loop until managed instance groups is delete
-while gcloud preview managed-instance-groups --zone $ZONE describe $GROUP; do sleep 3:; done
+gcloud compute instance-templates delete $TEMPLATE 
 
-gcloud compute instance-templates delete $TEMPLATE
+gcloud compute firewall-rules delete default-allow-http-8080
