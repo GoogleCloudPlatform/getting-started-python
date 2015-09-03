@@ -15,9 +15,7 @@
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
 
-import oauth2
-
-from bookshelf import get_model, storage, tasks
+from bookshelf import get_model, oauth2, storage, tasks
 
 
 crud = Blueprint('crud', __name__)

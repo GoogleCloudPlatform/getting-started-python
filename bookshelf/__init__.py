@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import logging
-import os
 
-from flask import Flask, redirect, url_for, current_app
+import httplib2
+from flask import Flask, redirect, request, session, url_for, current_app
+from oauth2client.flask_util import UserOAuth2
 
-from oauth2 import oauth2
+
+oauth2 = UserOAuth2()
 
 
 def create_app(config, debug=False, testing=False, config_overrides=None):
@@ -32,24 +35,28 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
 
     # Configure logging
     if not app.testing:
-        setup_logging(app)
+        logging.basicConfig(level=logging.INFO)
 
     # Setup the data model.
     with app.app_context():
         model = get_model()
         model.init_app(app)
 
-    # Create a health check handler. Health checks are used by the App Engine
-    # Managed VMs environment to determine if an instance is capable of serving
-    # requests. This can also be used by load balancers outside of App Engine
-    # for the same purpose.
-    @app.route('/_ah/health')
-    def health_check():
-        return 'ok', 200
+    # Initalize the OAuth2 helper.
+    oauth2.init_app(
+        app,
+        scopes=['email', 'profile'],
+        authorize_callback=_request_user_info)
 
-    # Register all blueprints
-    app.register_blueprint(oauth2)
+    # Add a logout handler.
+    @app.route('/logout')
+    def logout():
+        # Delete the user's profile and the credentials stored by oauth2.
+        del session['profile']
+        oauth2.storage.delete()
+        return redirect(request.referrer or '/')
 
+    # Register the Bookshelf CRUD blueprint.
     from .crud import crud
     app.register_blueprint(crud, url_prefix='/books')
 
@@ -57,6 +64,14 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     @app.route("/")
     def index():
         return redirect(url_for('crud.list'))
+
+    # Create a health check handler. Health checks are used when running on
+    # Google Compute Engine by the load balancer to determine which instances
+    # can serve traffic. Google App Engine also uses health checking, but
+    # accepts any non-500 response as healthy.
+    @app.route('/_ah/health')
+    def health_check():
+        return 'ok', 200
 
     return app
 
@@ -80,30 +95,20 @@ def get_model():
     return model
 
 
-def setup_logging(app):
-    log_path = app.config.get('LOG_PATH')
+def _request_user_info(credentials):
+    """
+    Makes an HTTP request to the Google+ API to retrieve the user's basic
+    profile information, including full name and photo, and stores it in the
+    Flask session.
+    """
+    http = httplib2.Http()
+    credentials.authorize(http)
+    resp, content = http.request(
+        'https://www.googleapis.com/plus/v1/people/me')
 
-    # Handler that outputs all logs to the console
-    console_handler = logging.StreamHandler()
+    if resp.status != 200:
+        current_app.logger.error(
+            "Error while obtaining user profile: %s" % resp)
+        return None
 
-    # This handler outputs all logs into general.log
-    general_handler = logging.FileHandler(
-        os.path.join(log_path, 'general.log'))
-    general_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(name)-12s: %(levelname)s: %(message)s '
-        '[in %(pathname)s:%(lineno)d]'
-    ))
-
-    # Configure root logger with the above handlers.
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.NOTSET)
-    root_logger.addHandler(general_handler)
-
-    # The console handler isn't used in production because cloud logging
-    # automatically collects stderr. If you log to both stderr and general.log
-    # there would be duplicate logs in the log viewer. This also allows you to
-    # easily check for any top-level exceptions or application crashes by
-    # viewing just the stderr log without all of the noise from the general
-    # log.
-    if app.debug:
-        root_logger.addHandler(console_handler)
+    session['profile'] = json.loads(content)

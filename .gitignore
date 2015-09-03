@@ -22,5 +22,4 @@ coverage.xml
 *,cover
 
 *.log
-
-lib/
+*.internal

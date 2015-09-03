@@ -80,7 +80,7 @@ command=/opt/app/start-app.sh
 autostart=true
 autorestart=true
 user=pythonapp
-environment=HOME="/home/pythonapp",USER="pythonapp",PYTHON_ENV="production"
+environment=HOME="/home/pythonapp",USER="pythonapp"
 EOF
 
 supervisorctl reread

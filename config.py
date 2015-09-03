@@ -18,8 +18,6 @@ Update this file with the values for your specific Google Cloud project.
 You can create and manage projects at https://console.developers.google.com
 """
 
-import os
-
 # The secret key is used by Flask to encrypt session cookies.
 SECRET_KEY = 'secret'
 
@@ -32,7 +30,7 @@ DATA_BACKEND = 'datastore'
 
 # Google Cloud Project ID. This can be found on the 'Overview' page at
 # https://console.developers.google.com
-PROJECT_ID = 'your-app-id'
+PROJECT_ID = 'your-project-id'
 
 # Cloud Datastore dataset id, this is the same as your project id.
 DATASTORE_DATASET_ID = PROJECT_ID
@@ -77,12 +75,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 #
 # If you receive a invalid redirect URI error review you settings to ensure
 # that the current URI is allowed.
-OAUTH2_CLIENT_ID = \
+GOOGLE_OAUTH2_CLIENT_ID = \
     'your-client-id'
-OAUTH2_CLIENT_SECRET = 'your-client-secret'
-
-# Log files are stored in this path.
-# When running on Google App Engine Managed VMs, the environment variable
-# LOG_PATH is set by app.yaml. Otherwise, the current working directory is
-# used.
-LOG_PATH = os.environ.get('LOG_PATH', '.')
+GOOGLE_OAUTH2_CLIENT_SECRET = 'your-client-secret'

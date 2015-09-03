@@ -12,34 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 import bookshelf
 import config
 
 
-def create_app():
-    # Environment configuration
-    env = os.environ.get('PYTHON_ENV', 'development')
-    port = 8080
-
-    # Production environment configuration.
-    if env == 'production':
-        host = '0.0.0.0'
-        debug = False
-    # Local environment configuration.
-    else:
-        host = '127.0.0.1'
-        debug = True
-
-    # Create the application, passing in any configuration needed from the
-    # environment.
-    app = bookshelf.create_app(config, debug=debug)
-
-    return app, host, port
-
-
-app, host, port = create_app()
+app = bookshelf.create_app(config)
 
 
 # Make the queue available at the top-level, this allows you to run
@@ -51,5 +28,7 @@ with app.app_context():
     books_queue = bookshelf.tasks.get_books_queue()
 
 
+# This is only used when running locally. When running live, gunicorn runs
+# the application.
 if __name__ == '__main__':
-    app.run(host, port)
+    app.run('127.0.0.1', 8080, debug=True)

@@ -18,7 +18,7 @@ import unittest
 import mock
 from nose.plugins.attrib import attr
 
-
+from oauth2client.client import OAuth2Credentials
 from bookshelf import tasks
 
 
@@ -68,6 +68,21 @@ class IntegrationBase(unittest.TestCase):
         self.model.create = self.original_create
         tasks.get_books_queue = self.original_get_books_queue
 
+    def _generate_credentials(self, scopes=('email', 'profile')):
+        return OAuth2Credentials(
+            'access_token',
+            'client_id',
+            'client_secret',
+            'refresh_token',
+            '3600',
+            None,
+            'Test',
+            id_token={
+                'sub': '123',
+                'email': 'user@example.com'
+            },
+            scopes=scopes)
+
 
 @attr('slow')
 class CrudTestsMixin(object):
@@ -111,8 +126,11 @@ class CrudTestsMixin(object):
         with self.app.test_client() as c:
             with c.session_transaction() as session:
                 session['profile'] = {'id': 'abc'}
+                session['google_oauth2_credentials'] = \
+                    self._generate_credentials().to_json()
 
             rv = c.get('/books/mine')
+            print(rv)
             assert rv.status == '200 OK'
             body = rv.data.decode('utf-8')
             assert 'Book 1' in body, "Should show book 1"

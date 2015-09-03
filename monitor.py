@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import os
-import signal
 import sys
 
 from flask import Flask
@@ -43,23 +42,6 @@ def health():
         return 'Worker not running', 503
 
     return 'healthy', 200
-
-
-# The stop handler is called by Google App Engine whenever an instance is going
-# to be shut down. This allows this app to signal the worker to attempt to shut
-# down gracefully.
-@monitor_app.route('/_ah/stop')
-def stop():
-    if not os.path.exists(PID_FILE):
-        # It's not an error condition if the worker is already down.
-        return 'Worker pid not found', 200
-
-    with open(PID_FILE, 'r') as pidfile:
-        pid = pidfile.read()
-
-    os.kill(int(pid), signal.SIGINT)
-
-    return 'ok', 200
 
 
 @monitor_app.route('/')
