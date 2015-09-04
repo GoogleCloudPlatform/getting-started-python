@@ -10,9 +10,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
+# limitations under the License
 
-# [START docker]
 # The Google App Engine python runtime is Debian Jessie with Python installed
 # and various os-level packages to allow installation of popular Python
 # libraries. The source is on github at:
@@ -38,4 +37,3 @@ ADD . /app
 
 # Use Gunicorn to serve the application.
 CMD gunicorn -b :$PORT main:app
-# [END docker]
