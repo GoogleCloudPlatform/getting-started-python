@@ -1,0 +1,7 @@
+tox
+unittest2
+nose
+flake8
+coverage
+BeautifulSoup4
+mock
