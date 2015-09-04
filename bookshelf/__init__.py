@@ -42,6 +42,14 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
         model = get_model()
         model.init_app(app)
 
+    # Create a health check handler. Health checks are used when running on
+    # Google Compute Engine by the load balancer to determine which instances
+    # can serve traffic. Google App Engine also uses health checking, but
+    # accepts any non-500 response as healthy.
+    @app.route('/_ah/health')
+    def health_check():
+        return 'ok', 200
+
     # Initalize the OAuth2 helper.
     oauth2.init_app(
         app,

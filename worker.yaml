@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START worker]
 module: worker
 runtime: custom
 vm: true
@@ -27,4 +26,3 @@ env_variables:
 # Temporary setting to keep gcloud from uploading the virtualenv
 skip_files:
  - ^v?env$
-# [END worker]

@@ -18,13 +18,11 @@ runtime: custom
 vm: true
 entrypoint: custom
 
-# [START env_variables]
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of
   # processes for this App Engine module. For the default module, only the
   # frontend process is needed.
   PROCESSES: bookshelf
-# [END env_variables]
 
 # Temporary setting to keep gcloud from uploading the virtualenv
 skip_files:
