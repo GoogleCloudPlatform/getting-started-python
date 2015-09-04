@@ -33,11 +33,9 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     if config_overrides:
         app.config.update(config_overrides)
 
-    # [START setup_logging]
     # Configure logging
     if not app.testing:
         logging.basicConfig(level=logging.INFO)
-    # [END setup_logging]
 
     # Setup the data model.
     with app.app_context():

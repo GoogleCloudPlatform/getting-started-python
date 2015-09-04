@@ -48,5 +48,9 @@ ENV PORT 8080
 # Clear any existing cmd.
 CMD []
 
-# Gunicorn is used to run the application on Google App Engine.
-ENTRYPOINT gunicorn -b 0.0.0.0:$PORT main:app
+# [START entrypoint]
+# Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
+# of the Foreman process manager. $PROCESSES is set by app.yaml / worker.yaml
+# to control which processes Honcho will start.
+ENTRYPOINT honcho start -f /app/procfile $PROCESSES
+# [END entrypoint]
