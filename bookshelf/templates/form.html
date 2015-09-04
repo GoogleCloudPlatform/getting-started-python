@@ -14,7 +14,6 @@
 # limitations under the License.
 #}
 
-{# [START form] #}
 {% extends "base.html" %}
 
 {% block content %}
@@ -52,8 +51,17 @@
     <input type="text" name="imageUrl" id="imageUrl" value="{{book.imageUrl}}" class="form-control"/>
   </div>
 
+  <div class="form-group hidden">
+    <label for="createdBy">Created by</label>
+    <input type="text" name="createdBy" id="createdBy" value="{{book.createdBy}}" class="form-control"/>
+  </div>
+
+  <div class="form-group hidden">
+    <label for="createdById">Created by ID</label>
+    <input type="text" name="createdById" id="createdById" value="{{book.createdById}}" class="form-control"/>
+  </div>
+
   <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 {% endblock %}
-{# [END form] #}
