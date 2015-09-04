@@ -13,15 +13,14 @@
 # limitations under the License.
 
 import json
+import logging
 
 from flask import current_app, Flask, redirect, request, session, url_for
 import httplib2
-
-# [START include]
 from oauth2client.flask_util import UserOAuth2
 
+
 oauth2 = UserOAuth2()
-# [END include]
 
 
 def create_app(config, debug=False, testing=False, config_overrides=None):
@@ -34,20 +33,23 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     if config_overrides:
         app.config.update(config_overrides)
 
+    # [START setup_logging]
+    # Configure logging
+    if not app.testing:
+        logging.basicConfig(level=logging.INFO)
+    # [END setup_logging]
+
     # Setup the data model.
     with app.app_context():
         model = get_model()
         model.init_app(app)
 
-    # [START init_app]
     # Initalize the OAuth2 helper.
     oauth2.init_app(
         app,
         scopes=['email', 'profile'],
         authorize_callback=_request_user_info)
-    # [END init_app]
 
-    # [START logout]
     # Add a logout handler.
     @app.route('/logout')
     def logout():
@@ -55,7 +57,6 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
         del session['profile']
         oauth2.storage.delete()
         return redirect(request.referrer or '/')
-    # [END logout]
 
     # Register the Bookshelf CRUD blueprint.
     from .crud import crud
@@ -88,7 +89,6 @@ def get_model():
     return model
 
 
-# [START request_user_info]
 def _request_user_info(credentials):
     """
     Makes an HTTP request to the Google+ API to retrieve the user's basic
@@ -106,4 +106,3 @@ def _request_user_info(credentials):
         return None
 
     session['profile'] = json.loads(content)
-# [END request_user_info]
