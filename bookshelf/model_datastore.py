@@ -28,7 +28,6 @@ def get_client():
         dataset_id=current_app.config['DATASTORE_DATASET_ID'])
 
 
-# [START from_datastore]
 def from_datastore(entity):
     """Translates Datastore results into the format expected by the
     application.
@@ -46,10 +45,8 @@ def from_datastore(entity):
 
     entity['id'] = entity.key.id
     return entity
-# [END from_datastore]
 
 
-# [START list]
 def list(limit=10, cursor=None):
     ds = get_client()
     query = ds.query(kind='Book', order=['title'])
@@ -57,7 +54,6 @@ def list(limit=10, cursor=None):
     entities, more_results, cursor = it.next_page()
     entities = builtin_list(map(from_datastore, entities))
     return entities, cursor if len(entities) == limit else None
-# [END list]
 
 
 def read(id):
@@ -67,7 +63,6 @@ def read(id):
     return from_datastore(results)
 
 
-# [START update]
 def update(data, id=None):
     ds = get_client()
     if id:
@@ -83,8 +78,8 @@ def update(data, id=None):
     ds.put(entity)
     return from_datastore(entity)
 
+
 create = update
-# [END update]
 
 
 def delete(id):
