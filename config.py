@@ -46,3 +46,20 @@ SQLALCHEMY_DATABASE_URI = \
 # panel. If self-hosting on compute engine, replace the values below.
 MONGO_URI = \
     'mongodb://user:password@host:27017/database'
+
+# Google Cloud Storage and upload settings.
+# Typically, you'll name your bucket the same as your project. To create a
+# bucket:
+#
+#   $ gsutil mb gs://<your-bucket-name>
+#
+# You also need to make sure that the default ACL is set to public-read,
+# otherwise users will not be able to see their upload images:
+#
+#   $ gsutil defacl set public-read gs://<your-bucket-name>
+#
+# You can adjust the max content length and allow extensions settings to allow
+# larger or more varied file types if desired.
+CLOUD_STORAGE_BUCKET = 'your-bucket-name'
+MAX_CONTENT_LENGTH = 8 * 1024 * 1024
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
