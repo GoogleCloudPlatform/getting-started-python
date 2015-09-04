@@ -54,7 +54,6 @@ def list(limit=10, cursor=None):
     return (books, next_page)
 
 
-# [START list_by_user]
 def list_by_user(user_id, limit=10, cursor=None):
     cursor = int(cursor) if cursor else 0
 
@@ -65,7 +64,6 @@ def list_by_user(user_id, limit=10, cursor=None):
 
     next_page = cursor + limit if len(books) == limit else None
     return (books, next_page)
-# [END list_by_user]
 
 
 def read(id):

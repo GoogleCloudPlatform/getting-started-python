@@ -51,7 +51,6 @@ def list():
         next_page_token=next_page_token)
 
 
-# [START list_mine]
 @crud.route("/mine")
 @oauth2.required
 def list_mine():
@@ -65,7 +64,6 @@ def list_mine():
         "list.html",
         books=books,
         next_page_token=next_page_token)
-# [END list_mine]
 
 
 @crud.route('/<id>')
@@ -74,7 +72,6 @@ def view(id):
     return render_template("view.html", book=book)
 
 
-# [START add]
 @crud.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
@@ -96,7 +93,6 @@ def add():
         return redirect(url_for('.view', id=book['id']))
 
     return render_template("form.html", action="Add", book={})
-# [END add]
 
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
