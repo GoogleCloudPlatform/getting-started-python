@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START worker]
 module: worker
 runtime: custom
 vm: true
@@ -28,4 +27,3 @@ env_variables:
   # processes for this App Engine module. For the worker module, both the queue
   # worker and the monitor process are needed.
   PROCESSES: worker monitor
-# [END worker]

@@ -24,10 +24,8 @@ beta_settings:
     https://www.googleapis.com/auth/userinfo.email,
     https://www.googleapis.com/auth/cloud-platform
 
-# [START env_variables]
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of
   # processes for this App Engine module. For the default module, only the
   # frontend process is needed.
   PROCESSES: bookshelf
-# [END env_variables]
