@@ -19,6 +19,9 @@ import config
 from nose.plugins.attrib import attr
 
 
+from oauth2client.client import OAuth2Credentials
+
+
 class IntegrationBase(unittest.TestCase):
 
     def createBooks(self, n=1):
@@ -59,6 +62,21 @@ class IntegrationBase(unittest.TestCase):
 
         self.model.create = self.original_create
 
+    def _generate_credentials(self, scopes=('email', 'profile')):
+        return OAuth2Credentials(
+            'access_token',
+            'client_id',
+            'client_secret',
+            'refresh_token',
+            '3600',
+            None,
+            'Test',
+            id_token={
+                'sub': '123',
+                'email': 'user@example.com'
+            },
+            scopes=scopes)
+
 
 @attr('slow')
 class CrudTestsMixin(object):
@@ -76,6 +94,40 @@ class CrudTestsMixin(object):
         # be after 1.
         assert 'Book 9' not in body, "Should not show more than 10 books"
         assert 'More' in body, "Should have more than one page"
+
+    def testListByUser(self):
+        data1 = {
+            'title': 'Book 1',
+            'createdById': 'abc'
+        }
+
+        data2 = {
+            'title': 'Book 2',
+            'createdById': 'def'
+        }
+
+        with self.app.test_request_context():
+            self.model.create(data1)
+            self.model.create(data2)
+
+        with self.app.test_client() as c:
+            rv = c.get('/books/')
+            assert rv.status == '200 OK'
+            body = rv.data.decode('utf-8')
+            assert 'Book 1' in body, "Should show both books"
+            assert 'Book 2' in body, "Should show both books"
+
+        with self.app.test_client() as c:
+            with c.session_transaction() as session:
+                session['profile'] = {'id': 'abc'}
+                session['google_oauth2_credentials'] = \
+                    self._generate_credentials().to_json()
+
+            rv = c.get('/books/mine')
+            assert rv.status == '200 OK'
+            body = rv.data.decode('utf-8')
+            assert 'Book 1' in body, "Should show book 1"
+            assert 'Book 2' not in body, "Should not show both books"
 
     def testAddAndView(self):
         data = {
