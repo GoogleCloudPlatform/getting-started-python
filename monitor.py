@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START monitor]
 import os
 import sys
 
@@ -53,4 +52,3 @@ def index():
 if __name__ == '__main__':
     PID_FILE = sys.argv[1]
     monitor_app.run('0.0.0.0', 8080)
-# [END monitor]
