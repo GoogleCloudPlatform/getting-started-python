@@ -12,20 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file specifies your Python application's runtime configuration.
-# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
+# [START worker]
+module: worker
 runtime: custom
 vm: true
 entrypoint: custom
 
-# [START env_variables]
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of
-  # processes for this App Engine module. For the default module, only the
-  # frontend process is needed.
-  PROCESSES: bookshelf
-# [END env_variables]
+  # processes for this App Engine module. For the worker module, both the queue
+  # worker and the monitor process are needed.
+  PROCESSES: worker monitor
 
 # Temporary setting to keep gcloud from uploading the virtualenv
 skip_files:
  - ^v?env$
+# [END worker]
