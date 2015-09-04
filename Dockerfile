@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START docker]
 # The Google App Engine base image is debian (wheezy) with ca-certificates
 # installed.
 FROM gcr.io/google_appengine/base
@@ -51,5 +50,3 @@ CMD []
 
 # Gunicorn is used to run the application on Google App Engine.
 ENTRYPOINT gunicorn -b 0.0.0.0:$PORT main:app
-
-# [END docker]

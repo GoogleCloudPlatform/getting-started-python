@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START app]
-from flask import Flask
+import bookshelf
+import config
 
 
-app = Flask(__name__)
+app = bookshelf.create_app(config)
 
 
-@app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
-
-
+# This is only used when running locally. When running live, gunicorn runs
+# the application.
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
-# [END app]
+    app.run(host='127.0.0.1', port=8080, debug=True)
