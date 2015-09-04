@@ -15,10 +15,10 @@
 import unittest
 
 import bookshelf
+from bookshelf import tasks
 import config
+import mock
 from nose.plugins.attrib import attr
-
-
 from oauth2client.client import OAuth2Credentials
 
 
@@ -54,6 +54,11 @@ class IntegrationBase(unittest.TestCase):
 
         self.model.create = tracking_create
 
+        # Monkey-patch get_books_queue to prevents pubsub events
+        # from firing
+        self.original_get_books_queue = tasks.get_books_queue
+        tasks.get_books_queue = mock.Mock()
+
     def tearDown(self):
 
         # Delete all items that we created during tests.
@@ -61,6 +66,7 @@ class IntegrationBase(unittest.TestCase):
             list(map(self.model.delete, self.ids_to_delete))
 
         self.model.create = self.original_create
+        tasks.get_books_queue = self.original_get_books_queue
 
     def _generate_credentials(self, scopes=('email', 'profile')):
         return OAuth2Credentials(
