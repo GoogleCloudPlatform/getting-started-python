@@ -42,6 +42,16 @@
     <textarea name="description" id="description" class="form-control">{{book.description}}</textarea>
   </div>
 
+  <div class="form-group">
+    <label for="image">Cover Image</label>
+    <input type="file" name="image" id="image" class="form-control"/>
+  </div>
+
+  <div class="form-group hidden">
+    <label for="imageUrl">Cover Image URL</label>
+    <input type="text" name="imageUrl" id="imageUrl" value="{{book.imageUrl}}" class="form-control"/>
+  </div>
+
   <button type="submit" class="btn btn-success">Save</button>
 </form>
 
