@@ -48,7 +48,6 @@ def _safe_filename(filename):
     return "{0}-{1}.{2}".format(basename, date, extension)
 
 
-# [START upload_file]
 def upload_file(file_stream, filename, content_type):
     """
     Uploads a file to a given Cloud Storage bucket and returns the public url
@@ -71,4 +70,3 @@ def upload_file(file_stream, filename, content_type):
         url = url.decode('utf-8')
 
     return url
-# [END upload_file]
