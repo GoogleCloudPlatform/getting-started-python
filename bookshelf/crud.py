@@ -120,7 +120,7 @@ def edit(id):
     return render_template("form.html", action="Edit", book=book)
 
 
-@crud.route('/<id>/delete')
+@crud.route('/<id>/delete', methods=['POST'])
 def delete(id):
     get_model().delete(id)
     return redirect(url_for('.list'))

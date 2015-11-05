@@ -19,17 +19,19 @@
 {% block content %}
 
 <h3>Book</h3>
-
-<div class="btn-group">
-  <a href="/books/{{book.id}}/edit" class="btn btn-primary btn-sm">
-    <i class="glyphicon glyphicon-edit"></i>
-    Edit book
-  </a>
-  <a href="/books/{{book.id}}/delete" class="btn btn-danger btn-sm">
-    <i class="glyphicon glyphicon-trash"></i>
-    Delete book
-  </a>
-</div>
+<form method="post" action="/books/{{book.id}}/delete" id="deleteForm">
+  <div class="btn-group">
+    <a href="/books/{{book.id}}/edit" class="btn btn-primary btn-sm">
+      <i class="glyphicon glyphicon-edit"></i>
+      Edit book
+    </a>
+    <a onclick="document.getElementById('deleteForm').submit();"
+       class="btn btn-danger btn-sm">
+      <i class="glyphicon glyphicon-trash"></i>
+      Delete book
+    </a>
+  </div>
+</form>
 
 <div class="media">
   <div class="media-left">
