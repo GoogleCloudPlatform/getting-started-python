@@ -1,6 +1,6 @@
 # Getting started with Python on Google Cloud Platform
 
-This repository is the complete sample code for the [Python Getting Started on Google Cloud Platform](http://cloud.google.com/python/getting-started) tutorials. Please refer to the tutorials for instructions on configuring, running, and deploying these samples.
+This repository is the complete sample code for the [Python Getting Started on Google Cloud Platform](https://cloud.google.com/appengine/docs/python/gettingstartedpython27/introduction) tutorials. Please refer to the tutorials for instructions on configuring, running, and deploying these samples.
 
 The code for the samples is contained in individual branches on this repository.
 
