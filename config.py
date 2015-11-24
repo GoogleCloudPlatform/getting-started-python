@@ -18,6 +18,8 @@ Update this file with the values for your specific Google Cloud project.
 You can create and manage projects at https://console.developers.google.com
 """
 
+import os
+
 # The secret key is used by Flask to encrypt session cookies.
 SECRET_KEY = 'secret'
 
@@ -30,7 +32,7 @@ DATA_BACKEND = 'datastore'
 
 # Google Cloud Project ID. This can be found on the 'Overview' page at
 # https://console.developers.google.com
-PROJECT_ID = 'your-project-id'
+PROJECT_ID = 'verdant-future-95122'
 
 # Cloud Datastore dataset id, this is the same as your project id.
 DATASTORE_DATASET_ID = PROJECT_ID
@@ -39,13 +41,13 @@ DATASTORE_DATASET_ID = PROJECT_ID
 # Replace user, pass, host, and database with the respective values of your
 # Cloud SQL instance.
 SQLALCHEMY_DATABASE_URI = \
-    'mysql+pymysql://user:password@host/database'
+    'mysql+pymysql://pythonapp2:secret123@173.194.236.132/library'
 
 # Mongo configuration
 # If using mongolab, the connection URI is available from the mongolab control
 # panel. If self-hosting on compute engine, replace the values below.
 MONGO_URI = \
-    'mongodb://user:password@host:27017/database'
+    'mongodb://104.154.57.55:27017/library'
 
 # Google Cloud Storage and upload settings.
 # Typically, you'll name your bucket the same as your project. To create a
@@ -60,7 +62,7 @@ MONGO_URI = \
 #
 # You can adjust the max content length and allow extensions settings to allow
 # larger or more varied file types if desired.
-CLOUD_STORAGE_BUCKET = 'your-bucket-name'
+CLOUD_STORAGE_BUCKET = 'verdant-future-95122'
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -76,5 +78,13 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # If you receive a invalid redirect URI error review you settings to ensure
 # that the current URI is allowed.
 GOOGLE_OAUTH2_CLIENT_ID = \
-    'your-client-id'
-GOOGLE_OAUTH2_CLIENT_SECRET = 'your-client-secret'
+    '166453264591-nr3vm062mem6oqs5a4iqs3qh0slev57l.apps.googleusercontent.com'
+
+GOOGLE_OAUTH2_CLIENT_SECRET = \
+    '166453264591-40rpj6oon2kf9jctve2bn48mabrjtlg1.apps.googleusercontent.com'
+
+# Log files are stored in this path.
+# When running on Google App Engine Managed VMs, the environment variable
+# LOG_PATH is set by app.yaml. Otherwise, the current working directory is
+# used.
+LOG_PATH = os.environ.get('LOG_PATH', '.')
