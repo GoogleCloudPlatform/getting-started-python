@@ -15,11 +15,11 @@
 import os
 import time
 import unittest
-from six.moves.urllib.parse import urlencode
 
-import httplib2
 from bs4 import BeautifulSoup
+import httplib2
 from nose.plugins.attrib import attr
+from six.moves.urllib.parse import urlencode
 
 
 @attr('e2e')

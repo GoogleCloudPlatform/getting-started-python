@@ -1,0 +1,11 @@
+sudo: false
+language: python
+env: 
+    - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client-secret.json
+before_install:
+- openssl aes-256-cbc -K $encrypted_82d8befc5c58_key -iv $encrypted_82d8befc5c58_iv
+  -in secrets.tar.gz.enc -out secrets.tar.gz -d
+- tar -xzf secrets.tar.gz
+- pip install tox
+script:
+- tox

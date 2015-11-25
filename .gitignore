@@ -25,3 +25,4 @@ coverage.xml
 
 lib/
 *.internal
+secrets.tar.gz
