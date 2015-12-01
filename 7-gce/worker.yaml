@@ -15,7 +15,6 @@
 module: worker
 runtime: custom
 vm: true
-entrypoint: custom
 
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of

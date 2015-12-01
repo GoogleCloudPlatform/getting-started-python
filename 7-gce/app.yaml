@@ -14,9 +14,9 @@
 
 # This file specifies your Python application's runtime configuration.
 # See https://cloud.google.com/appengine/docs/managed-vms/config for details.
+
 runtime: custom
 vm: true
-entrypoint: custom
 
 env_variables:
   # Processes is passed to Honcho in Dockerfile to run a particular set of

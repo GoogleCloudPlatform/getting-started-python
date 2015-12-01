@@ -12,14 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file specifies your Python application's runtime configuration
-# including URL routing, versions, static file uploads, etc. See
-# https://developers.google.com/appengine/docs/python/config/appconfig
-# for details.
-
-# TODO: Enter your application id below. If you have signed up
-# using cloud.google.com/console use the "project id" for your application
-# id.
+# This file specifies your Python application's runtime configuration.
+# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
 
 # [START runtime]
 runtime: custom

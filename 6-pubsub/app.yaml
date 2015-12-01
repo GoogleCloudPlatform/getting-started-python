@@ -16,7 +16,6 @@
 # See https://cloud.google.com/appengine/docs/managed-vms/config for details.
 runtime: custom
 vm: true
-entrypoint: custom
 
 # [START env_variables]
 env_variables:
