@@ -6,6 +6,9 @@ This repository is the complete sample code for the [Python Getting Started on G
 
 The code for the samples is contained in individual folders in this repository.
 
+Note that 7-gce is the final version of the project, including the complete Bookshelf app on Managed VMs in addition to scripts to alternatively deploy on GCE.
+
+
 Tutorial | Folder
 ---------|-------
 [Hello world](https://cloud.google.com/python/getting-started/hello-world) | [1-hello-world](https://github.com/GoogleCloudPlatform/getting-started-python/tree/master/1-hello-world)
