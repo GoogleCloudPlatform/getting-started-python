@@ -26,4 +26,5 @@ coverage.xml
 lib/
 *.internal
 secrets.tar.gz
+secrets.tar
 client_secret.json
