@@ -28,6 +28,10 @@ Create a cluster for the bookshelf application:
 
 The scopes specified in the `--scope` argument allows nodes in the cluster to access Google Cloud Platform APIs, such as the Cloud Datastore API.
 
+Alternatively, you can use make:
+
+    make create-cluster
+
 ## Create a Cloud Storage bucket
 
 The bookshelf application uses [Google Cloud Storage](https://cloud.google.com/storage) to store image files. Create a bucket for your project:
@@ -35,24 +39,36 @@ The bookshelf application uses [Google Cloud Storage](https://cloud.google.com/s
     gsutil mb gs://<your-project-id>
     gsutil defacl set public-read gs://<your-project-id>
 
+Alternatively, you can use make:
+
+    make create-bucket
+
 ## Update config.py
 
 Modify config.py and enter your Cloud Project ID into the `PROJECT_ID` and `CLOUD_STORAGE_BUCKET` field. The remaining configuration values are only needed if you wish to use a different database or if you wish to enable log-in via oauth2, which requires a domain name.
 
 ## Build the bookshelf container
 
-Before the application can be deployed to Container Engine, you will need build and push the image to [Google Container Registry](https://cloud.google.com/container-registry/). 
+Before the application can be deployed to Container Engine, you will need build and push the image to [Google Container Registry](https://cloud.google.com/container-registry/).
 
     docker build -t gcr.io/your-project-id/bookshelf .
     gcloud docker push gcr.io/your-project-id/bookshelf
 
-## Deploy to Bookshelf frontend
+Alternativel,y you can use make:
+
+    make push
+
+## Deploy the bookshelf frontend
 
 The bookshelf app has two distinct "tiers". The frontend serves a web interface to create and manage books, while the worker handles fetching book information from the Google Books API.
 
-`bookshelf-frontend.yaml` contains the Kubernetes resource definitions to deploy the frontend. **Update this file with your Project ID**, then use `kubectl` to create these resources on the cluster:
+Update `bookshelf-frontend.yaml` with your Project ID or use `make template`. This file contains the Kubernetes resource definitions to deploy the frontend. You can use `kubectl` to create these resources on the cluster:
 
     kubectl create -f bookshelf-frontend.yaml
+
+Alternatively, you can use make:
+
+    make deploy-frontend
 
 Once the resources are created, there should be 3 `bookshelf-frontend` pods on the cluster. To see the pods and ensure that they are running:
 
@@ -68,10 +84,14 @@ Once the pods are ready, you can get the public IP address of the load balancer:
 
 You can then browse to the public IP address in your browser to see the bookshelf application.
 
-# Deploy worker
+## Deploy worker
 
-`bookshelf-worker.yaml` contains the Kubernetes resource definitions to deploy the worker. The worker doesn't need to serve web traffic or expose any ports, so it has significantly less configuration than the frontend. **Update `bookshelf-worker.yaml` file with your Project ID**, then use `kubectl` to create these resources on the cluster:
+Update `bookshelf-worker.yaml` with your Project ID or use `make template`. This file contains the Kubernetes resource definitions to deploy the worker. The worker doesn't need to serve web traffic or expose any ports, so it has significantly less configuration than the frontend. You can use `kubectl` to create these resources on the cluster:
 
     kubectl create -f bookshelf-worker.yaml
+
+Alternatively, you can use make:
+
+    make deploy-backend
 
 Once again, use `kubectl get pods` to check the status of the worker pods. Once the worker pods are up and running, you should be able to create books on the frontend and the workers will handle updating book information in the background.
