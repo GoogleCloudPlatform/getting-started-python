@@ -8,6 +8,7 @@ before_install:
 - tar xvf secrets.tar
 - pip install tox
 script:
+- tox
 - cd $TRAVIS_BUILD_DIR/1-hello-world && tox
 - cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/2-structured-data && cd $TRAVIS_BUILD_DIR/2-structured-data
   && tox

@@ -18,7 +18,6 @@
 # [START runtime]
 runtime: custom
 vm: true
-entrypoint: custom
 # [END runtime]
 
 # Temporary setting to keep gcloud from uploading the virtualenv
