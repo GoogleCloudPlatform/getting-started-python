@@ -1,9 +1,9 @@
 Flask==0.10.1
-gcloud==0.7.1
-gunicorn==19.3.0
-oauth2client==1.5.0
-Flask-SQLAlchemy==2.0
-PyMySQL==0.6.6
-Flask-PyMongo==0.3.1
-PyMongo==2.8.1
-six==1.9.0
+gcloud==0.8.0
+gunicorn==19.4.5
+oauth2client==1.5.2
+Flask-SQLAlchemy==2.1
+PyMySQL==0.7.1
+Flask-PyMongo==0.4.0
+PyMongo==3.2
+six==1.10.0
