@@ -1,3 +1,5 @@
+GCLOUD_PROJECT:=$(shell gcloud config list project --format="value(core.project)")
+
 .PHONY: all
 all: deploy
 
@@ -5,6 +7,7 @@ all: deploy
 create-cluster:
 	gcloud container clusters create bookshelf \
 		--scope "https://www.googleapis.com/auth/userinfo.email","cloud-platform"
+	gcloud container clusters get-credentials bookshelf
 
 .PHONY: create-bucket
 create-bucket:
