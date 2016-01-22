@@ -5,3 +5,4 @@ flake8
 coverage
 BeautifulSoup4
 mock
+flaky
