@@ -16,9 +16,16 @@ import unittest
 
 import bookshelf
 import config
+from flaky import flaky
+from gcloud.exceptions import ServiceUnavailable
 from nose.plugins.attrib import attr
 
 
+def flaky_filter(e, *args):
+    return isinstance(e, ServiceUnavailable)
+
+
+@flaky(rerun_filter=flaky_filter)
 class IntegrationBase(unittest.TestCase):
 
     def createBooks(self, n=1):

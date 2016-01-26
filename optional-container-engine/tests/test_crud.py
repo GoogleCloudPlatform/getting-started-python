@@ -11,17 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import unittest
 
 import bookshelf
 from bookshelf import tasks
 import config
+from flaky import flaky
+from gcloud.exceptions import ServiceUnavailable
 import mock
 from nose.plugins.attrib import attr
 from oauth2client.client import OAuth2Credentials
 
 
+def flaky_filter(e, *args):
+    return isinstance(e, ServiceUnavailable)
+
+
+@flaky(rerun_filter=flaky_filter)
 class IntegrationBase(unittest.TestCase):
 
     def createBooks(self, n=1):
