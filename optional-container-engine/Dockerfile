@@ -36,6 +36,6 @@ RUN pip install -r /app/requirements.txt
 ADD . /app
 
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
-# of the Foreman process manager. $PROCESSES is set by app.yaml / worker.yaml
+# of the Foreman process manager. $PROCESSES is set in the pod manifest
 # to control which processes Honcho will start.
 CMD honcho start -f /app/procfile $PROCESSES

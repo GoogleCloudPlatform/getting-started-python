@@ -21,20 +21,12 @@ module: worker
 runtime: python
 vm: true
 
-# [START entrypoint]
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
-# of the Foreman process manager. $PROCESSES is set by app.yaml / worker.yaml
-# to control which processes Honcho will start.
-entrypoint: honcho start -f /app/procfile $PROCESSES
-# [END entrypoint]
+# of the Foreman process manager. For the worker module, both the queue worker
+# and the monitor process are needed.
+entrypoint: honcho start -f /app/procfile worker monitor
 
 runtime_config:
   python_version: 3
+# [END worker]
 
-# [START env_variables]
-env_variables:
-  # Processes is passed to Honchovia the entrypoint to run a particular set
-  # of processes for this App Engine module. For the worker module, both the
-  # queue worker and the monitor process are needed.
-  PROCESSES: worker monitor
-# [END env_variables]
