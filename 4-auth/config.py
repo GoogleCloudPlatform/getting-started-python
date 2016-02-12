@@ -34,9 +34,6 @@ DATA_BACKEND = 'datastore'
 # https://console.developers.google.com
 PROJECT_ID = 'your-project-id'
 
-# Cloud Datastore dataset id, this is the same as your project id.
-DATASTORE_DATASET_ID = PROJECT_ID
-
 # SQLAlchemy configuration
 # Replace user, pass, host, and database with the respective values of your
 # Cloud SQL instance.

@@ -13,11 +13,13 @@
 # limitations under the License.
 
 # This file specifies your Python application's runtime configuration.
-# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
+# See https://cloud.google.com/appengine/docs/managed-vms/python/runtime
+# for details.
 
-runtime: custom
+runtime: python
 vm: true
+entrypoint: gunicorn -b :$PORT main:app
 
-# Temporary setting to keep gcloud from uploading the virtualenv
-skip_files:
- - ^v?env$
+runtime_config:
+  python_version: 3
+
