@@ -14,11 +14,11 @@
 
 import re
 
-import httplib2
 from conftest import flaky_filter
 from flaky import flaky
-from six import BytesIO
+import httplib2
 import pytest
+from six import BytesIO
 
 
 # Mark all test cases in this class as flaky, so that if errors occur they
@@ -64,7 +64,7 @@ class TestStorage(object):
         }
 
         with app.test_client() as c:
-            rv = c.post('/books/add', data=data,
-                        follow_redirects=True)
+            rv = c.post('/books/add', data=data, follow_redirects=True)
+
         # check we weren't pwned
         assert rv.status == '400 BAD REQUEST'
