@@ -15,17 +15,23 @@
 import re
 
 import httplib2
-from nose.plugins.attrib import attr
+from conftest import flaky_filter
+from flaky import flaky
 from six import BytesIO
-from test_crud import IntegrationBase
+import pytest
 
 
-@attr('slow')
-class StorageIntegrationTest(IntegrationBase):
+# Mark all test cases in this class as flaky, so that if errors occur they
+# can be retried. This is useful when databases are temporarily unavailable.
+@flaky(rerun_filter=flaky_filter)
+# Tell pytest to use both the app and model fixtures for all test cases.
+# This ensures that configuration is properly applied and that all database
+# resources created during tests are cleaned up. These fixtures are defined
+# in conftest.py
+@pytest.mark.usefixtures('app', 'model')
+class TestStorage(object):
 
-    backend = 'datastore'
-
-    def testAddWithImage(self):
+    def test_upload_image(self, app):
         data = {
             'title': 'Test Book',
             'author': 'Test Author',
@@ -34,7 +40,7 @@ class StorageIntegrationTest(IntegrationBase):
             'image': (BytesIO(b'hello world'), 'hello.jpg')
         }
 
-        with self.app.test_client() as c:
+        with app.test_client() as c:
             rv = c.post('/books/add', data=data, follow_redirects=True)
 
         assert rv.status == '200 OK'
@@ -47,7 +53,7 @@ class StorageIntegrationTest(IntegrationBase):
         assert resp.status == 200
         assert content == b'hello world'
 
-    def testAddBadFileType(self):
+    def test_upload_bad_file(self, app):
         data = {
             'title': 'Test Book',
             'author': 'Test Author',
@@ -57,7 +63,7 @@ class StorageIntegrationTest(IntegrationBase):
                       '1337h4x0r.php')
         }
 
-        with self.app.test_client() as c:
+        with app.test_client() as c:
             rv = c.post('/books/add', data=data,
                         follow_redirects=True)
         # check we weren't pwned
