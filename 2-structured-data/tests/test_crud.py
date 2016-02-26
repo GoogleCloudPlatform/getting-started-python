@@ -75,8 +75,9 @@ def model(monkeypatch, app):
     list(map(model.delete, ids_to_delete))
 
 
-def flaky_filter(e, *args):
+def flaky_filter(info, *args):
     """Used by flaky to determine when to re-run a test case."""
+    _, e, _ = info
     return isinstance(e, ServiceUnavailable)
 
 
