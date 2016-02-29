@@ -14,7 +14,6 @@
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-import six
 
 
 builtin_list = list
@@ -29,11 +28,10 @@ def init_app(app):
 
 def from_sql(row):
     """Translates a SQLAlchemy model instance into a dictionary"""
-    d = {}
-    for column in row.__table__.columns:
-        d[column.name] = six.text_type(getattr(row, column.name))
-
-    return d
+    data = row.__dict__.copy()
+    data['id'] = row.id
+    data.pop('_sa_instance_state')
+    return data
 
 
 class Book(db.Model):
@@ -85,7 +83,9 @@ def read(id):
 
 
 def create(data):
+    print(data)
     book = Book(**data)
+    print(book)
     db.session.add(book)
     db.session.commit()
     return from_sql(book)
