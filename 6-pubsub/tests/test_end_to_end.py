@@ -14,71 +14,63 @@
 
 import os
 import time
-import unittest
 
 from bs4 import BeautifulSoup
-import httplib2
-from nose.plugins.attrib import attr
-from six.moves.urllib.parse import urlencode
+import pytest
+import requests
 
 
-@attr('e2e')
-class EndToEndTest(unittest.TestCase):
-    """ Tests designed to be run against live environments.
+@pytest.mark.e2e
+def test_end_to_end():
+    """Tests designed to be run against live environments.
 
     Unlike the integration tests in the other packages, these tests are
     designed to be run against fully-functional live environments.
 
-    To run locally, start both main.py and worker.py and run this file.
+    To run locally, start both main.py and psq_worker main.books_queue and
+    run this file.
 
-    It can be run against a live environment by settings the E2E_HOST and
-    E2E_PORT environment variables before running the tests:
+    It can be run against a live environment by setting the E2E_URL
+    environment variables before running the tests:
 
-        E2E_HOST=your-app-id.appspot.com E2E_PORT=80 \
+        E2E_URL=http://your-app-id.appspot.com \
         nosetests tests/test_end_to_end.py
-
     """
 
-    def setUp(self):
-        host = os.environ.get('E2E_HOST', 'localhost')
-        port = os.environ.get('E2E_PORT', '8080')
-        self.host = "http://{}:{}".format(host, port)
+    base_url = os.environ.get('E2E_URL', 'http://localhost:8080')
 
-    def testCreateBook(self):
-        h = httplib2.Http()
+    book_data = {
+        'title': 'a confederacy of dunces',
+    }
 
-        data = {
-            'title': 'a confederacy of dunces',
-        }
+    response = requests.post(base_url + '/books/add', data=book_data)
 
-        headers = {'Content-type': 'application/x-www-form-urlencoded'}
+    # There was a 302, so get the book's URL from the redirect.
+    book_url = response.request.url
+    book_id = book_url.rsplit('/', 1).pop()
 
-        resp, content = h.request(self.host + "/books/add", "POST",
-                                  urlencode(data),
-                                  headers=headers)
-        created_book = resp['location']
-        self.assertEquals(resp.status, 302)
-        book_id = created_book.split('/')[-1]
-        time.sleep(5)
+    # Wait 30 seconds for pubsub messages to be processed.
+    time.sleep(30)
 
-        resp, content = h.request(created_book)
+    try:
+        # Check that the book's information was updated.
+        response = requests.get(book_url)
+        assert response.status_code == 200
 
-        self.assertEquals(resp.status, 200)
-        soup = BeautifulSoup(content)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
         title = soup.find('h4', 'book-title').contents[0].strip()
-        self.assertEquals(title, 'A Confederacy of Dunces')
+        assert title == 'A Confederacy of Dunces'
 
         author = soup.find('h5', 'book-author').string
-        self.assertIn('John Kennedy Toole', author)
+        assert 'John Kennedy Toole' in author
 
         description = soup.find('p', 'book-description').string
-        self.assertIn('Ignatius Reilly', description)
+        assert 'Ignatius Reilly' in description
 
-        image_tag = soup.find('img', 'book-image')['src']
-        resp, content = h.request(image_tag)
-        self.assertEquals(resp.status, 200)
-
-        resp, content = h.request(self.host + "/books/{}/delete"
-                                  .format(book_id))
-        self.assertEquals(resp.status, 200)
+        image_src = soup.find('img', 'book-image')['src']
+        image = requests.get(image_src)
+        assert image.status_code == 200
+    finally:
+        # Delete the book we created.
+        requests.get(base_url + '/books/{}/delete'.format(book_id))
