@@ -17,7 +17,9 @@
 import bookshelf
 import config
 from gcloud.exceptions import ServiceUnavailable
+from oauth2client.client import HttpAccessTokenRefreshError
 import pytest
+from retrying import retry
 
 
 @pytest.yield_fixture(params=['datastore', 'cloudsql', 'mongodb'])
@@ -57,26 +59,32 @@ def model(monkeypatch, app):
     """
     model = bookshelf.get_model()
 
-    ids_to_delete = []
-
-    # Monkey-patch create so we can track the IDs of every item
-    # created and delete them after the test case.
-    original_create = model.create
-
-    def tracking_create(*args, **kwargs):
-        res = original_create(*args, **kwargs)
-        ids_to_delete.append(res['id'])
-        return res
-
-    monkeypatch.setattr(model, 'create', tracking_create)
+    # Ensure no books exist before running. This typically helps if tests
+    # somehow left the database in a bad state.
+    delete_all_books(model)
 
     yield model
 
-    # Delete all items that we created during tests.
-    list(map(model.delete, ids_to_delete))
+    # Delete all books that we created during tests.
+    delete_all_books(model)
+
+
+# The backend data stores can sometimes be flaky. It's useful to retry this
+# a few times before giving up.
+@retry(
+    stop_max_attempt_number=3,
+    wait_exponential_multiplier=100,
+    wait_exponential_max=2000)
+def delete_all_books(model):
+    while True:
+        books, _ = model.list(limit=50)
+        if not books:
+            break
+        for book in books:
+            model.delete(book['id'])
 
 
 def flaky_filter(info, *args):
     """Used by flaky to determine when to re-run a test case."""
     _, e, _ = info
-    return isinstance(e, ServiceUnavailable)
+    return isinstance(e, (ServiceUnavailable, HttpAccessTokenRefreshError))

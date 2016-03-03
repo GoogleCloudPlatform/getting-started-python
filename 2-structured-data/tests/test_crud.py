@@ -12,73 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import bookshelf
-import config
+from conftest import flaky_filter
 from flaky import flaky
-from gcloud.exceptions import ServiceUnavailable
 import pytest
-
-
-@pytest.yield_fixture(params=['datastore', 'cloudsql', 'mongodb'])
-def app(request):
-    """This fixtures provides a Flask app instance configured for testing.
-
-    Because it's parametric, it will cause every test that uses this fixture
-    to run three times: one time for each backend (datastore, cloudsql, and
-    mongodb).
-
-    It also ensures the tests run within a request context, allowing
-    any calls to flask.request, flask.current_app, etc. to work."""
-    app = bookshelf.create_app(
-        config,
-        testing=True,
-        config_overrides={
-            'DATA_BACKEND': request.param
-        })
-
-    with app.test_request_context():
-        yield app
-
-
-@pytest.yield_fixture
-def model(monkeypatch, app):
-    """This fixture provides a modified version of the app's model that tracks
-    all created items and deletes them at the end of the test.
-
-    Any tests that directly or indirectly interact with the database should use
-    this to ensure that resources are properly cleaned up.
-
-    Monkeypatch is provided by pytest and used to patch the model's create
-    method.
-
-    The app fixture is needed to provide the configuration and context needed
-    to get the proper model object.
-    """
-    model = bookshelf.get_model()
-
-    ids_to_delete = []
-
-    # Monkey-patch create so we can track the IDs of every item
-    # created and delete them after the test case.
-    original_create = model.create
-
-    def tracking_create(*args, **kwargs):
-        res = original_create(*args, **kwargs)
-        ids_to_delete.append(res['id'])
-        return res
-
-    monkeypatch.setattr(model, 'create', tracking_create)
-
-    yield model
-
-    # Delete all items that we created during tests.
-    list(map(model.delete, ids_to_delete))
-
-
-def flaky_filter(info, *args):
-    """Used by flaky to determine when to re-run a test case."""
-    _, e, _ = info
-    return isinstance(e, ServiceUnavailable)
 
 
 # Mark all test cases in this class as flaky, so that if errors occur they
@@ -86,7 +22,8 @@ def flaky_filter(info, *args):
 @flaky(rerun_filter=flaky_filter)
 # Tell pytest to use both the app and model fixtures for all test cases.
 # This ensures that configuration is properly applied and that all database
-# resources created during tests are cleaned up.
+# resources created during tests are cleaned up. These fixtures are defined
+# in conftest.py
 @pytest.mark.usefixtures('app', 'model')
 class TestCrudActions(object):
 
