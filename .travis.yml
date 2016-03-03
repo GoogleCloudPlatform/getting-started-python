@@ -9,19 +9,4 @@ before_install:
 install:
 - pip install nox-automation tox
 script:
-- nox --session reqcheck
-- cd $TRAVIS_BUILD_DIR/1-hello-world && tox
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/2-structured-data && cd $TRAVIS_BUILD_DIR/2-structured-data
-  && tox -e lint
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/3-binary-data && cd $TRAVIS_BUILD_DIR/3-binary-data
-  && tox -e lint
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/4-auth && cd $TRAVIS_BUILD_DIR/4-auth
-  && tox -e lint
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/5-logging && cd $TRAVIS_BUILD_DIR/5-logging
-  && tox -e lint
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/6-pubsub && cd $TRAVIS_BUILD_DIR/6-pubsub
-  && tox -e lint
-- cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/7-gce && cd $TRAVIS_BUILD_DIR/7-gce
-  && tox -e lint
-after_script:
-- kill $DATASTORE_EMULATOR
+- nox --session reqcheck lint
