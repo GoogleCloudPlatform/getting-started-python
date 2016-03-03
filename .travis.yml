@@ -6,9 +6,9 @@ env:
 before_install:
 - openssl aes-256-cbc -K $encrypted_b4c8e1c51f6e_key -iv $encrypted_b4c8e1c51f6e_iv -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
-- pip install tox
+- pip install nox-automation tox
 script:
-- tox
+- nox --session reqcheck
 - cd $TRAVIS_BUILD_DIR/1-hello-world && tox
 - cp $TRAVIS_BUILD_DIR/config.py $TRAVIS_BUILD_DIR/2-structured-data && cd $TRAVIS_BUILD_DIR/2-structured-data
   && tox
