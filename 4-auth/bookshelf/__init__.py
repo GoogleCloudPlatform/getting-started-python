@@ -19,7 +19,7 @@ from flask import current_app, Flask, redirect, request, session, url_for
 import httplib2
 
 # [START include]
-from oauth2client.flask_util import UserOAuth2
+from oauth2client.contrib.flask_util import UserOAuth2
 
 oauth2 = UserOAuth2()
 # [END include]
