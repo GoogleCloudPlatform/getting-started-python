@@ -9,4 +9,4 @@ before_install:
 install:
 - pip install nox-automation tox
 script:
-- nox --session reqcheck lint travis
+- nox --session lint travis
