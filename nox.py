@@ -38,6 +38,7 @@ def session_lint(session):
 @nox.parametrize('dir', DIRS)
 def session_run_tests(session, dir=None, toxargs=None):
     """Run all tests for all directories (slow!)"""
+    shutil.copy('config.py', dir)
     session.chdir(dir)
     session.run('tox', *(toxargs or []))
 
