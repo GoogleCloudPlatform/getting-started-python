@@ -83,9 +83,7 @@ def read(id):
 
 
 def create(data):
-    print(data)
     book = Book(**data)
-    print(book)
     db.session.add(book)
     db.session.commit()
     return from_sql(book)
