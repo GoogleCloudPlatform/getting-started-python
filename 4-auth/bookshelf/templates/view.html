@@ -40,13 +40,14 @@
     {% endif %}
   </div>
   <div class="media-body">
+    {{book|pprint}}
     <h4 class="book-title">
       {{book.title}}
       <small>{{book.publishedDate}}</small>
     </h4>
     <h5 class="book-author">By {{book.author|default('Unknown', True)}}</h5>
     <p class="book-description">{{book.description}}</p>
-    <small class="book-added-by">Added by {{book.createdBy|default('Anonymous', True)}}</small>
+    <small class="book-added-by">Added by {{book.get('createdBy')|default('Anonymous', True)}}</small>
   </div>
 </div>
 
