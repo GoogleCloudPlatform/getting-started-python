@@ -31,3 +31,5 @@ lib/
 /client-secret.json
 /service-account.json
 /config.py
+
+.DS_Store
