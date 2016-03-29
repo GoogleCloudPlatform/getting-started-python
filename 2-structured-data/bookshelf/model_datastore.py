@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from flask import current_app
-from gcloud import datastore
+from google.appengine.ext import ndb
 
 
 builtin_list = list
@@ -23,8 +23,13 @@ def init_app(app):
     pass
 
 
-def get_client():
-    return datastore.Client(current_app.config['PROJECT_ID'])
+# [START model]
+class Book(ndb.Model):
+    title = ndb.StringProperty()
+    author = ndb.StringProperty()
+    publishedDate = ndb.StringProperty()
+    description = ndb.StringProperty()
+# [END model]
 
 
 # [START from_datastore]
@@ -42,51 +47,49 @@ def from_datastore(entity):
         return None
     if isinstance(entity, builtin_list):
         entity = entity.pop()
-
-    entity['id'] = entity.key.id
-    return entity
+    book = {}
+    book['id'] = entity.key.id()
+    book['author'] = entity.author
+    book['description'] = entity.description
+    book['title'] = entity.title
+    book['publishedDate'] = entity.publishedDate
+    return book
 # [END from_datastore]
 
 
 # [START list]
 def list(limit=10, cursor=None):
-    ds = get_client()
-    query = ds.query(kind='Book', order=['title'])
-    it = query.fetch(limit=limit, start_cursor=cursor)
-    entities, more_results, cursor = it.next_page()
+    query = Book.query().order(Book.title)
+    entities, cursor, more = query.fetch_page(10, start_cursor=cursor)
     entities = builtin_list(map(from_datastore, entities))
     return entities, cursor if len(entities) == limit else None
 # [END list]
 
 
 def read(id):
-    ds = get_client()
-    key = ds.key('Book', int(id))
-    results = ds.get(key)
+    book_key = ndb.Key('Book', int(id))
+    results = book_key.get()
     return from_datastore(results)
 
 
 # [START update]
 def update(data, id=None):
-    ds = get_client()
     if id:
-        key = ds.key('Book', int(id))
+        key = ndb.Key('Book', int(id))
+        book = key.get()
     else:
-        key = ds.key('Book')
-
-    entity = datastore.Entity(
-        key=key,
-        exclude_from_indexes=['description'])
-
-    entity.update(data)
-    ds.put(entity)
-    return from_datastore(entity)
+        book = Book()
+    book.title = data['title']
+    book.author = data['author']
+    book.publishedDate = data['publishedDate']
+    book.description = data['description']
+    book.put()
+    return from_datastore(book)
 
 create = update
 # [END update]
 
 
 def delete(id):
-    ds = get_client()
-    key = ds.key('Book', int(id))
-    ds.delete(key)
+    key = ndb.Key('Book', int(id))
+    key.delete()
