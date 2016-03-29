@@ -57,19 +57,24 @@ def from_datastore(entity):
 # [END from_datastore]
 
 
+
 # [START list]
 def list(limit=10, cursor=None):
+    if cursor:
+        cursor = Cursor(urlsafe=cursor)
     query = Book.query().order(Book.title)
-    entities, cursor, more = query.fetch_page(10, start_cursor=cursor)
+    entities, cursor, more = query.fetch_page(limit, start_cursor=cursor)
     entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor if len(entities) == limit else None
+    return entities, cursor.urlsafe() if len(entities) == limit else None
 # [END list]
 
 
+# [START read]
 def read(id):
     book_key = ndb.Key('Book', int(id))
     results = book_key.get()
     return from_datastore(results)
+# [END read]
 
 
 # [START update]
@@ -90,6 +95,8 @@ create = update
 # [END update]
 
 
+# [START delete]
 def delete(id):
     key = ndb.Key('Book', int(id))
     key.delete()
+# [END delete]
