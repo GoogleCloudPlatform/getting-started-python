@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from flask import current_app
+from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
 
 
