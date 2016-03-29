@@ -66,12 +66,9 @@ def get_model():
     elif model_backend == 'datastore':
         from . import model_datastore
         model = model_datastore
-    elif model_backend == 'mongodb':
-        from . import model_mongodb
-        model = model_mongodb
     else:
         raise ValueError(
             "No appropriate databackend configured. "
-            "Please specify datastore, cloudsql, or mongodb")
+            "Please specify datastore, or cloudsql")
 
     return model
