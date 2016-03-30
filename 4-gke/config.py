@@ -21,10 +21,10 @@ You can create and manage projects at https://console.developers.google.com
 # The secret key is used by Flask to encrypt session cookies.
 SECRET_KEY = 'secret'
 
-# There are three different ways to store the data in the application.
+# There are two different ways to store the data in the application.
 # You can choose 'datastore', or 'cloudsql'. Be sure to
 # configure the respective settings for the one you choose below.
-# You do not have to configure the other data backends. If unsure, choose
+# You do not have to configure the other data backend. If unsure, choose
 # 'datastore' as it does not require any additional configuration.
 DATA_BACKEND = 'datastore'
 
