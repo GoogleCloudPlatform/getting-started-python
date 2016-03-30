@@ -29,20 +29,7 @@
         </div>
         <ul class="nav navbar-nav">
           <li><a href="/books">Books</a></li>
-          <li><a href="/books/mine">My Books</a></li>
         </ul>
-        <p class="navbar-text navbar-right">
-        {% if session.profile %}
-          <a href="/logout">
-            {% if session.profile.image %}
-              <img class="img-circle" src="{{session.profile.image.url}}" width="24">
-            {% endif %}
-            {{session.profile.displayName}}
-          </a>
-        {% else %}
-          <a href="/oauth2authorize">Login</a>
-        {% endif %}
-        </p>
       </div>
     </div>
     <div class="container">

@@ -12,15 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
 import logging
 
-from flask import current_app, Flask, redirect, request, session, url_for
-import httplib2
-from oauth2client.contrib.flask_util import UserOAuth2
-
-
-oauth2 = UserOAuth2()
+from flask import current_app, Flask, redirect, url_for
 
 
 def create_app(config, debug=False, testing=False, config_overrides=None):
@@ -41,28 +35,6 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     with app.app_context():
         model = get_model()
         model.init_app(app)
-
-    # Create a health check handler. Health checks are used when running on
-    # Google Compute Engine by the load balancer to determine which instances
-    # can serve traffic. Google App Engine also uses health checking, but
-    # accepts any non-500 response as healthy.
-    @app.route('/_ah/health')
-    def health_check():
-        return 'ok', 200
-
-    # Initalize the OAuth2 helper.
-    oauth2.init_app(
-        app,
-        scopes=['email', 'profile'],
-        authorize_callback=_request_user_info)
-
-    # Add a logout handler.
-    @app.route('/logout')
-    def logout():
-        # Delete the user's profile and the credentials stored by oauth2.
-        del session['profile']
-        oauth2.storage.delete()
-        return redirect(request.referrer or '/')
 
     # Register the Bookshelf CRUD blueprint.
     from .crud import crud
@@ -101,21 +73,3 @@ def get_model():
 
     return model
 
-
-def _request_user_info(credentials):
-    """
-    Makes an HTTP request to the Google+ API to retrieve the user's basic
-    profile information, including full name and photo, and stores it in the
-    Flask session.
-    """
-    http = httplib2.Http()
-    credentials.authorize(http)
-    resp, content = http.request(
-        'https://www.googleapis.com/plus/v1/people/me')
-
-    if resp.status != 200:
-        current_app.logger.error(
-            "Error while obtaining user profile: %s" % resp)
-        return None
-
-    session['profile'] = json.loads(content)

@@ -34,6 +34,7 @@ def from_sql(row):
     return data
 
 
+# [START model]
 class Book(db.Model):
     __tablename__ = 'books'
 
@@ -48,8 +49,10 @@ class Book(db.Model):
 
     def __repr__(self):
         return "<Book(title='%s', author=%s)" % (self.title, self.author)
+# [END model]
 
 
+# [START list]
 def list(limit=10, cursor=None):
     cursor = int(cursor) if cursor else 0
     query = (Book.query
@@ -59,28 +62,35 @@ def list(limit=10, cursor=None):
     books = builtin_list(map(from_sql, query.all()))
     next_page = cursor + limit if len(books) == limit else None
     return (books, next_page)
+# [END list]
 
 
+# [START read]
 def read(id):
     result = Book.query.get(id)
     if not result:
         return None
     return from_sql(result)
+# [END read]
 
 
+# [START create]
 def create(data):
     book = Book(**data)
     db.session.add(book)
     db.session.commit()
     return from_sql(book)
+# [END create]
 
 
+# [START update]
 def update(data, id):
     book = Book.query.get(id)
     for k, v in data.items():
         setattr(book, k, v)
     db.session.commit()
     return from_sql(book)
+# [END update]
 
 
 def delete(id):
