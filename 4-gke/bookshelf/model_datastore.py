@@ -55,20 +55,6 @@ def list(limit=10, cursor=None):
     return entities, cursor if len(entities) == limit else None
 
 
-def list_by_user(user_id, limit=10, cursor=None):
-    ds = get_client()
-    query = ds.query(
-        kind='Book',
-        filters=[
-            ('createdById', '=', user_id)
-        ]
-    )
-    it = query.fetch(limit=limit, start_cursor=cursor)
-    entities, more_results, cursor = it.next_page()
-    entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor if len(entities) == limit else None
-
-
 def read(id):
     ds = get_client()
     key = ds.key('Book', int(id))
