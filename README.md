@@ -9,7 +9,6 @@ The code for the labs is contained in individual folders in this repository.
 
 Tutorial | Folder
 ---------|-------
-[Hello world](https://cloud.google.com/python/getting-started/hello-world) | [1-hello-world](https://github.com/GoogleCloudPlatform/getting-started-python/tree/master/1-hello-world)
 [Structured data](https://cloud.google.com/python/getting-started/using-structured-data) | [2-structured-data](https://github.com/GoogleCloudPlatform/getting-started-python/tree/master/2-structured-data)
 [Cloud Storage](https://cloud.google.com/python/getting-started/using-cloud-storage) | [3-binary-data](https://github.com/GoogleCloudPlatform/getting-started-python/tree/master/3-binary-data)
 [Authenticating users](https://cloud.google.com/python/getting-started/authenticate-users) | [4-auth](https://github.com/GoogleCloudPlatform/getting-started-python/tree/master/4-auth)
