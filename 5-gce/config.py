@@ -22,7 +22,7 @@ You can create and manage projects at https://console.developers.google.com
 SECRET_KEY = 'secret'
 
 # There are three different ways to store the data in the application.
-# You can choose 'datastore', 'cloudsql', or 'mongodb'. Be sure to
+# You can choose 'datastore', or 'cloudsql'. Be sure to
 # configure the respective settings for the one you choose below.
 # You do not have to configure the other data backends. If unsure, choose
 # 'datastore' as it does not require any additional configuration.
@@ -37,12 +37,6 @@ PROJECT_ID = 'your-project-id'
 # Cloud SQL instance.
 SQLALCHEMY_DATABASE_URI = \
     'mysql+pymysql://user:password@host/database'
-
-# Mongo configuration
-# If using mongolab, the connection URI is available from the mongolab control
-# panel. If self-hosting on compute engine, replace the values below.
-MONGO_URI = \
-    'mongodb://user:password@host:27017/database'
 
 # Google Cloud Storage and upload settings.
 # Typically, you'll name your bucket the same as your project. To create a
