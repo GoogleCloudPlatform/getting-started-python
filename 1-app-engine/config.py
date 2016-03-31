@@ -28,10 +28,6 @@ SECRET_KEY = 'secret'
 # 'datastore' as it does not require any additional configuration.
 DATA_BACKEND = 'datastore'
 
-# Google Cloud Project ID. This can be found on the 'Overview' page at
-# https://console.developers.google.com
-# PROJECT_ID = 'your-project-id'
-
 # SQLAlchemy configuration
 # Replace user, pass, host, and database with the respective values of your
 # Cloud SQL instance.

@@ -1,4 +1,6 @@
 Flask==0.10.1
+google-api-python-client==1.5.0
+oauth2client==2.0.1
 GoogleAppEngineCloudStorageClient==1.9.22.1
 gunicorn==19.4.5
 Flask-SQLAlchemy==2.1
