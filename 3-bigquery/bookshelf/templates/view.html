@@ -32,6 +32,7 @@
 </div>
 
 <div class="media">
+  {# [START book_image] #}
   <div class="media-left">
     {% if book.imageUrl %}
       <img class="book-image" src="{{book.imageUrl}}">
@@ -39,6 +40,7 @@
       <img class="book-image" src="http://placekitten.com/g/128/192">
     {% endif %}
   </div>
+  {# [END book_image] #}
   <div class="media-body">
     <h4 class="book-title">
       {{book.title}}
@@ -46,7 +48,6 @@
     </h4>
     <h5 class="book-author">By {{book.author|default('Unknown', True)}}</h5>
     <p class="book-description">{{book.description}}</p>
-    <small class="book-added-by">Added by {{book.createdBy|default('Anonymous', True)}}</small>
   </div>
 </div>
 

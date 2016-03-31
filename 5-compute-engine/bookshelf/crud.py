@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from bookshelf import get_model, oauth2, storage, tasks
+from bookshelf import get_model, storage
 from flask import Blueprint, current_app, redirect, render_template, request, \
-    session, url_for
+    url_for
 
 
 crud = Blueprint('crud', __name__)
 
 
+# [START upload_image_file]
 def upload_image_file(file):
     """
     Upload the user-uploaded file to Google Cloud Storage and retrieve its
@@ -38,27 +39,13 @@ def upload_image_file(file):
         "Uploaded file %s as %s.", file.filename, public_url)
 
     return public_url
+# [END upload_image_file]
 
 
 @crud.route("/")
 def list():
     token = request.args.get('page_token', None)
     books, next_page_token = get_model().list(cursor=token)
-
-    return render_template(
-        "list.html",
-        books=books,
-        next_page_token=next_page_token)
-
-
-@crud.route("/mine")
-@oauth2.required
-def list_mine():
-    token = request.args.get('page_token', None)
-
-    books, next_page_token = get_model().list_by_user(
-        user_id=session['profile']['id'],
-        cursor=token)
 
     return render_template(
         "list.html",
@@ -78,22 +65,16 @@ def add():
         data = request.form.to_dict(flat=True)
 
         # If an image was uploaded, update the data to point to the new image.
+        # [START image_url]
         image_url = upload_image_file(request.files.get('image'))
+        # [END image_url]
 
+        # [START image_url2]
         if image_url:
             data['imageUrl'] = image_url
-
-        # If the user is logged in, associate their profile with the new book.
-        if 'profile' in session:
-            data['createdBy'] = session['profile']['displayName']
-            data['createdById'] = session['profile']['id']
+        # [END image_url2]
 
         book = get_model().create(data)
-
-        # [START enqueue]
-        q = tasks.get_books_queue()
-        q.enqueue(tasks.process_book, book['id'])
-        # [END enqueue]
 
         return redirect(url_for('.view', id=book['id']))
 
@@ -113,9 +94,6 @@ def edit(id):
             data['imageUrl'] = image_url
 
         book = get_model().update(data, id)
-
-        q = tasks.get_books_queue()
-        q.enqueue(tasks.process_book, book['id'])
 
         return redirect(url_for('.view', id=book['id']))
 

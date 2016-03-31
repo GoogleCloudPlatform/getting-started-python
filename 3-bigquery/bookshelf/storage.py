@@ -16,16 +16,11 @@ from __future__ import absolute_import
 
 import datetime
 
+import cloudstorage as gcs
 from flask import current_app
-from gcloud import storage
 import six
 from werkzeug import secure_filename
 from werkzeug.exceptions import BadRequest
-
-
-def _get_storage_client():
-    return storage.Client(
-        project=current_app.config['PROJECT_ID'])
 
 
 def _check_extension(filename, allowed_extensions):
@@ -48,6 +43,7 @@ def _safe_filename(filename):
     return "{0}-{1}.{2}".format(basename, date, extension)
 
 
+# [START upload_file]
 def upload_file(file_stream, filename, content_type):
     """
     Uploads a file to a given Cloud Storage bucket and returns the public url
@@ -55,18 +51,20 @@ def upload_file(file_stream, filename, content_type):
     """
     _check_extension(filename, current_app.config['ALLOWED_EXTENSIONS'])
     filename = _safe_filename(filename)
+    bucket = current_app.config['CLOUD_STORAGE_BUCKET']
+    
+    filename = '/' + bucket + '/' + filename
+    
+    gcs_file = gcs.open(filename,
+                        'w',
+                        content_type=content_type)
+    gcs_file.write(file_stream)
+    gcs_file.close()
 
-    client = _get_storage_client()
-    bucket = client.get_bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
-    blob = bucket.blob(filename)
-
-    blob.upload_from_string(
-        file_stream,
-        content_type=content_type)
-
-    url = blob.public_url
+    url = 'https://storage.googleapis.com' + filename
 
     if isinstance(url, six.binary_type):
-        url = url.decode('utf-8')
+       url = url.decode('utf-8')
 
     return url
+# [END upload_file]
