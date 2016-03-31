@@ -45,8 +45,8 @@ git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID /opt/app
 
 # Install app dependencies
-virtualenv /opt/app/5-gce/env
-/opt/app/5-gce/env/bin/pip install -r /opt/app/5-gce/requirements.txt
+virtualenv /opt/app/5-compute-engine/env
+/opt/app/5-compute-engine/env/bin/pip install -r /opt/app/5-compute-engine/requirements.txt
 
 # Make sure the pythonapp user owns the application code
 chown -R pythonapp:pythonapp /opt/app
@@ -55,14 +55,14 @@ chown -R pythonapp:pythonapp /opt/app
 # applicaiton.
 cat >/etc/supervisor/conf.d/python-app.conf << EOF
 [program:pythonapp]
-directory=/opt/app/5-gce
-command=/opt/app/5-gce/env/bin/gunicorn main:app --bind 0.0.0.0:8080
+directory=/opt/app/5-compute-engine
+command=/opt/app/5-compute-engine/env/bin/gunicorn main:app --bind 0.0.0.0:8080
 autostart=true
 autorestart=true
 user=pythonapp
 # Environment variables ensure that the application runs inside of the
 # configured virtualenv.
-environment=VIRTUAL_ENV="/opt/app/env/5-gce",PATH="/opt/app/5-gce/env/bin",\
+environment=VIRTUAL_ENV="/opt/app/env/5-compute-engine",PATH="/opt/app/5-compute-engine/env/bin",\
     HOME="/home/pythonapp",USER="pythonapp"
 stdout_logfile=syslog
 stderr_logfile=syslog
