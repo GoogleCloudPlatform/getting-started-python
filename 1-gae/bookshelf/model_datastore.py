@@ -26,10 +26,10 @@ def init_app(app):
 
 # [START model]
 class Book(ndb.Model):
-    title = ndb.StringProperty()
     author = ndb.StringProperty()
-    publishedDate = ndb.StringProperty()
     description = ndb.StringProperty()
+    publishedDate = ndb.StringProperty()
+    title = ndb.StringProperty()
 # [END model]
 
 
