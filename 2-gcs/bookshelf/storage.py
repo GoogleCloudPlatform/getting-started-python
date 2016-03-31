@@ -61,8 +61,10 @@ def upload_file(file_stream, filename, content_type):
     gcs_file.write(file_stream)
     gcs_file.close()
 
-    # if isinstance(url, six.binary_type):
-    #    url = url.decode('utf-8')
+    url = 'https://storage.googleapis.com' + filename
 
-    return filename
+    if isinstance(url, six.binary_type):
+       url = url.decode('utf-8')
+
+    return url
 # [END upload_file]
