@@ -52,8 +52,9 @@ def from_datastore(entity):
     book['id'] = entity.key.id()
     book['author'] = entity.author
     book['description'] = entity.description
-    book['title'] = entity.title
+    book['imageUrl'] = entity.imageUrl
     book['publishedDate'] = entity.publishedDate
+    book['title'] = entity.title
     return book
 # [END from_datastore]
 
@@ -85,10 +86,11 @@ def update(data, id=None):
         book = key.get()
     else:
         book = Book()
-    book.title = data['title']
     book.author = data['author']
-    book.publishedDate = data['publishedDate']
     book.description = data['description']
+    book.imageUrl = data['imageUrl']
+    book.publishedDate = data['publishedDate']
+    book.title = data['title']
     book.put()
     return from_datastore(book)
 

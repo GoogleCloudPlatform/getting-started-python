@@ -13,12 +13,15 @@
 # limitations under the License.
 
 # This file specifies your Python application's runtime configuration.
-# See https://cloud.google.com/appengine/docs/managed-vms/config for details.
+# See https://cloud.google.com/appengine/docs/python/config/appconfig
+# for details.
 
-runtime: python
-vm: true
-entrypoint: gunicorn -b :$PORT main:app
+application: your-project-id
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
 
-runtime_config:
-  python_version: 3
-
+handlers:
+- url: /.*
+  script: main.app
