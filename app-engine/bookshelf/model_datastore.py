@@ -87,7 +87,6 @@ def update(data, id=None):
         book = Book()
     book.author = data['author']
     book.description = data['description']
-    book.imageUrl = data['imageUrl']
     book.publishedDate = data['publishedDate']
     book.title = data['title']
     book.put()
