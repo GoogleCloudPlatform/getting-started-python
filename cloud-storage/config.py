@@ -18,9 +18,6 @@ Update this file with the values for your specific Google Cloud project.
 You can create and manage projects at https://console.developers.google.com
 """
 
-# The secret key is used by Flask to encrypt session cookies.
-SECRET_KEY = 'secret'
-
 # There are two different ways to store the data in the application.
 # You can choose 'datastore', or 'cloudsql'. Be sure to
 # configure the respective settings for the one you choose below.
