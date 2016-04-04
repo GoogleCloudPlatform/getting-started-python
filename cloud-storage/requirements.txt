@@ -1,6 +1,4 @@
 Flask==0.10.1
 GoogleAppEngineCloudStorageClient==1.9.22.1
 gunicorn==19.4.5
-Flask-SQLAlchemy==2.1
-PyMySQL==0.7.2
 six==1.10.0
