@@ -1,9 +1,5 @@
 Flask==0.10.1
 gcloud==0.11.0
 gunicorn==19.4.5
-Flask-SQLAlchemy==2.1
-PyMySQL==0.7.2
 six==1.10.0
-requests[security]==2.9.1
 honcho==0.6.6
-psq==0.2.1
