@@ -16,7 +16,7 @@ from __future__ import absolute_import
 
 import datetime
 
-import cloudstorage as gcs
+import cloudstorage
 from flask import current_app
 import six
 from werkzeug import secure_filename
@@ -53,15 +53,15 @@ def upload_file(file_stream, filename, content_type):
     filename = _safe_filename(filename)
     bucket = current_app.config['CLOUD_STORAGE_BUCKET']
     
-    filename = '/' + bucket + '/' + filename
+    objectname = '/' + bucket + '/' + filename
     
-    gcs_file = gcs.open(filename,
+    cs_file = cloudstorage.open(objectname,
                         'w',
                         content_type=content_type)
-    gcs_file.write(file_stream)
-    gcs_file.close()
+    cs_file.write(file_stream)
+    cs_file.close()
 
-    url = 'https://storage.googleapis.com' + filename
+    url = 'https://storage.googleapis.com' + objectname
 
     if isinstance(url, six.binary_type):
        url = url.decode('utf-8')
