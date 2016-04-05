@@ -14,8 +14,10 @@
 
 import contextlib
 
+import bookshelf
 from conftest import flaky_filter
 from flaky import flaky
+import mock
 from oauth2client.client import OAuth2Credentials
 import pytest
 
@@ -55,7 +57,6 @@ def client_with_credentials(app):
 # in conftest.py
 @pytest.mark.usefixtures('app', 'model')
 class TestAuth(object):
-
     def test_not_logged_in(self, app):
         with app.test_client() as c:
             rv = c.get('/books/')
@@ -120,3 +121,13 @@ class TestAuth(object):
         body = rv.data.decode('utf-8')
         assert 'Book 1' in body
         assert 'Book 2' not in body
+
+    @mock.patch("httplib2.Http")
+    def test_request_user_info(self, HttpMock):
+        httpObj = mock.MagicMock()
+        responseMock = mock.MagicMock(status=200)
+        httpObj.request = mock.MagicMock(
+            return_value=(responseMock, b'{"name": "bill"}'))
+        HttpMock.return_value = httpObj
+        credentials = mock.MagicMock()
+        bookshelf._request_user_info(credentials)
