@@ -53,6 +53,7 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     def logout():
         # Delete the user's profile and the credentials stored by oauth2.
         del session['profile']
+        session.modified = True
         oauth2.storage.delete()
         return redirect(request.referrer or '/')
 
