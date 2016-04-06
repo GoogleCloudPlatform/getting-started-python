@@ -113,4 +113,4 @@ def _request_user_info(credentials):
             "Error while obtaining user profile: %s" % resp)
         return None
 
-    session['profile'] = json.loads(content)
+    session['profile'] = json.loads(content.decode('utf-8'))
