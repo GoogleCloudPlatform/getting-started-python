@@ -1,3 +1,0 @@
-bookshelf: gunicorn -b 0.0.0.0:$PORT main:app
-worker: psqworker --pid /tmp/psq.pid main.books_queue
-monitor: python monitor.py /tmp/psq.pid
