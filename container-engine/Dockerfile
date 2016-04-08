@@ -12,11 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-# The Google App Engine python runtime is Debian Jessie with Python installed
-# and various os-level packages to allow installation of popular Python
-# libraries. The source is on github at:
-#   https://github.com/GoogleCloudPlatform/python-docker
-FROM gcr.io/google_appengine/python
+# The Google App Engine base image is debian (jessie) with ca-certificates
+# installed.
+FROM gcr.io/google_appengine/base
+
+# Install Python, pip, and C dev libraries necessary to compile the most popular
+# Python libraries.
+RUN apt-get -q update && \
+ apt-get install --no-install-recommends -y -q \
+   python2.7 python3.4 python2.7-dev python3.4-dev python-pip build-essential git mercurial \
+   libffi-dev libssl-dev libxml2-dev \
+   libxslt1-dev libpq-dev libmysqlclient-dev libcurl4-openssl-dev \
+   libjpeg-dev zlib1g-dev libpng12-dev \
+   gfortran libblas-dev liblapack-dev libatlas-dev libquadmath0 \
+   libfreetype6-dev pkg-config swig \
+   && \
+ apt-get clean && rm /var/lib/apt/lists/*_*
+
+# Setup locale. This prevents Python 3 IO encoding issues.
+ENV LANG C.UTF-8
+
+# Upgrade pip (debian package version tends to run a few version behind) and
+# install virtualenv system-wide.
+RUN pip install --upgrade pip virtualenv
+
+RUN ln -s /home/vmagent/app /app
+WORKDIR /app
+
+# Port 8080 is the port used by Google App Engine for serving HTTP traffic.
+EXPOSE 8080
+ENV PORT 8080
 
 # Create a virtualenv for the application dependencies.
 # If you want to use Python 3, add the -p python3.4 flag.
