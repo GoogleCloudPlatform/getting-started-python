@@ -44,6 +44,7 @@ export HOME=/root
 git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID /opt/app
 
+# Replace the project ID placeholder in config.py
 sed -i s/your-project-id/"$PROJECTID"/ /opt/app/compute-engine/config.py
 
 # Install app dependencies
