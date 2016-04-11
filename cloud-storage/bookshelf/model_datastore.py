@@ -27,7 +27,7 @@ def init_app(app):
 # [START model]
 class Book(ndb.Model):
     author = ndb.StringProperty()
-    description = ndb.StringProperty()
+    description = ndb.StringProperty(indexed=False)
     imageUrl = ndb.StringProperty()
     publishedDate = ndb.StringProperty()
     title = ndb.StringProperty()
