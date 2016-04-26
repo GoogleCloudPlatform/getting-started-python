@@ -52,7 +52,7 @@ def list(limit=10, cursor=None):
     it = query.fetch(limit=limit, start_cursor=cursor)
     entities, more_results, cursor = it.next_page()
     entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor if len(entities) == limit else None
+    return entities, cursor.decode('utf-8') if len(entities) == limit else None
 
 
 # [START list_by_user]
@@ -67,7 +67,7 @@ def list_by_user(user_id, limit=10, cursor=None):
     it = query.fetch(limit=limit, start_cursor=cursor)
     entities, more_results, cursor = it.next_page()
     entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor if len(entities) == limit else None
+    return entities, cursor.decode('utf-8') if len(entities) == limit else None
 # [END list_by_user]
 
 
