@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
+
 from conftest import flaky_filter
 from flaky import flaky
 import pytest
@@ -38,9 +40,8 @@ class TestCrudActions(object):
 
         body = rv.data.decode('utf-8')
         assert 'Book 1' in body, "Should show books"
-        # Ordering is lexical, so 9 will be on page two and 10 and 11 will
-        # be after 1.
-        assert 'Book 9' not in body, "Should not show more than 10 books"
+        assert (len(re.findall('<h4>Book', body)) == 10,
+                "Should not show more than 10 books")
         assert 'More' in body, "Should have more than one page"
 
     def test_add(self, app):
