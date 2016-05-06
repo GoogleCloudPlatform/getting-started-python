@@ -3,7 +3,7 @@ import shutil
 
 import nox
 
-REPO_TOOLS_REQ =\
+REPO_TOOLS_REQ = \
     'git+https://github.com/GoogleCloudPlatform/python-repo-tools.git'
 
 DIRS = [
@@ -35,12 +35,22 @@ def session_lint(session):
         '--import-order-style=google', '.')
 
 
-@nox.parametrize('dir', DIRS)
-def session_run_tests(session, dir=None, toxargs=None):
-    """Run all tests for all directories (slow!)"""
+def run_test(session, dir, toxargs):
     shutil.copy('config.py', dir)
     session.chdir(dir)
     session.run('tox', *(toxargs or []))
+
+
+@nox.parametrize('dir', DIRS)
+def session_run_tests(session, dir=None, toxargs=None):
+    """Run all tests for all directories (slow!)"""
+    run_test(session, dir, toxargs)
+
+
+def session_run_one_test(session):
+    dir = session.posargs[0]
+    toxargs = session.posargs[1:]
+    run_test(session, dir, toxargs)
 
 
 @nox.parametrize('dir', DIRS)
