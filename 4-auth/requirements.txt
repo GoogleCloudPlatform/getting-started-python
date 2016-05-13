@@ -7,3 +7,5 @@ PyMySQL==0.7.2
 Flask-PyMongo==0.4.1
 PyMongo==3.2.2
 six==1.10.0
+Flask-Session
+pymemcache==1.3.5

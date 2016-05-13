@@ -13,10 +13,15 @@
 # limitations under the License.
 
 import json
+import os
 import logging
 
 from flask import current_app, Flask, redirect, request, session, url_for
 import httplib2
+from pymemcache.client.base import Client as MemcacheClient
+
+from flask.ext.session import MemcachedSessionInterface
+
 
 # [START include]
 from oauth2client.contrib.flask_util import UserOAuth2
@@ -25,9 +30,21 @@ oauth2 = UserOAuth2()
 # [END include]
 
 
+# [START client]
+memcache_addr = os.environ.get('MEMCACHE_PORT_11211_TCP_ADDR', 'localhost')
+memcache_port = os.environ.get('MEMCACHE_PORT_11211_TCP_PORT', 11211)
+memcache_client = MemcacheClient((memcache_addr, int(memcache_port)))
+# [END client]
+
+
+
 def create_app(config, debug=False, testing=False, config_overrides=None):
     app = Flask(__name__)
     app.config.from_object(config)
+
+    app.session_interface = MemcachedSessionInterface(memcache_client, 'sess')
+
+
 
     app.debug = debug
     app.testing = testing
