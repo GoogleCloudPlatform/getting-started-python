@@ -15,16 +15,16 @@
 # This file configures the bookshelf application frontend. The frontend serves
 # public web traffic.
 
-# The bookshelf frontend replication controller ensures that at least 3
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bookshelf-frontend
+  labels:
+    app: bookshelf
+# The bookshelf frontend replica set ensures that at least 3
 # instances of the bookshelf app are running on the cluster.
 # For more info about Pods see:
 #   https://cloud.google.com/container-engine/docs/pods/
-# For more info about Replication Controllers:
-#   https://cloud.google.com/container-engine/docs/replicationcontrollers/
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: bookshelf-frontend
 spec:
   replicas: 3
   template:
@@ -49,29 +49,5 @@ spec:
           value: bookshelf
         # The bookshelf process listens on port 8080 for web traffic by default.
         ports:
-        - containerPort: 8080
-
----
-
-# The bookshelf service provides a load-balancing proxy over the bookshelf app
-# pods. By specifying the type as a 'LoadBalancer', Container Engine will
-# create an external HTTP load balancer.
-# For more information about Services see:
-#   https://cloud.google.com/container-engine/docs/services/
-# For more information about external HTTP load balancing see:
-#   https://cloud.google.com/container-engine/docs/load-balancer
-apiVersion: v1
-kind: Service
-metadata:
-  name: bookshelf-frontend
-  labels:
-    app: bookshelf
-    tier: frontend
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8080
-  selector:
-    app: bookshelf
-    tier: frontend
+        - name: http-server
+          containerPort: 8080
