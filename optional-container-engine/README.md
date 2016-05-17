@@ -22,7 +22,7 @@ This optional tutorial will walk you through how to deploy the Bookshelf sample 
 Create a cluster for the bookshelf application:
 
     gcloud container clusters create bookshelf \
-        --scope "https://www.googleapis.com/auth/userinfo.email","cloud-platform" \
+        --scope "cloud-platform" \
         --num-nodes 2
     gcloud container clusters get-credentials bookshelf
 

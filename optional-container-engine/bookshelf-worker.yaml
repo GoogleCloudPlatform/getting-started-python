@@ -15,16 +15,16 @@
 # This file configures the bookshelf task worker. The worker is responsible
 # for processing book requests and updating book information.
 
-# The bookshelf worker controller ensures that at least 3 instances of the
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bookshelf-worker
+  labels:
+    app: bookshelf
+# The bookshelf worker replica set ensures that at least 2 instances of the
 # bookshelf worker pod are running on the cluster.
 # For more info about Pods see:
 #   https://cloud.google.com/container-engine/docs/pods/
-# For more info about Replication Controllers:
-#   https://cloud.google.com/container-engine/docs/replicationcontrollers/
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: bookshelf-worker
 spec:
   replicas: 2
   template:

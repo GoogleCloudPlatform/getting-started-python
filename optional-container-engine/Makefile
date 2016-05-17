@@ -6,7 +6,8 @@ all: deploy
 .PHONY: create-cluster
 create-cluster:
 	gcloud container clusters create bookshelf \
-		--scope "https://www.googleapis.com/auth/userinfo.email","cloud-platform"
+		--scope "cloud-platform" \
+		--num-nodes 2
 	gcloud container clusters get-credentials bookshelf
 
 .PHONY: create-bucket
@@ -27,6 +28,10 @@ template:
 	sed -i ".tmpl" "s/\$$GCLOUD_PROJECT/$(GCLOUD_PROJECT)/g" bookshelf-frontend.yaml
 	sed -i ".tmpl" "s/\$$GCLOUD_PROJECT/$(GCLOUD_PROJECT)/g" bookshelf-worker.yaml
 
+.PHONY: create-service
+create-service:
+	kubectl create -f bookshelf-service.yaml
+
 .PHONY: deploy-frontend
 deploy-frontend: push template
 	kubectl create -f bookshelf-frontend.yaml
@@ -36,10 +41,10 @@ deploy-worker: push template
 	kubectl create -f bookshelf-worker.yaml
 
 .PHONY: deploy
-deploy: deploy-frontend deploy-worker
+deploy: deploy-frontend deploy-worker create-service
 
 .PHONY: delete
 delete:
-	kubectl delete rc bookshelf-frontend
-	kubectl delete rc bookshelf-worker
-	kubectl delete service bookshelf-frontend
+	-kubectl delete -f bookshelf-frontend.yaml
+	-kubectl delete -f bookshelf-worker.yaml
+	-kubectl delete -f bookshelf-frontend.yaml
