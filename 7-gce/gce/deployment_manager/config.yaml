@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 imports:
 - name: bookshelf.jinja
   path: ./bookshelf.jinja
@@ -29,3 +30,4 @@ resources:
     scopes:
     - https://www.googleapis.com/auth/cloud-platform
 
+# [END all]
