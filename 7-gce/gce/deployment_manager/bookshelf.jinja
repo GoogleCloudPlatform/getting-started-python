@@ -11,8 +11,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #}
 
+{# [START all] #}
+
+{# [START env] #}
 {% set NAME = "bookshelf-" + env["deployment"] %}
 {% set SERVICE = "bookshelf-" + env["deployment"] + "-frontend" %}
+{# [END env] #}
 
 #
 # Instance group setup
@@ -43,8 +47,10 @@ resources:
       metadata:
         items:
           - key: startup-script
+{# [START startup] #}
             value: |
 {{imports['startup-script']|indent(14, true)}}
+{# [END startup] #}
       networkInterfaces:
           - network: global/networks/default
             accessConfigs:
@@ -100,8 +106,10 @@ resources:
       - $(ref.{{ NAME }}-health-check.selfLink)
     portName: http
     backends:
+{# [START reference] #}
       - group: $(ref.{{ NAME }}-frontend-group.instanceGroup)
         zone: {{ properties['zone'] }}
+{# [END reference] #}
 
 # Create a URL map and web Proxy. The URL map will send all requests to the
 # backend service defined above.
@@ -135,10 +143,12 @@ resources:
     zone: {{ properties['zone'] }}
     target: $(ref.{{ NAME }}-frontend-group.selfLink)
     autoscalingPolicy:
+{# [START properties] #}
       minNumReplicas: {{ properties['min-instances'] }}
       maxNumReplicas: {{ properties['max-instances'] }}
       loadBalancingUtilization:
         utilizationTarget: {{ properties['target-utilization'] }}
+{# [END properties] #}
 
 # Firewall rule that allows traffic to GCE instances with the
 # http server tag we created
@@ -154,3 +164,5 @@ resources:
     targetTags:
       - http-server
     description: "Allow port 8080 access to http-server"
+
+{# [END all] #}
