@@ -26,7 +26,7 @@ def session_reqcheck(session):
     else:
         command = 'check-requirements'
 
-    for reqfile in glob('**/requirements.txt'):
+    for reqfile in glob('**/requirements*.txt'):
         session.run('gcprepotools', command, reqfile)
 
 
