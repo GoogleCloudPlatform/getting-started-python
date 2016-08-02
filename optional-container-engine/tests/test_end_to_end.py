@@ -66,7 +66,7 @@ def test_end_to_end():
         assert 'John Kennedy Toole' in author
 
         description = soup.find('p', 'book-description').string
-        assert 'Ignatius Reilly' in description
+        assert 'Ignatius' in description
 
         image_src = soup.find('img', 'book-image')['src']
         image = requests.get(image_src)
