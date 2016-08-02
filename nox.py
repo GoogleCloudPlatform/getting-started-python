@@ -7,7 +7,9 @@ REPO_TOOLS_REQ = \
     'git+https://github.com/GoogleCloudPlatform/python-repo-tools.git'
 
 DIRS = [
-    '1-hello-world',
+    # Hello world doesn't have system tests, just a lint test which will be
+    # covered by the global lint here.
+    # '1-hello-world',
     '2-structured-data',
     '3-binary-data',
     '4-auth',
@@ -31,7 +33,7 @@ def session_reqcheck(session):
 def session_lint(session):
     session.install('flake8', 'flake8-import-order')
     session.run(
-        'flake8', '--exclude=env,.nox,._config.py',
+        'flake8', '--exclude=env,.nox,._config.py,.tox',
         '--import-order-style=google', '.')
 
 
@@ -56,12 +58,8 @@ def session_run_one_test(session):
 @nox.parametrize('dir', DIRS)
 def session_travis(session, dir=None):
     """On travis, only run the py3.4 and cloudsql tests."""
-    if dir == '1-hello-world':
-        session_run_tests(
-            session, dir=dir, toxargs=['-e', 'lint'])
-    else:
-        shutil.copy('config.py', dir)
-        session_run_tests(
-            session,
-            dir=dir,
-            toxargs=['-e', 'py34', '--', '-k', 'cloudsql'])
+    shutil.copy('config.py', dir)
+    session_run_tests(
+        session,
+        dir=dir,
+        toxargs=['-e', 'py34', '--', '-k', 'cloudsql'])
