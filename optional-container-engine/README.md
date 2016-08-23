@@ -22,11 +22,11 @@ This optional tutorial will walk you through how to deploy the Bookshelf sample 
 Create a cluster for the bookshelf application:
 
     gcloud container clusters create bookshelf \
-        --scope "cloud-platform" \
+        --scopes "cloud-platform" \
         --num-nodes 2
     gcloud container clusters get-credentials bookshelf
 
-The scopes specified in the `--scope` argument allows nodes in the cluster to access Google Cloud Platform APIs, such as the Cloud Datastore API.
+The scopes specified in the `--scopes` argument allows nodes in the cluster to access Google Cloud Platform APIs, such as the Cloud Datastore API.
 
 Alternatively, you can use make:
 
