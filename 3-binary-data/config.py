@@ -46,6 +46,10 @@ CLOUDSQL_DATABASE = 'bookshelf'
 CLOUDSQL_CONNECTION_NAME = 'your-cloudsql-connection-name'
 
 # The CloudSQL proxy is used locally to connect to the cloudsql instance.
+# To start the proxy, use:
+#
+#   $ cloud_sql_proxy -instances=your-connection-name=tcp:3306
+#
 # Alternatively, you could use a local MySQL instance for testing.
 LOCAL_SQLALCHEMY_DATABASE_URI = (
     'mysql+pymysql://{user}:{password}@localhost/{database}').format(
