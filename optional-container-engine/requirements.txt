@@ -4,7 +4,7 @@ gunicorn==19.6.0
 oauth2client==3.0.0
 mock==2.0.0
 Flask-SQLAlchemy==2.1
-PyMySQL==0.7.8
+PyMySQL==0.7.9
 Flask-PyMongo==0.4.1
 PyMongo==3.3.0
 six==1.10.0
