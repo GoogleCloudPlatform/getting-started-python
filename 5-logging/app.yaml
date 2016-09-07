@@ -22,3 +22,9 @@ entrypoint: gunicorn -b :$PORT main:app
 
 runtime_config:
   python_version: 3
+
+beta_settings:
+    # If using Cloud SQL, set this value to the Cloud SQL connection name, e.g.
+    #   "project:region:cloudsql-instance"
+    # You must also update the values in config.py.
+    cloud_sql_instances: "your-cloudsql-connection-name"

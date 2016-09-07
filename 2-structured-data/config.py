@@ -18,6 +18,8 @@ Update this file with the values for your specific Google Cloud project.
 You can create and manage projects at https://console.developers.google.com
 """
 
+import os
+
 # The secret key is used by Flask to encrypt session cookies.
 SECRET_KEY = 'secret'
 
@@ -32,11 +34,40 @@ DATA_BACKEND = 'datastore'
 # https://console.developers.google.com
 PROJECT_ID = 'your-project-id'
 
-# SQLAlchemy configuration
-# Replace user, pass, host, and database with the respective values of your
-# Cloud SQL instance.
-SQLALCHEMY_DATABASE_URI = \
-    'mysql+pymysql://user:password@host/database'
+# CloudSQL & SQLAlchemy configuration
+# Replace the following values the respective values of your Cloud SQL
+# instance.
+CLOUDSQL_USER = 'root'
+CLOUDSQL_PASSWORD = 'your-cloudsql-password'
+CLOUDSQL_DATABASE = 'bookshelf'
+# Set this value to the Cloud SQL connection name, e.g.
+#   "project:region:cloudsql-instance".
+# You must also update the value in app.yaml.
+CLOUDSQL_CONNECTION_NAME = 'your-cloudsql-connection-name'
+
+# The CloudSQL proxy is used locally to connect to the cloudsql instance.
+# To start the proxy, use:
+#
+#   $ cloud_sql_proxy -instances=your-connection-name=tcp:3306
+#
+# Alternatively, you could use a local MySQL instance for testing.
+LOCAL_SQLALCHEMY_DATABASE_URI = (
+    'mysql+pymysql://{user}:{password}@localhost/{database}').format(
+        user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
+        database=CLOUDSQL_DATABASE)
+
+# When running on App Engine a unix socket is used to connect to the cloudsql
+# instance.
+LIVE_SQLALCHEMY_DATABASE_URI = (
+    'mysql+pymysql://{user}:{password}@localhost/{database}'
+    '?unix_socket=/cloudsql/{connection_name}').format(
+        user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
+        database=CLOUDSQL_DATABASE, connection_name=CLOUDSQL_CONNECTION_NAME)
+
+if os.environ.get('GAE_APPENGINE_HOSTNAME'):
+    SQLALCHEMY_DATABASE_URI = LIVE_SQLALCHEMY_DATABASE_URI
+else:
+    SQLALCHEMY_DATABASE_URI = LOCAL_SQLALCHEMY_DATABASE_URI
 
 # Mongo configuration
 # If using mongolab, the connection URI is available from the mongolab control
