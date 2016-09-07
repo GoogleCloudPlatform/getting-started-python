@@ -34,7 +34,6 @@ DATA_BACKEND = 'datastore'
 # https://console.developers.google.com
 PROJECT_ID = 'your-project-id'
 
-# SQLAlchemy configuration
 # CloudSQL & SQLAlchemy configuration
 # Replace the following values the respective values of your Cloud SQL
 # instance.
