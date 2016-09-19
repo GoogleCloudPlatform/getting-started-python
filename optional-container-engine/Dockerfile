@@ -5,8 +5,8 @@
 FROM gcr.io/google_appengine/python
 
 # Create a virtualenv for the application dependencies.
-# If you want to use Python 3, add the -p python3.4 flag.
-RUN virtualenv /env
+# If you want to use Python 2, add the -p python2.7 flag.
+RUN virtualenv -p python3.4 /env
 
 # Set virtualenv environment variables. This is equivalent to running
 # source /env/bin/activate. This ensures the application is executed within
