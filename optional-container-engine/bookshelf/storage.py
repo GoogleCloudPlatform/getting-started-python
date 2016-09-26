@@ -17,7 +17,7 @@ from __future__ import absolute_import
 import datetime
 
 from flask import current_app
-from gcloud import storage
+from google.cloud import storage
 import six
 from werkzeug import secure_filename
 from werkzeug.exceptions import BadRequest

@@ -16,7 +16,7 @@
 
 import bookshelf
 import config
-from gcloud.exceptions import ServiceUnavailable
+from google.cloud.exceptions import ServiceUnavailable
 from oauth2client.client import HttpAccessTokenRefreshError
 import pytest
 from retrying import retry
