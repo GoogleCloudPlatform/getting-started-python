@@ -25,8 +25,10 @@ runtime_config:
 
 #[START cloudsql_settings]
 beta_settings:
-    # If using Cloud SQL, set this value to the Cloud SQL connection name, e.g.
+    # If using Cloud SQL, uncomment and set this value to the Cloud SQL
+    # connection name, e.g.
     #   "project:region:cloudsql-instance"
     # You must also update the values in config.py.
-    cloud_sql_instances: "your-cloudsql-connection-name"
+    #
+    # cloud_sql_instances: "your-cloudsql-connection-name"
 #[END cloudsql_settings]
