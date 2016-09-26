@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from flask import current_app
-from gcloud import datastore
+from google.cloud import datastore
 
 
 builtin_list = list
