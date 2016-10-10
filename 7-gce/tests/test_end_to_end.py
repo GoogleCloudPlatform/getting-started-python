@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import re
 import time
 
 from bs4 import BeautifulSoup
@@ -60,13 +61,13 @@ def test_end_to_end():
         soup = BeautifulSoup(response.text, 'html.parser')
 
         title = soup.find('h4', 'book-title').contents[0].strip()
-        assert title == 'A Confederacy of Dunces'
+        assert re.search(r'A Confederacy of Dunces', title, re.I)
 
         author = soup.find('h5', 'book-author').string
-        assert 'John Kennedy Toole' in author
+        assert re.search(r'John Kennedy Toole', author, re.I)
 
         description = soup.find('p', 'book-description').string
-        assert 'Ignatius' in description
+        assert re.search(r'Ignatius', description, re.I)
 
         image_src = soup.find('img', 'book-image')['src']
         image = requests.get(image_src)
