@@ -54,15 +54,19 @@ CLOUDSQL_CONNECTION_NAME = 'your-cloudsql-connection-name'
 #   $ cloud_sql_proxy -instances=your-connection-name=tcp:3306
 #
 # Alternatively, you could use a local MySQL instance for testing.
+# Port 3306 is the standard MySQL port. If you need to use a different port,
+# change the 3306 to a different port number.
 LOCAL_SQLALCHEMY_DATABASE_URI = (
-    'mysql+pymysql://{user}:{password}@localhost/{database}').format(
+    'mysql+pymysql://{user}:{password}@127.0.0.1:3306/{database}').format(
         user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
         database=CLOUDSQL_DATABASE)
 
 # When running on App Engine a unix socket is used to connect to the cloudsql
 # instance.
+# Port 3306 is the standard MySQL port. If you need to use a different port,
+# change the 3306 to a different port number.
 LIVE_SQLALCHEMY_DATABASE_URI = (
-    'mysql+pymysql://{user}:{password}@localhost/{database}'
+    'mysql+pymysql://{user}:{password}@127.0.0.1:3306/{database}'
     '?unix_socket=/cloudsql/{connection_name}').format(
         user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
         database=CLOUDSQL_DATABASE, connection_name=CLOUDSQL_CONNECTION_NAME)
