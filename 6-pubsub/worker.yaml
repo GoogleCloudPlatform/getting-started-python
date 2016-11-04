@@ -19,7 +19,7 @@
 # [START worker]
 service: worker
 runtime: python
-vm: true
+env: flex
 
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
 # of the Foreman process manager. For the worker module, both the queue worker
