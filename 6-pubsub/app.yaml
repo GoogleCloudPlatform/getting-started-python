@@ -17,7 +17,7 @@
 # for details.
 
 runtime: python
-vm: true
+env: flex
 
 # [START entrypoint]
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
