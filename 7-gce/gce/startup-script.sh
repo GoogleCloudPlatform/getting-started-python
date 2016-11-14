@@ -52,7 +52,7 @@ virtualenv /opt/app/7-gce/env
 chown -R pythonapp:pythonapp /opt/app
 
 # Configure supervisor to start gunicorn inside of our virtualenv and run the
-# applicaiton.
+# application.
 cat >/etc/supervisor/conf.d/python-app.conf << EOF
 [program:pythonapp]
 directory=/opt/app/7-gce
