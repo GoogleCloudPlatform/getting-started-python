@@ -82,6 +82,7 @@ def update(data, id=None):
     ds.put(entity)
     return from_datastore(entity)
 
+
 create = update
 # [END update]
 
