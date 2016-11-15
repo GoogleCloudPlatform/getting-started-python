@@ -48,11 +48,17 @@ def from_datastore(entity):
 
 def list(limit=10, cursor=None):
     ds = get_client()
+
     query = ds.query(kind='Book', order=['title'])
-    it = query.fetch(limit=limit, start_cursor=cursor)
-    entities, more_results, cursor = it.next_page()
-    entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor.decode('utf-8') if len(entities) == limit else None
+    query_iterator = query.fetch(limit=limit, start_cursor=cursor)
+    page = next(query_iterator.pages)
+
+    entities = builtin_list(map(from_datastore, page))
+    next_cursor = (
+        query_iterator.next_page_token.decode('utf-8')
+        if query_iterator.next_page_token else None)
+
+    return entities, next_cursor
 
 
 # [START list_by_user]
@@ -64,10 +70,16 @@ def list_by_user(user_id, limit=10, cursor=None):
             ('createdById', '=', user_id)
         ]
     )
-    it = query.fetch(limit=limit, start_cursor=cursor)
-    entities, more_results, cursor = it.next_page()
-    entities = builtin_list(map(from_datastore, entities))
-    return entities, cursor.decode('utf-8') if len(entities) == limit else None
+
+    query_iterator = query.fetch(limit=limit, start_cursor=cursor)
+    page = next(query_iterator.pages)
+
+    entities = builtin_list(map(from_datastore, page))
+    next_cursor = (
+        query_iterator.next_page_token.decode('utf-8')
+        if query_iterator.next_page_token else None)
+
+    return entities, next_cursor
 # [END list_by_user]
 
 
