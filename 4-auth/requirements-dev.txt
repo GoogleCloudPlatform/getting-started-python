@@ -1,5 +1,5 @@
 tox==2.4.1
-flake8==3.1.0
+flake8==3.2.0
 flaky==3.3.0
 pytest==3.0.4
 pytest-cov==2.4.0
