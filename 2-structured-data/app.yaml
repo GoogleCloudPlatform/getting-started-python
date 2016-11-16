@@ -17,7 +17,7 @@
 # for details.
 
 runtime: python
-vm: true
+env: flex
 entrypoint: gunicorn -b :$PORT main:app
 
 runtime_config:
@@ -30,5 +30,5 @@ beta_settings:
     #   "project:region:cloudsql-instance"
     # You must also update the values in config.py.
     #
-    # cloud_sql_instances: "your-cloudsql-connection-name"
+    cloud_sql_instances: "your-cloudsql-connection-name"
 #[END cloudsql_settings]
