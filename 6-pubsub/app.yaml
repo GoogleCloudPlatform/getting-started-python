@@ -21,7 +21,7 @@ env: flex
 
 # [START entrypoint]
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
-# of the Foreman process manager. For the default module, only the
+# of the Foreman process manager. For the default service, only the
 # frontend process is needed.
 entrypoint: honcho start -f /app/procfile bookshelf
 # [END entrypoint]
