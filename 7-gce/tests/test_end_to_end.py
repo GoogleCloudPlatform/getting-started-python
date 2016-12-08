@@ -14,11 +14,11 @@
 
 import os
 import re
-import time
 
 from bs4 import BeautifulSoup
 import pytest
 import requests
+from retrying import retry
 
 
 @pytest.mark.e2e
@@ -50,10 +50,10 @@ def test_end_to_end():
     book_url = response.request.url
     book_id = book_url.rsplit('/', 1).pop()
 
-    # Wait 30 seconds for pubsub messages to be processed.
-    time.sleep(30)
-
-    try:
+    # Use retry because it will take some indeterminate time for the pub/sub
+    # message to be processed.
+    @retry(wait_exponential_multiplier=1000, stop_max_attempt_number=15)
+    def check_for_updated_data():
         # Check that the book's information was updated.
         response = requests.get(book_url)
         assert response.status_code == 200
@@ -72,6 +72,9 @@ def test_end_to_end():
         image_src = soup.find('img', 'book-image')['src']
         image = requests.get(image_src)
         assert image.status_code == 200
+
+    try:
+        check_for_updated_data()
     finally:
         # Delete the book we created.
         requests.get(base_url + '/books/{}/delete'.format(book_id))
