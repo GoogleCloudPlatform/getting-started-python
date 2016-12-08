@@ -18,7 +18,7 @@ DIRS = [
     '7-gce']
 
 
-def session_reqcheck(session):
+def session_check_requirements(session):
     session.install(REPO_TOOLS_REQ)
 
     if 'update' in session.posargs:
