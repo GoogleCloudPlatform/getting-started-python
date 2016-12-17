@@ -17,7 +17,6 @@ import logging
 
 from flask import current_app, Flask, redirect, request, session, url_for
 import google.cloud.logging
-from google.cloud.logging.handlers import CloudLoggingHandler, setup_logging
 import httplib2
 from oauth2client.contrib.flask_util import UserOAuth2
 
@@ -38,10 +37,8 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     # [START setup_logging]
     if not app.testing:
         client = google.cloud.logging.Client(app.config['PROJECT_ID'])
-        handler = CloudLoggingHandler(client)
-        # Attaches the handler to the root logger
-        setup_logging(handler)
-        logging.getLogger().setLevel(logging.INFO)
+        # Attaches a Google Stackdriver logging handler to the root logger
+        client.setup_logging(logging.INFO)
     # [END setup_logging]
 
     # Setup the data model.
