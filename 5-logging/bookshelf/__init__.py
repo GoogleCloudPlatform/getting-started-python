@@ -16,6 +16,7 @@ import json
 import logging
 
 from flask import current_app, Flask, redirect, request, session, url_for
+from google.cloud import error_reporting
 import google.cloud.logging
 import httplib2
 from oauth2client.contrib.flask_util import UserOAuth2
@@ -70,15 +71,17 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     def index():
         return redirect(url_for('crud.list'))
 
-    # Add an error handler. This is useful for debugging the live application,
-    # however, you should disable the output of the exception for production
-    # applications.
+    # Add an error handler that reports exceptions to Stackdriver Error
+    # Reporting. Note that this error handler is only used when debug
+    # is False
     @app.errorhandler(500)
     def server_error(e):
+        client = error_reporting.Client(app.config['PROJECT_ID'])
+        client.report_exception(
+            http_context=error_reporting.build_flask_context(request))
         return """
-        An internal error occurred: <pre>{}</pre>
-        See logs for full stacktrace.
-        """.format(e), 500
+        An internal error occurred.
+        """, 500
 
     return app
 
