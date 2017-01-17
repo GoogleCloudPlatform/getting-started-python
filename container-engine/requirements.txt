@@ -1,4 +1,5 @@
 Flask==0.11.1
+protobuf==3.0.0
 gcloud==0.18.1
 gunicorn==19.6.0
 six==1.10.0
