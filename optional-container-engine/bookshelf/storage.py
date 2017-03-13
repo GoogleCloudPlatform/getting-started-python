@@ -57,7 +57,7 @@ def upload_file(file_stream, filename, content_type):
     filename = _safe_filename(filename)
 
     client = _get_storage_client()
-    bucket = client.get_bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
+    bucket = client.bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
     blob = bucket.blob(filename)
 
     blob.upload_from_string(
