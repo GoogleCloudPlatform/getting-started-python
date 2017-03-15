@@ -2,7 +2,7 @@ tox==2.6.0
 flake8==3.3.0
 flaky==3.3.0
 mock==2.0.0
-pytest==3.0.6
+pytest==3.0.7
 pytest-cov==2.4.0
 BeautifulSoup4==4.5.3
 requests==2.13.0
