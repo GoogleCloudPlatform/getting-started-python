@@ -1,5 +1,5 @@
-Flask==0.12
-google-cloud==0.23.0
+Flask==0.12.1
+google-cloud==0.24.0
 gunicorn==19.7.1
 oauth2client==4.0.0
 Flask-SQLAlchemy==2.2
@@ -8,5 +8,5 @@ Flask-PyMongo==0.4.1
 PyMongo==3.4.0
 six==1.10.0
 requests[security]==2.13.0
-honcho==0.7.1
+honcho==1.0.1
 psq==0.5.0
