@@ -52,7 +52,7 @@ def test_end_to_end():
 
     # Use retry because it will take some indeterminate time for the pub/sub
     # message to be processed.
-    @retry(wait_exponential_multiplier=1000, stop_max_attempt_number=15)
+    @retry(wait_exponential_multiplier=5000, stop_max_attempt_number=12)
     def check_for_updated_data():
         # Check that the book's information was updated.
         response = requests.get(book_url)
