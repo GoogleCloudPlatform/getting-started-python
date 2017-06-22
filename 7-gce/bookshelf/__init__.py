@@ -125,7 +125,7 @@ def _request_user_info(credentials):
 
     if resp.status != 200:
         current_app.logger.error(
-            "Error while obtaining user profile: %s" % resp)
+            "Error while obtaining user profile: \n%s: %s", resp, content)
         return None
 
     session['profile'] = json.loads(content.decode('utf-8'))
