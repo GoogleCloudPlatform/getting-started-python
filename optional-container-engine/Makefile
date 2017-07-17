@@ -21,7 +21,7 @@ build:
 
 .PHONY: push
 push: build
-	gcloud docker push gcr.io/$(GCLOUD_PROJECT)/bookshelf
+	gcloud docker -- push gcr.io/$(GCLOUD_PROJECT)/bookshelf
 
 .PHONY: template
 template:
