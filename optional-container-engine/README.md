@@ -51,10 +51,10 @@ Modify config.py and enter your Cloud Project ID into the `PROJECT_ID` and `CLOU
 
 Before the application can be deployed to Container Engine, you will need build and push the image to [Google Container Registry](https://cloud.google.com/container-registry/).
 
-    docker build -t gcr.io/your-project-id/bookshelf .
-    gcloud docker push gcr.io/your-project-id/bookshelf
+    docker build -t gcr.io/<your-project-id>/bookshelf .
+    gcloud docker push gcr.io/<your-project-id>/bookshelf
 
-Alternativel,y you can use make:
+Alternatively, you can use make:
 
     make push
 
