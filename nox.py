@@ -27,7 +27,7 @@ def session_check_requirements(session):
         command = 'check-requirements'
 
     for reqfile in glob('**/requirements*.txt'):
-        session.run('gcprepotools', command, reqfile)
+        session.run('gcp-devrel-py-tools', command, reqfile)
 
 
 def session_lint(session):
