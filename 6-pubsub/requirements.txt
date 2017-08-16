@@ -7,6 +7,6 @@ PyMySQL==0.7.11
 Flask-PyMongo==0.5.1
 PyMongo==3.5.0
 six==1.10.0
-requests[security]==2.18.3
+requests[security]==2.18.4
 honcho==1.0.1
 psq==0.5.0
