@@ -5,7 +5,7 @@ oauth2client==4.1.2
 Flask-SQLAlchemy==2.2
 PyMySQL==0.7.11
 Flask-PyMongo==0.5.1
-PyMongo==3.5.0
+PyMongo==3.5.1
 six==1.10.0
 requests[security]==2.18.4
 honcho==1.0.1
