@@ -45,6 +45,6 @@ deploy: deploy-frontend deploy-worker create-service
 
 .PHONY: delete
 delete:
-	-kubectl delete -f bookshelf-frontend.yaml
+	-kubectl delete -f bookshelf-service.yaml
 	-kubectl delete -f bookshelf-worker.yaml
 	-kubectl delete -f bookshelf-frontend.yaml
