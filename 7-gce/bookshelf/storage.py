@@ -70,3 +70,14 @@ def upload_file(file_stream, filename, content_type):
         url = url.decode('utf-8')
 
     return url
+
+
+def delete_file(blob_name):
+    """
+    Deletes a file from a given Google Cloud Storage bucket
+    """
+    client = _get_storage_client()
+    bucket = client.get_bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
+    blob = bucket.blob(blob_name)
+    blob.delete()
+    return blob.name

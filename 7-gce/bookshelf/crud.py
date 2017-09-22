@@ -127,5 +127,12 @@ def edit(id):
 
 @crud.route('/<id>/delete')
 def delete(id):
+    book = get_model().read(id)
+    image_url = book.get('imageUrl')
     get_model().delete(id)
+    # async job to delete book image in GCS
+    if image_url:
+        image_name = image_url.split('/')[-1]
+        q = tasks.get_books_queue()
+        q.enqueue(tasks.delete_book_image, image_name)
     return redirect(url_for('.list'))
