@@ -130,7 +130,7 @@ def delete(id):
     book = get_model().read(id)
     image_url = book.get('imageUrl')
     get_model().delete(id)
-    # async job to delete book image in GCS
+    # Async job to delete book image in GCS
     if image_url:
         image_name = image_url.split('/')[-1]
         q = tasks.get_books_queue()
