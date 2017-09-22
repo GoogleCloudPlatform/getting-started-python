@@ -74,7 +74,7 @@ def upload_file(file_stream, filename, content_type):
 
 def delete_file(blob_name):
     """
-    Deletes a file from a given Google Cloud Storage bucket
+    Deletes a file from a given Google Cloud Storage bucket.
     """
     client = _get_storage_client()
     bucket = client.get_bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
