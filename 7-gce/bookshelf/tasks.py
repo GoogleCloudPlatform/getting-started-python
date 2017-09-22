@@ -115,3 +115,10 @@ def download_and_upload_image(src, dst_filename):
         r.content,
         dst_filename,
         r.headers.get('content-type', 'image/jpeg'))
+
+def delete_book_image(blob_name):
+    """
+    Deletes an image file from Google Cloud Storage.
+    """
+    logging.info("Deleting book image {} from storage bucket.".format(blob_name))
+    return storage.delete_file(blob_name)
