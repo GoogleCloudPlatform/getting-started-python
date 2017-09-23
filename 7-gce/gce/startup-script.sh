@@ -42,7 +42,7 @@ pip install --upgrade pip virtualenv
 # git requires $HOME and it's not set during the startup script.
 export HOME=/root
 git config --global credential.helper gcloud.sh
-git clone https://source.developers.google.com/p/$PROJECTID /opt/app
+git clone https://source.developers.google.com/p/$PROJECTID/r/[YOUR_REPO_NAME] /opt/app
 
 # Install app dependencies
 virtualenv /opt/app/7-gce/env
