@@ -99,7 +99,7 @@ gcloud compute http-health-checks create ah-health-check \
 
 # [START create_backend_service]
 gcloud compute backend-services create $SERVICE \
-  --http-health-checks ah-health-check
+  --http-health-checks ah-health-check \
   --global
 # [END create_backend_service]
 
