@@ -20,7 +20,8 @@ ZONE=us-central1-f
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
 MACHINE_TYPE=f1-micro
-IMAGE=debian-8
+IMAGE_FAMILY=debian-8
+IMAGE_PROJECT=debian-cloud
 STARTUP_SCRIPT=startup-script.sh
 SCOPES="userinfo-email,cloud-platform"
 TAGS=http-server
@@ -41,7 +42,8 @@ SERVICE=frontend-web-service
 
 # [START create_template]
 gcloud compute instance-templates create $TEMPLATE \
-  --image $IMAGE \
+  --image-family $IMAGE_FAMILY \
+  --image-project $IMAGE_PROJECT \
   --machine-type $MACHINE_TYPE \
   --scopes $SCOPES \
   --metadata-from-file startup-script=$STARTUP_SCRIPT \
@@ -97,13 +99,15 @@ gcloud compute http-health-checks create ah-health-check \
 
 # [START create_backend_service]
 gcloud compute backend-services create $SERVICE \
-  --http-health-checks ah-health-check
+  --http-health-checks ah-health-check \
+  --global
 # [END create_backend_service]
 
 # [START add_backend_service]
 gcloud compute backend-services add-backend $SERVICE \
   --instance-group $GROUP \
-  --instance-zone $ZONE
+  --instance-group-zone $ZONE \
+  --global
 # [END add_backend_service]
 
 # Create a URL map and web Proxy. The URL map will send all requests to the
@@ -125,7 +129,7 @@ gcloud compute target-http-proxies create $SERVICE-proxy \
 gcloud compute forwarding-rules create $SERVICE-http-rule \
   --global \
   --target-http-proxy $SERVICE-proxy \
-  --port-range 80
+  --ports=80
 # [END create_forwarding_rule]
 
 #
@@ -140,9 +144,16 @@ gcloud compute instance-groups managed set-autoscaling \
 # [END set_autoscaling]
 
 # [START create_firewall]
-gcloud compute firewall-rules create default-allow-http-8080 \
+# Check if the firewall rule has been created in previous steps of the documentation
+if gcloud compute firewall-rules list --filter="name~'default-allow-http-8080'" \
+  --format="table(name)" | grep -q 'NAME'; then
+  echo "Firewall rule default-allow-http-8080 already exists."
+else
+  gcloud compute firewall-rules create default-allow-http-8080 \
     --allow tcp:8080 \
     --source-ranges 0.0.0.0/0 \
     --target-tags http-server \
-    --description "Allow port 8080 access to http-server"
+    --description "Allow port 8080 access to http-server" 
+fi
+
 # [END create_firewall]

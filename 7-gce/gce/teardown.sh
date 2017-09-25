@@ -24,18 +24,18 @@ SERVICE=frontend-web-service
 
 gcloud compute instance-groups managed stop-autoscaling $GROUP --zone $ZONE
 
-gcloud compute forwarding-rules delete $SERVICE-http-rule --global 
+gcloud compute forwarding-rules delete $SERVICE-http-rule --global --quiet
 
-gcloud compute target-http-proxies delete $SERVICE-proxy 
+gcloud compute target-http-proxies delete $SERVICE-proxy --quiet
 
-gcloud compute url-maps delete $SERVICE-map 
+gcloud compute url-maps delete $SERVICE-map --quiet
 
-gcloud compute backend-services delete $SERVICE 
+gcloud compute backend-services delete $SERVICE --global --quiet
 
-gcloud compute http-health-checks delete ah-health-check
+gcloud compute http-health-checks delete ah-health-check --quiet
 
-gcloud compute instance-groups managed delete $GROUP  
+gcloud compute instance-groups managed delete $GROUP --quiet
 
-gcloud compute instance-templates delete $TEMPLATE 
+gcloud compute instance-templates delete $TEMPLATE --quiet
 
-gcloud compute firewall-rules delete default-allow-http-8080
+gcloud compute firewall-rules delete default-allow-http-8080 --quiet
