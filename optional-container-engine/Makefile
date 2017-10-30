@@ -6,7 +6,7 @@ all: deploy
 .PHONY: create-cluster
 create-cluster:
 	gcloud container clusters create bookshelf \
-		--scope "cloud-platform" \
+		--scopes "cloud-platform" \
 		--num-nodes 2
 	gcloud container clusters get-credentials bookshelf
 
