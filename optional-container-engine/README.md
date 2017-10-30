@@ -92,6 +92,6 @@ Update `bookshelf-worker.yaml` with your Project ID or use `make template`. This
 
 Alternatively, you can use make:
 
-    make deploy-backend
+    make deploy-worker
 
 Once again, use `kubectl get pods` to check the status of the worker pods. Once the worker pods are up and running, you should be able to create books on the frontend and the workers will handle updating book information in the background.
