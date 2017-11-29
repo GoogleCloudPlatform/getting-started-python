@@ -1,6 +1,6 @@
-# Deploy Bookshelf to Container Engine/Kubernetes
+# Deploy Bookshelf to Google Kubernetes Engine
 
-This optional tutorial will walk you through how to deploy the Bookshelf sample application to [Google Container Engine](https://cloud.google.com/container-engine/). This tutorial is also applicable to [Kubernetes](http://kubernetes.io/) outside of Container Engine, but may require additional steps for external load balancing.
+This optional tutorial will walk you through how to deploy the Bookshelf sample application to [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/). This tutorial is also applicable to [Kubernetes](http://kubernetes.io/) outside of Google Kubernetes Engine, but may require additional steps for external load balancing.
 
 ## Pre-requisites
 
@@ -12,7 +12,7 @@ This optional tutorial will walk you through how to deploy the Bookshelf sample 
 
 4. Install the [Google Cloud SDK](https://cloud.google.com/sdk)
 
-        $ curl https://sdk.cloud.google.com | bash 
+        $ curl https://sdk.cloud.google.com | bash
         $ gcloud init
 
 5. Install [Docker](https://www.docker.com/).
@@ -49,7 +49,7 @@ Modify config.py and enter your Cloud Project ID into the `PROJECT_ID` and `CLOU
 
 ## Build the bookshelf container
 
-Before the application can be deployed to Container Engine, you will need build and push the image to [Google Container Registry](https://cloud.google.com/container-registry/).
+Before the application can be deployed to Kubernetes Engine, you will need build and push the image to [Google Container Registry](https://cloud.google.com/container-registry/).
 
     docker build -t gcr.io/<your-project-id>/bookshelf .
     gcloud docker push gcr.io/<your-project-id>/bookshelf
