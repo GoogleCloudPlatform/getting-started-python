@@ -21,17 +21,21 @@ import psq
 import requests
 
 
+publisher_client = pubsub.PublisherClient()
+subscriber_client = pubsub.SubscriberClient()
+
+
 # [START get_books_queue]
 def get_books_queue():
-    client = pubsub.Client(
-        project=current_app.config['PROJECT_ID'])
+    project = current_app.config['PROJECT_ID']
 
     # Create a queue specifically for processing books and pass in the
     # Flask application context. This ensures that tasks will have access
     # to any extensions / configuration specified to the app, such as
     # models.
     return psq.Queue(
-        client, 'books', extra_context=current_app.app_context)
+        publisher_client, subscriber_client, project,
+        'books', extra_context=current_app.app_context)
 # [END get_books_queue]
 
 
