@@ -21,11 +21,11 @@ import psq
 import requests
 
 
+# [START get_books_queue]
 publisher_client = pubsub.PublisherClient()
 subscriber_client = pubsub.SubscriberClient()
 
 
-# [START get_books_queue]
 def get_books_queue():
     project = current_app.config['PROJECT_ID']
 
