@@ -5,6 +5,9 @@ WSGI applications specified in app.yaml are loaded.
 """
 
 from google.appengine.ext import vendor
+import tempfile
+import tempfile2
+tempfile.SpooledTemporaryFile = tempfile2.SpooledTemporaryFile
 
 # Third-party libraries are stored in "lib", vendoring will make
 # sure that they are importable by the application.
