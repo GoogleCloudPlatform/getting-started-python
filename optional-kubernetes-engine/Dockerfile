@@ -2,7 +2,7 @@
 # and various os-level packages to allow installation of popular Python
 # libraries. The source is on github at:
 #   https://github.com/GoogleCloudPlatform/python-docker
-FROM gcr.io/google_appengine/python
+FROM gcr.io/google-appengine/python
 
 # Create a virtualenv for the application dependencies.
 # If you want to use Python 2, add the -p python2.7 flag.
