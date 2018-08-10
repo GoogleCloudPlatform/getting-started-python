@@ -45,7 +45,8 @@ git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID/r/[YOUR_REPO_NAME] /opt/app
 
 # Install app dependencies
-virtualenv /opt/app/7-gce/env
+virtualenv -p python3 /opt/app/7-gce/env
+source /opt/app/7-gce/env/bin/activate
 /opt/app/7-gce/env/bin/pip install -r /opt/app/7-gce/requirements.txt
 
 # Make sure the pythonapp user owns the application code
@@ -56,13 +57,13 @@ chown -R pythonapp:pythonapp /opt/app
 cat >/etc/supervisor/conf.d/python-app.conf << EOF
 [program:pythonapp]
 directory=/opt/app/7-gce
-command=/opt/app/7-gce/env/bin/gunicorn main:app --bind 0.0.0.0:8080
+command=/opt/app/7-gce/env/bin/honcho start -f ./procfile worker bookshelf
 autostart=true
 autorestart=true
 user=pythonapp
 # Environment variables ensure that the application runs inside of the
 # configured virtualenv.
-environment=VIRTUAL_ENV="/opt/app/env/7-gce",PATH="/opt/app/7-gce/env/bin",\
+environment=VIRTUAL_ENV="/opt/app/7-gce/env",PATH="/opt/app/7-gce/env/bin",\
     HOME="/home/pythonapp",USER="pythonapp"
 stdout_logfile=syslog
 stderr_logfile=syslog
