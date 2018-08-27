@@ -20,7 +20,7 @@ gcloud config set compute/zone $ZONE
 
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
-SERVICE=frontend-web-service
+SERVICE=my-app-service
 
 gcloud compute instance-groups managed stop-autoscaling $GROUP --zone $ZONE
 

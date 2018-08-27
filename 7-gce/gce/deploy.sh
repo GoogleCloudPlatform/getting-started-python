@@ -20,7 +20,7 @@ ZONE=us-central1-f
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
 MACHINE_TYPE=f1-micro
-IMAGE_FAMILY=debian-8
+IMAGE_FAMILY=debian-9
 IMAGE_PROJECT=debian-cloud
 STARTUP_SCRIPT=startup-script.sh
 SCOPES="userinfo-email,cloud-platform"
@@ -30,7 +30,7 @@ MIN_INSTANCES=1
 MAX_INSTANCES=10
 TARGET_UTILIZATION=0.6
 
-SERVICE=frontend-web-service
+SERVICE=my-app-service
 
 #
 # Instance group setup
@@ -58,7 +58,7 @@ gcloud compute instance-groups managed \
   --base-instance-name $GROUP \
   --size $MIN_INSTANCES \
   --template $TEMPLATE \
-  --zone $ZONE 
+  --zone $ZONE
 # [END create_group]
 
 # [START create_named_port]
@@ -140,7 +140,7 @@ gcloud compute instance-groups managed set-autoscaling \
   $GROUP \
   --max-num-replicas $MAX_INSTANCES \
   --target-load-balancing-utilization $TARGET_UTILIZATION \
-  --zone $ZONE 
+  --zone $ZONE
 # [END set_autoscaling]
 
 # [START create_firewall]
@@ -153,7 +153,7 @@ else
     --allow tcp:8080 \
     --source-ranges 0.0.0.0/0 \
     --target-tags http-server \
-    --description "Allow port 8080 access to http-server" 
+    --description "Allow port 8080 access to http-server"
 fi
 
 # [END create_firewall]
