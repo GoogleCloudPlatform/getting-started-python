@@ -28,6 +28,4 @@ SECRETS_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/secrets-password.txt")
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service-account.json"
 
 # Run tests
-pip install --upgrade nox-automation
-
 nox -s run_tests
