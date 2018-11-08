@@ -1,5 +1,4 @@
 from glob import glob
-import shutil
 
 import nox
 
@@ -15,10 +14,13 @@ DIRS = [
     '4-auth',
     '5-logging',
     '6-pubsub',
-    '7-gce']
+    '7-gce',
+    'optional-kubernetes-engine'
+]
 
 
-def session_check_requirements(session):
+@nox.session
+def check_requirements(session):
     session.install(REPO_TOOLS_REQ)
 
     if 'update' in session.posargs:
@@ -30,7 +32,8 @@ def session_check_requirements(session):
         session.run('gcp-devrel-py-tools', command, reqfile)
 
 
-def session_lint(session):
+@nox.session
+def lint(session):
     session.install('flake8', 'flake8-import-order')
     session.run(
         'flake8', '--exclude=env,.nox,._config.py,.tox',
@@ -38,28 +41,22 @@ def session_lint(session):
 
 
 def run_test(session, dir, toxargs):
-    shutil.copy('config.py', dir)
     session.chdir(dir)
     session.run('tox', *(toxargs or []))
 
 
+@nox.session
 @nox.parametrize('dir', DIRS)
-def session_run_tests(session, dir=None, toxargs=None):
+def run_tests(session, dir=None, toxargs=None):
     """Run all tests for all directories (slow!)"""
     run_test(session, dir, toxargs)
 
 
-def session_run_one_test(session):
-    dir = session.posargs[0]
-    toxargs = session.posargs[1:]
-    run_test(session, dir, toxargs)
-
-
+@nox.session
 @nox.parametrize('dir', DIRS)
-def session_travis(session, dir=None):
+def travis(session, dir=None):
     """On travis, only run the py3.4 and cloudsql tests."""
-    shutil.copy('config.py', dir)
-    session_run_tests(
+    run_tests(
         session,
         dir=dir,
         toxargs=['-e', 'py34', '--', '-k', 'cloudsql'])
