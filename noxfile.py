@@ -42,6 +42,7 @@ def lint(session):
 
 def run_test(session, dir, toxargs):
     session.chdir(dir)
+    session.install('tox')
     session.run('tox', *(toxargs or []))
 
 
@@ -55,8 +56,8 @@ def run_tests(session, dir=None, toxargs=None):
 @nox.session
 @nox.parametrize('dir', DIRS)
 def travis(session, dir=None):
-    """On travis, only run the py3.4 and cloudsql tests."""
+    """On travis, only run the py3.6 and cloudsql tests."""
     run_tests(
         session,
         dir=dir,
-        toxargs=['-e', 'py34', '--', '-k', 'cloudsql'])
+        toxargs=['-e', 'py36', '--', '-k', 'cloudsql'])
