@@ -56,8 +56,8 @@ def run_tests(session, dir=None, toxargs=None):
 @nox.session
 @nox.parametrize('dir', DIRS)
 def travis(session, dir=None):
-    """On travis, only run the py3.6 and cloudsql tests."""
+    """On travis, only run lint."""
     run_tests(
         session,
         dir=dir,
-        toxargs=['-e', 'py36', '--', '-k', 'cloudsql'])
+        toxargs=['-e', 'lint'])
