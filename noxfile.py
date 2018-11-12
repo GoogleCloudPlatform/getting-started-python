@@ -1,4 +1,5 @@
 from glob import glob
+import os
 
 import nox
 
@@ -17,6 +18,8 @@ DIRS = [
     '7-gce',
     'optional-kubernetes-engine'
 ]
+
+PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml']
 
 
 @nox.session
@@ -40,16 +43,26 @@ def lint(session):
         '--import-order-style=google', '.')
 
 
-def run_test(session, dir, toxargs):
+def run_test(session, dir):
+    session.install('-r', 'requirements.txt')
     session.chdir(dir)
-    session.run('tox', *(toxargs or []))
+    if os.path.exists('requirements.txt'):
+        session.install('-r', 'requirements.txt')
+
+    session.run(
+        'pytest',
+        *(PYTEST_COMMON_ARGS + session.posargs),
+        # Pytest will return 5 when no tests are collected. This can happen
+        # on travis where slow and flaky tests are excluded.
+        # See http://doc.pytest.org/en/latest/_modules/_pytest/main.html
+        success_codes=[0, 5])
 
 
 @nox.session
 @nox.parametrize('dir', DIRS)
-def run_tests(session, dir=None, toxargs=None):
+def run_tests(session, dir=None):
     """Run all tests for all directories (slow!)"""
-    run_test(session, dir, toxargs)
+    run_test(session, dir)
 
 
 @nox.session
@@ -58,5 +71,4 @@ def travis(session, dir=None):
     """On travis, only run the py3.4 and cloudsql tests."""
     run_tests(
         session,
-        dir=dir,
-        toxargs=['-e', 'py34', '--', '-k', 'cloudsql'])
+        dir=dir)
