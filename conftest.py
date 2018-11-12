@@ -17,7 +17,7 @@ import os
 import mock
 import pytest
 
-PROJECT = os.environ['GCLOUD_PROJECT']
+PROJECT = 'python-docs-samples'
 
 
 @pytest.fixture
