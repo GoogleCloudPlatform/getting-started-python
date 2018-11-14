@@ -83,4 +83,4 @@ def update(data, id):
 
 
 def delete(id):
-    mongo.db.books.delete_one(_id(id))
+    mongo.db.books.delete_one({'_id': _id(id)})
