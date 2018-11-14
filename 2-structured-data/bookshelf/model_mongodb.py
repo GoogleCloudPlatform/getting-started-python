@@ -12,14 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 from bson.objectid import ObjectId
-from flask.ext.pymongo import PyMongo
+from flask_pymongo import PyMongo
 
 
 builtin_list = list
 
 
-mongo = PyMongo()
+mongo = None
 
 
 def _id(id):
@@ -43,6 +45,10 @@ def from_mongo(data):
 
 
 def init_app(app):
+    global mongo
+
+    app.config["MONGO_URI"] = os.environ["MONGO_URI"]
+    mongo = PyMongo(app)
     mongo.init_app(app)
 
 
@@ -67,17 +73,17 @@ def read(id):
 
 # [START create]
 def create(data):
-    new_id = mongo.db.books.insert(data)
+    new_id = mongo.db.books.insert_one(data)
     return read(new_id)
 # [END create]
 
 
 # [START update]
 def update(data, id):
-    mongo.db.books.update({'_id': _id(id)}, data)
+    mongo.db.books.update_one({'_id': _id(id)}, data)
     return read(id)
 # [END update]
 
 
 def delete(id):
-    mongo.db.books.remove(_id(id))
+    mongo.db.books.delete_one(_id(id))
