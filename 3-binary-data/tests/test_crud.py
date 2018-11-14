@@ -40,7 +40,7 @@ class TestCrudActions(object):
 
         body = rv.data.decode('utf-8')
         assert 'Book 1' in body, "Should show books"
-        assert len(re.findall('<h4>Book', body)) == 10, (
+        assert len(re.findall('<h4>Book', body)) <= 10, (
             "Should not show more than 10 books")
         assert 'More' in body, "Should have more than one page"
 

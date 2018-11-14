@@ -16,7 +16,6 @@ DIRS = [
     '5-logging',
     '6-pubsub',
     '7-gce',
-    'optional-kubernetes-engine'
 ]
 
 PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml']

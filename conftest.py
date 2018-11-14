@@ -17,8 +17,6 @@ import os
 import mock
 import pytest
 
-PROJECT = 'python-docs-samples'
-
 
 @pytest.fixture
 def api_client_inject_project_id():
