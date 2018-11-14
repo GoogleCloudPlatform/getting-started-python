@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
 
@@ -47,7 +45,6 @@ def from_mongo(data):
 def init_app(app):
     global mongo
 
-    app.config["MONGO_URI"] = os.environ["MONGO_URI"]
     mongo = PyMongo(app)
     mongo.init_app(app)
 

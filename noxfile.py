@@ -44,15 +44,12 @@ def lint(session):
 
 
 def run_test(session, dir):
-    print('Running a test')
-
     session.install('-r', 'requirements.txt')
     session.chdir(dir)
     if os.path.exists('requirements.txt'):
         session.install('-r', 'requirements.txt')
 
     session.env['PYTHONPATH'] = os.getcwd()
-    print(session.env)
     session.run(
         'pytest',
         *(PYTEST_COMMON_ARGS + session.posargs),
