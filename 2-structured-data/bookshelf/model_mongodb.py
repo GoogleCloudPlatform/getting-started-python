@@ -63,7 +63,7 @@ def list(limit=10, cursor=None):
 
 # [START read]
 def read(id):
-    result = mongo.db.books.find_one(_id(id))
+    result = mongo.db.books.find_one({'_id': _id(id)})
     return from_mongo(result)
 # [END read]
 
