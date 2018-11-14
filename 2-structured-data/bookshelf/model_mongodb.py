@@ -70,8 +70,8 @@ def read(id):
 
 # [START create]
 def create(data):
-    new_id = mongo.db.books.insert_one(data)
-    return read(new_id)
+    result = mongo.db.books.insert_one(data)
+    return read(result.inserted_id)
 # [END create]
 
 
