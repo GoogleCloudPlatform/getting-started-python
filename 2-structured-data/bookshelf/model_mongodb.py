@@ -77,7 +77,7 @@ def create(data):
 
 # [START update]
 def update(data, id):
-    mongo.db.books.update_one({'_id': _id(id)}, data)
+    mongo.db.books.replace_one({'_id': _id(id)}, data)
     return read(id)
 # [END update]
 
