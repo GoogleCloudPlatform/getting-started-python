@@ -18,7 +18,7 @@ DIRS = [
     '7-gce',
 ]
 
-PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml']
+PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml', '-m', 'not e2e']
 
 
 @nox.session
