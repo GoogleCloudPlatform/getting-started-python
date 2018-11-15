@@ -64,7 +64,7 @@ class TestAuth(object):
 
         assert rv.status < '400'
         body = rv.data.decode('utf-8')
-        assert 'Login' in body
+        assert 'Redirecting' in body
 
     def test_logged_in(self, client_with_credentials):
         with client_with_credentials() as c:
@@ -72,7 +72,7 @@ class TestAuth(object):
 
         assert rv.status < '400'
         body = rv.data.decode('utf-8')
-        assert 'Test User' in body
+        assert 'Redirecting' not in body
 
     def test_add_anonymous(self, app):
         data = {
