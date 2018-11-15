@@ -62,7 +62,7 @@ class TestAuth(object):
         with app.test_client() as c:
             rv = c.get('/books/mine')
 
-        assert rv.status == '200 OK'
+        assert rv.status < '400'
         body = rv.data.decode('utf-8')
         assert 'Login' in body
 
@@ -70,7 +70,7 @@ class TestAuth(object):
         with client_with_credentials() as c:
             rv = c.get('/books/mine')
 
-        assert rv.status == '200 OK'
+        assert rv.status < '400'
         body = rv.data.decode('utf-8')
         assert 'Test User' in body
 
