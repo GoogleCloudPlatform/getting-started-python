@@ -60,7 +60,7 @@ class TestAuth(object):
 
     def test_not_logged_in(self, app):
         with app.test_client() as c:
-            rv = c.get('/books/')
+            rv = c.get('/books/mine')
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
@@ -68,7 +68,7 @@ class TestAuth(object):
 
     def test_logged_in(self, client_with_credentials):
         with client_with_credentials() as c:
-            rv = c.get('/books/')
+            rv = c.get('/books/mine')
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
