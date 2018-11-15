@@ -16,10 +16,9 @@ DIRS = [
     '5-logging',
     '6-pubsub',
     '7-gce',
-    'optional-kubernetes-engine'
 ]
 
-PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml']
+PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml', '-m', 'not e2e']
 
 
 @nox.session
@@ -44,15 +43,12 @@ def lint(session):
 
 
 def run_test(session, dir):
-    print('Running a test')
-
     session.install('-r', 'requirements.txt')
     session.chdir(dir)
     if os.path.exists('requirements.txt'):
         session.install('-r', 'requirements.txt')
 
     session.env['PYTHONPATH'] = os.getcwd()
-    print(session.env)
     session.run(
         'pytest',
         *(PYTEST_COMMON_ARGS + session.posargs),

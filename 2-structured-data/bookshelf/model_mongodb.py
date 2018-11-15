@@ -13,13 +13,13 @@
 # limitations under the License.
 
 from bson.objectid import ObjectId
-from flask.ext.pymongo import PyMongo
+from flask_pymongo import PyMongo
 
 
 builtin_list = list
 
 
-mongo = PyMongo()
+mongo = None
 
 
 def _id(id):
@@ -43,6 +43,9 @@ def from_mongo(data):
 
 
 def init_app(app):
+    global mongo
+
+    mongo = PyMongo(app)
     mongo.init_app(app)
 
 
@@ -60,24 +63,24 @@ def list(limit=10, cursor=None):
 
 # [START read]
 def read(id):
-    result = mongo.db.books.find_one(_id(id))
+    result = mongo.db.books.find_one({'_id': _id(id)})
     return from_mongo(result)
 # [END read]
 
 
 # [START create]
 def create(data):
-    new_id = mongo.db.books.insert(data)
-    return read(new_id)
+    result = mongo.db.books.insert_one(data)
+    return read(result.inserted_id)
 # [END create]
 
 
 # [START update]
 def update(data, id):
-    mongo.db.books.update({'_id': _id(id)}, data)
+    mongo.db.books.replace_one({'_id': _id(id)}, data)
     return read(id)
 # [END update]
 
 
 def delete(id):
-    mongo.db.books.remove(_id(id))
+    mongo.db.books.delete_one({'_id': _id(id)})
