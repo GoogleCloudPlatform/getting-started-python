@@ -114,7 +114,7 @@ def _request_user_info(credentials):
     http = httplib2.Http()
     credentials.authorize(http)
     resp, content = http.request(
-        'https://www.googleapis.com/plus/v1/people/me')
+        'https://people.googleapis.com/v1/people/me')
 
     if resp.status != 200:
         current_app.logger.error(
