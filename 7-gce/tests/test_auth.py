@@ -59,19 +59,19 @@ def client_with_credentials(app):
 class TestAuth(object):
     def test_not_logged_in(self, app):
         with app.test_client() as c:
-            rv = c.get('/books/')
+            rv = c.get('/books/mine')
 
-        assert rv.status == '200 OK'
+        assert rv.status < '400'
         body = rv.data.decode('utf-8')
-        assert 'Login' in body
+        assert 'Redirecting' in body
 
     def test_logged_in(self, client_with_credentials):
         with client_with_credentials() as c:
-            rv = c.get('/books/')
+            rv = c.get('/books/mine')
 
-        assert rv.status == '200 OK'
+        assert rv.status < '400'
         body = rv.data.decode('utf-8')
-        assert 'Test User' in body
+        assert 'Redirecting' not in body
 
     def test_add_anonymous(self, app):
         data = {
