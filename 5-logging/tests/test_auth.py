@@ -41,7 +41,7 @@ def client_with_credentials(app):
     def inner():
         with app.test_client() as client:
             with client.session_transaction() as session:
-                session['profile'] = {'id': 'abc', 'displayName': 'Test User'}
+                session['profile'] = {'email': 'abc@example.com', 'name': 'Test User'}
                 session['google_oauth2_credentials'] = credentials.to_json()
             yield client
 
@@ -57,7 +57,6 @@ def client_with_credentials(app):
 # in conftest.py
 @pytest.mark.usefixtures('app', 'model')
 class TestAuth(object):
-
     def test_not_logged_in(self, app):
         with app.test_client() as c:
             rv = c.get('/books/')
@@ -105,12 +104,12 @@ class TestAuth(object):
         # created by another user.
         model.create({
             'title': 'Book 1',
-            'createdById': 'abc'
+            'createdById': 'abc@example.com'
         })
 
         model.create({
             'title': 'Book 2',
-            'createdById': 'def'
+            'createdById': 'def@example.com'
         })
 
         # Check the "My Books" page and make sure only one of the books

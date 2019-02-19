@@ -62,7 +62,7 @@ def list_mine():
         token = token.encode('utf-8')
 
     books, next_page_token = get_model().list_by_user(
-        user_id=session['profile']['id'],
+        user_id=session['profile']['email'],
         cursor=token)
 
     return render_template(
@@ -90,8 +90,8 @@ def add():
 
         # If the user is logged in, associate their profile with the new book.
         if 'profile' in session:
-            data['createdBy'] = session['profile']['displayName']
-            data['createdById'] = session['profile']['id']
+            data['createdBy'] = session['profile']['name']
+            data['createdById'] = session['profile']['email']
 
         book = get_model().create(data)
 

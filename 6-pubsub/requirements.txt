@@ -1,6 +1,7 @@
 Flask>=1.0.0
 google-cloud-datastore==1.7.1
 google-cloud-storage==1.13.0
+google-cloud-pubsub==0.39.1
 google-cloud-logging==1.8.0
 google-cloud-error_reporting==0.30.0
 gunicorn==19.9.0
