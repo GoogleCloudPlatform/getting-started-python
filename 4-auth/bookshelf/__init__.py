@@ -107,7 +107,7 @@ def get_model():
 # [START request_user_info]
 def _request_user_info(credentials):
     """
-    Makes an HTTP request to the Google+ API to retrieve the user's basic
+    Makes an HTTP request to the Google OAuth2 API to retrieve the user's basic
     profile information, including full name and photo, and stores it in the
     Flask session.
     """

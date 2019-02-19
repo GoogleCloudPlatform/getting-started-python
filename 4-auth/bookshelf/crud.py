@@ -62,7 +62,6 @@ def list_mine():
     if token:
         token = token.encode('utf-8')
 
-    print(session['profile'])
     books, next_page_token = get_model().list_by_user(
         user_id=session['profile']['email'],
         cursor=token)
