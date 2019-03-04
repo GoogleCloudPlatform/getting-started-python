@@ -59,7 +59,7 @@ def client_with_credentials(app):
 class TestAuth(object):
     def test_not_logged_in(self, app):
         with app.test_client() as c:
-            rv = c.get('/books/')
+            rv = c.get('/')
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
@@ -67,7 +67,7 @@ class TestAuth(object):
 
     def test_logged_in(self, client_with_credentials):
         with client_with_credentials() as c:
-            rv = c.get('/books/')
+            rv = c.get('/')
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
@@ -79,7 +79,7 @@ class TestAuth(object):
         }
 
         with app.test_client() as c:
-            rv = c.post('/books/add', data=data, follow_redirects=True)
+            rv = c.post('/add', data=data, follow_redirects=True)
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
@@ -92,7 +92,7 @@ class TestAuth(object):
         }
 
         with client_with_credentials() as c:
-            rv = c.post('/books/add', data=data, follow_redirects=True)
+            rv = c.post('/add', data=data, follow_redirects=True)
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
@@ -115,7 +115,7 @@ class TestAuth(object):
         # Check the "My Books" page and make sure only one of the books
         # appears.
         with client_with_credentials() as c:
-            rv = c.get('/books/mine')
+            rv = c.get('/mine')
 
         assert rv.status == '200 OK'
         body = rv.data.decode('utf-8')
