@@ -16,6 +16,9 @@
 # installed.
 FROM gcr.io/google_appengine/base
 
+# Fix taken from https://superuser.com/a/1423685/155054
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
 # Install Python, pip, and C dev libraries necessary to compile the most popular
 # Python libraries.
 RUN apt-get -q update && \
