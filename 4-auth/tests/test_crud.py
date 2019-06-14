@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import re
+import time
 
 from conftest import flaky_filter
 from flaky import flaky
@@ -32,7 +33,8 @@ class TestCrudActions(object):
     def test_list(self, app, model):
         for i in range(1, 12):
             model.create({'title': u'Book {0}'.format(i)})
-
+        time.sleep(2)  # Wait for data to propogate
+        
         with app.test_client() as c:
             rv = c.get('/books/')
 
