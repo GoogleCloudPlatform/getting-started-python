@@ -72,7 +72,7 @@ def validate_assertion(assertion):
 
 @app.route('/', methods=['GET'])
 def say_hello():
-    from Flask import request
+    from flask import request
 
     assertion = request.headers.get('X-Goog-IAP-JWT-Assertion')
     email, id = validate_assertion(assertion)
