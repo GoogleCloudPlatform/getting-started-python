@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import googleclouddebugger
-googleclouddebugger.enable()
+import sys
 
 from flask import Flask
 app = Flask(__name__)
@@ -27,10 +26,13 @@ def certs():
 
     global CERTS
     if CERTS is None:
-        resp = requests.get(
-            'https://www.gstatic.com/iap/verify/public_key'
-        )
-        CERTS = resp.json()
+        try:
+            response = requests.get(
+                'https://www.gstatic.com/iap/verify/public_key'
+            )
+            CERTS = response.json()
+        except Exception as e:
+            print('Failed to fetch CERTS: {}'.format(e), file=sys.stderr)
     return CERTS
 
 
@@ -40,18 +42,26 @@ def get_metadata(item_name):
     endpoint = 'http://metadata.google.internal'
     path = '/computeMetadata/v1/project/'
     path += item_name
-    response = requests.get(
-        '{}{}'.format(endpoint, path),
-        headers = {'Metadata-Flavor': 'Google'}
-    )
-    return response.json()
+    try:
+        response = requests.get(
+            '{}{}'.format(endpoint, path),
+            headers = {'Metadata-Flavor': 'Google'}
+        )
+        metadata = response.json()
+    except Exception as e:
+        print(
+            'Failed to get metadata for {}: {}'.format(item_name, e),
+            file=sys.stderr
+        )
+        metadata = None
+    return metadata
 
 
 def audience():
     global AUDIENCE
     if AUDIENCE is None:
-        project_number = get_metadata('numeric_project_id')
-        project_id = get_metadata('project_id')
+        project_number = get_metadata('numeric-project-id')
+        project_id = get_metadata('project-id')
         AUDIENCE = '/projects/{}/apps/{}'.format(
             project_number, project_id
         )
@@ -70,7 +80,8 @@ def validate_assertion(assertion):
             )
         return info['email'], info['sub']
     except Exception as e:
-        return str(e), None
+        print('Failed to validate assertion: {}'.format(e), file=sys.stderr)
+        return None, None
 
 
 @app.route('/', methods=['GET'])
