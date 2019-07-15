@@ -70,7 +70,7 @@ def validate_assertion(assertion):
             )
         return info['email'], info['sub']
     except Exception as e:
-        return e.message, None
+        return str(e), None
 
 
 @app.route('/', methods=['GET'])
