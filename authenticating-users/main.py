@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import googleclouddebugger
+googleclouddebugger.enable()
+
 from flask import Flask
 app = Flask(__name__)
 
@@ -66,8 +69,8 @@ def validate_assertion(assertion):
             audience=audience()
             )
         return info['email'], info['sub']
-    except:
-        return None, None
+    except Exception as e:
+        return e.message, None
 
 
 @app.route('/', methods=['GET'])
