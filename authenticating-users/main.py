@@ -50,8 +50,8 @@ def get_metadata(item_name):
 def audience():
     global AUDIENCE
     if AUDIENCE is None:
-        project_number = get_metadata(numeric_project_id)
-        project_id = get_metadata(project_id)
+        project_number = get_metadata('numeric_project_id')
+        project_id = get_metadata('project_id')
         AUDIENCE = '/projects/{}/apps/{}'.format(
             project_number, project_id
         )
