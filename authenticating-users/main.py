@@ -26,13 +26,10 @@ def certs():
 
     global CERTS
     if CERTS is None:
-        try:
-            response = requests.get(
-                'https://www.gstatic.com/iap/verify/public_key'
-            )
-            CERTS = response.json()
-        except Exception as e:
-            print('Failed to fetch CERTS: {}'.format(e), file=sys.stderr)
+        response = requests.get(
+            'https://www.gstatic.com/iap/verify/public_key'
+        )
+        CERTS = response.json()
     return CERTS
 
 
@@ -42,18 +39,11 @@ def get_metadata(item_name):
     endpoint = 'http://metadata.google.internal'
     path = '/computeMetadata/v1/project/'
     path += item_name
-    try:
-        response = requests.get(
-            '{}{}'.format(endpoint, path),
-            headers = {'Metadata-Flavor': 'Google'}
-        )
-        metadata = response.json()
-    except Exception as e:
-        print(
-            'Failed to get metadata for {}: {}'.format(item_name, e),
-            file=sys.stderr
-        )
-        metadata = None
+    response = requests.get(
+        '{}{}'.format(endpoint, path),
+        headers = {'Metadata-Flavor': 'Google'}
+    )
+    metadata = response.text
     return metadata
 
 
