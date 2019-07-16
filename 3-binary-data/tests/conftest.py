@@ -22,7 +22,8 @@ import pytest
 from retrying import retry
 
 
-@pytest.yield_fixture(params=['datastore', 'cloudsql', 'mongodb'])
+#@pytest.yield_fixture(params=['datastore', 'cloudsql', 'mongodb'])
+@pytest.yield_fixture(params=['datastore', 'mongodb'])
 def app(request):
     """This fixtures provides a Flask app instance configured for testing.
 
