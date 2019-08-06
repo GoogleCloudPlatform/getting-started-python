@@ -24,7 +24,7 @@ def init_app(app):
 
 
 def get_client():
-    return datastore.Client()
+    return datastore.Client(current_app.config['PROJECT_ID'])
 
 
 # [START from_datastore]
