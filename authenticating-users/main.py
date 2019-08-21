@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START getting_started_auth_all]
 import sys
 
 from flask import Flask
@@ -21,6 +22,7 @@ CERTS = None
 AUDIENCE = None
 
 
+# [START getting_started_auth_certs]
 def certs():
     """Returns a dictionary of current Google public key certificates for
     validating Google-signed JWTs. Since these change rarely, the result
@@ -35,8 +37,10 @@ def certs():
         )
         CERTS = response.json()
     return CERTS
+# [END getting_started_auth_certs]
 
 
+# [START getting_started_auth_metadata]
 def get_metadata(item_name):
     """Returns a string with the project metadata value for the item_name.
     See https://cloud.google.com/compute/docs/storing-retrieving-metadata for
@@ -53,8 +57,10 @@ def get_metadata(item_name):
     )
     metadata = response.text
     return metadata
+# [END getting_started_auth_metadata]
 
 
+# [START getting_started_auth_audience]
 def audience():
     """Returns the audience value (the JWT 'aud' property) for the current
     running instance. Since this involves a metadata lookup, the result is
@@ -68,8 +74,10 @@ def audience():
             project_number, project_id
         )
     return AUDIENCE
+# [END getting_started_auth_audience]
 
 
+# [START getting_started_auth_validate_assertion]
 def validate_assertion(assertion):
     """Checks that the JWT assertion is valid (properly signed, for the
     correct audience) and if so, returns strings for the requesting user's
@@ -88,8 +96,10 @@ def validate_assertion(assertion):
     except Exception as e:
         print('Failed to validate assertion: {}'.format(e), file=sys.stderr)
         return None, None
+# [END getting_started_auth_validate_assertion]
 
 
+# [START getting_started_auth_front_controller]
 @app.route('/', methods=['GET'])
 def say_hello():
     from flask import request
@@ -98,3 +108,5 @@ def say_hello():
     email, id = validate_assertion(assertion)
     page = "<h1>Hello {}</h1>".format(email)
     return page
+# [END getting_started_auth_front_controller]
+# [END getting_started_auth_all]
