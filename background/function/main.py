@@ -56,7 +56,7 @@ def document_name(message):
 def update_database(transaction, message):
     name = document_name(message)
     doc_ref = db.collection("translations").document(document_id=name)
-    
+
     try:
         doc_ref.get(transaction=transaction)
     except NotFound:
@@ -76,7 +76,6 @@ def translate_string(from_string, to_language):
     Returns the translated string and the code for original language
     """
     result = xlate.translate(from_string, target_language=to_language)
-    db = firestore.Client()
     return result['translatedText'], result['detectedSourceLanguage']
 
 

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """ This web app shows translations that have been previously requested, and
-    provides a form to request  a new translation.
+    provides a form to request a new translation.
 """
 
 import json
