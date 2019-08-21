@@ -13,5 +13,5 @@ $ gcloud app deploy
 
 From the function directory, after creating the PubSub topic:
 ```
-$ gcloud functions deploy --runtime=go111 --trigger-topic=translate Translate --set-env-vars GOOGLE_CLOUD_PROJECT=my-project
+$ gcloud functions deploy --runtime=python37 --trigger-topic=translate Translate --set-env-vars GOOGLE_CLOUD_PROJECT=my-project
 ```

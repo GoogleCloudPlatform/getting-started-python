@@ -22,18 +22,39 @@
     The dictionary may have other fields, which will be ignored.
 """
 
+# [START getting_started_background_translate_setup]
 import base64
 import hashlib
 import json
 
 from google.cloud import firestore
 from google.cloud import translate
+# [END getting_started_background_translate_setup]
 
+# [START getting_started_background_translate_init]
 # Get client objects once to reuse over multiple invocations.
 xlate = translate.Client()
 db = firestore.Client()
+# [END getting_started_background_translate_init]
 
 
+# [START getting_started_background_translate_string]
+def translate_string(from_string, to_language):
+    """ Translates a string to a specified language.
+
+    from_string - the original string before translation
+
+    to_language - the language to translate to, as a two-letter code (e.g.,
+        'en' for english, 'de' for german)
+
+    Returns the translated string and the code for original language
+    """
+    result = xlate.translate(from_string, target_language=to_language)
+    return result['translatedText'], result['detectedSourceLanguage']
+# [END getting_started_background_translate_string]
+
+
+# [START getting_started_background_translate]
 def document_name(message):
     """ Messages are saved in a Firestore database with document IDs generated
         from the original string and destination language. If the exact same
@@ -65,20 +86,6 @@ def update_database(transaction, message):
     transaction.set(doc_ref, message)
 
 
-def translate_string(from_string, to_language):
-    """ Translates a string to a specified language.
-
-    from_string - the original string before translation
-
-    to_language - the language to translate to, as a two-letter code (e.g.,
-        'en' for english, 'de' for german)
-
-    Returns the translated string and the code for original language
-    """
-    result = xlate.translate(from_string, target_language=to_language)
-    return result['translatedText'], result['detectedSourceLanguage']
-
-
 def translate_message(event, context):
     """ Process a pubsub message requesting a translation
     """
@@ -95,3 +102,4 @@ def translate_message(event, context):
 
     transaction = db.transaction()
     update_database(transaction, message)
+# [END getting_started_background_translate]

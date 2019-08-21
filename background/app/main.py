@@ -16,6 +16,7 @@
     provides a form to request a new translation.
 """
 
+# [START getting_started_background_app_main]
 import json
 import os
 
@@ -31,8 +32,10 @@ publisher = pubsub.PublisherClient()
 
 # Keep this list of supported languages up to date
 ACCEPTABLE_LANGUAGES = ('de', 'en', 'es', 'fr', 'ja', 'sw')
+# [END getting_started_background_app_main]
 
 
+# [START getting_started_background_app_list]
 @app.route('/', methods=['GET'])
 def index():
     """ The home page has a list of prior translations and a form to
@@ -45,8 +48,10 @@ def index():
         doc_list.append(doc.to_dict())
 
     return render_template('index.html', translations=doc_list)
+# [END getting_started_background_app_list]
 
 
+# [START getting_started_background_app_request]
 @app.route('/request-translation', methods=['POST'])
 def translate():
     """ Handle a request to translate a string (form field 'v') to a given
@@ -75,3 +80,4 @@ def translate():
     )
     publisher.publish(topic_name, json.dumps(message).encode('utf8'))
     return redirect('/')
+# [END getting_started_background_app_request]
