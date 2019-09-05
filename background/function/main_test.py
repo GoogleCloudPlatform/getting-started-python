@@ -14,36 +14,38 @@
 
 import base64
 import json
-import main
+import os
 import pytest
 
+from google.cloud import firestore
 
-class MockTranslateClient():
-    def __init__(self, *args, **kwargs):
-        pass
+os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ.get('FIRESTORE_PROJECT_ID')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
+    os.path.join(
+        os.path.dirname(__file__),
+        '..',
+        '..',
+        'firestore-service-account.json'
+    )
+)
 
-    def translate(self, s, target_language='N/A'):
-        return {
-            'translatedText': 'This is the output string',
-            'detectedSourceLanguage': 'en',
-        }
-
-
-@pytest.yield_fixture
-def xlate():
-    client = MockTranslateClient()
-    yield client
+import main
 
 
-last_message = None
-def dummy_update(transaction, message):
-    global last_message
-    last_message = message
+def clear_collection(collection):
+    """ Removes every document from the collection, to make it easy to see
+        what has been added by the current test run.
+    """
+    for doc in collection.stream():
+        doc.reference.delete()
 
 
-def test_invocations(xlate):
-    main.update_database = dummy_update
-    main.xlate = xlate
+def test_invocations():
+    db = firestore.Client(project=os.environ['FIRESTORE_PROJECT_ID'])
+    main.db = db
+
+    translations = db.collection('translations')
+    clear_collection(translations)
 
     event = {
         'data': base64.b64encode(json.dumps({
@@ -54,8 +56,12 @@ def test_invocations(xlate):
 
     main.translate_message(event, None)
 
-    assert last_message is not None
-    assert last_message['Original'] == 'My test message'
-    assert last_message['Language'] == 'de'
-    assert last_message['Translated'] == 'This is the output string'
-    assert last_message['OriginalLanguage'] == 'en'
+    docs = [doc for doc in translations.stream()]
+    assert len(docs) == 1   # Should be only the one just created
+
+    message = docs[0].to_dict()
+
+    assert message['Original'] == 'My test message'
+    assert message['Language'] == 'de'
+    assert len(message['Translated']) > 0
+    assert message['OriginalLanguage'] == 'en'

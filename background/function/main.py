@@ -26,6 +26,7 @@
 import base64
 import hashlib
 import json
+import os
 
 from google.cloud import firestore
 from google.cloud import translate
@@ -76,7 +77,7 @@ def document_name(message):
 @firestore.transactional
 def update_database(transaction, message):
     name = document_name(message)
-    doc_ref = db.collection("translations").document(document_id=name)
+    doc_ref = db.collection('translations').document(document_id=name)
 
     try:
         doc_ref.get(transaction=transaction)
