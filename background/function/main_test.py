@@ -19,7 +19,7 @@ import pytest
 
 from google.cloud import firestore
 
-os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ.get('FIRESTORE_PROJECT_ID')
+os.environ['GOOGLE_CLOUD_PROJECT'] = FIRESTORE_PROJECT_ID
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
     os.path.join(
         os.path.dirname(__file__),
