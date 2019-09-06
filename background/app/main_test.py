@@ -12,54 +12,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
-import main
+import os
 import pytest
+import uuid
 
+from google.cloud import firestore
+from google.cloud import pubsub
 
-class MockFirestoreClient():
-    def __init__(self, *args, **kwargs):
-        pass
+os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ.get('FIRESTORE_PROJECT_ID')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
+    os.path.join(
+        os.path.dirname(__file__),
+        '..',
+        '..',
+        'firestore-service-account.json'
+    )
+)
 
-    def collection(self, name):
-        return self
+SUBSCRIPTION_NAME = 'projects/{}/subscriptions/{}'.format(
+    os.getenv('FIRESTORE_PROJECT_ID'), 'test-' + str(uuid.uuid4())
+)
 
-    def stream(self):
-        return [self]
-
-    def to_dict(self):
-        return {
-            'Original': 'This is a test sentence',
-            'Language': 'de',
-            'Translated': 'This should be in German in a real environment',
-            'OriginalLanguage': 'en',
-        }
-
-
-class MockPublisherClient():
-    def __init__(self, *args, **kwargs):
-        self.messages = []
-
-    def publish(self, topic_name, json_message):
-        message = json.loads(json_message)
-        self.messages.append({
-            'topic': topic_name,
-            'message': message,
-        })
+import main
 
 
 @pytest.yield_fixture
 def db():
-    client = MockFirestoreClient()
+    def clear_collection(collection):
+        """ Removes every document from the collection, to make it easy to see
+            what has been added by the current test run.
+        """
+        for doc in collection.stream():
+            doc.reference.delete()
+
+    client = firestore.Client()
+    translations = client.collection('translations')
+    clear_collection(translations)
+    translations.add({
+        'Original': 'A testing message',
+        'Language': 'fr',
+        'Translated': '"A testing message", but in French',
+        'OriginalLanguage': 'en',
+        },
+        document_id='test translation'
+    )
     yield client
 
 
 @pytest.yield_fixture
 def publisher():
-    client = MockPublisherClient()
+    client = pubsub.PublisherClient()
     yield client
 
 
+@pytest.yield_fixture
+def subscriber():
+    subscriber = pubsub.SubscriberClient()
+    topic_name = 'projects/{}/topics/{}'.format(
+        os.getenv('FIRESTORE_PROJECT_ID'), 'translate'
+    )
+    subscription = subscriber.create_subscription(
+        SUBSCRIPTION_NAME, topic_name
+    )
+    yield subscriber
+    subscriber.delete_subscription(SUBSCRIPTION_NAME)
+    
 
 def test_index(db, publisher):
     main.app.testing = True
@@ -71,10 +88,10 @@ def test_index(db, publisher):
     assert r.status_code == 200
     response_text = r.data.decode('utf-8')
     assert 'Text to translate' in response_text
-    assert 'This should be in German' in response_text
+    assert 'but in French' in response_text
 
 
-def test_translate(db, publisher):
+def test_translate(db, publisher, subscriber):
     main.app.testing = True
     main.db = db
     main.publisher = publisher
@@ -86,8 +103,8 @@ def test_translate(db, publisher):
     })
 
     assert r.status_code < 400
-    assert len(publisher.messages) == 1
-    assert '/translate' in publisher.messages[0]['topic']
-    assert publisher.messages[0]['message']['Original'] == 'This is a test'
-    assert publisher.messages[0]['message']['Language'] == 'fr'
 
+    response = subscriber.pull(SUBSCRIPTION_NAME, 1, timeout=2.0)
+    assert len(response.received_messages) == 1
+    assert b'This is a test' in response.received_messages[0].message.data
+    assert b'fr' in response.received_messages[0].message.data
