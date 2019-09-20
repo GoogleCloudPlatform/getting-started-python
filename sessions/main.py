@@ -20,30 +20,33 @@ from flask import Flask, make_response, request
 
 
 app = Flask(__name__)
-sessions = firestore.Client().collection('sessions')
+db = firestore.Client()
+sessions = db.collection('sessions')
 colors = ['red', 'blue', 'green', 'yellow', 'pink']
 
 
-# Updates and returns the info for given session_id. If there is no session_id,
-# it creates a random one. If there is no session data, it creates and stores
-# initial values (1 view, random color). Updates the session by incrementing
-# the number of views.
-def update_session(session_id):
+@firestore.transactional
+def get_session_data(transaction, session_id):
+    """ Looks up (or creates) the session with the given session_id.
+        Creates a random session_id if none is provided. Increments
+        the number of views in this session. Updates are done in a
+        transaction to make sure no saved increments are overwritten.
+    """
     if session_id is None:
         session_id = str(uuid4())   # Random, unique identifier
 
-    doc = sessions.document(session_id).get()
+    doc_ref = sessions.document(document_id=session_id)
+    doc = doc_ref.get(transaction=transaction)
     if doc.exists:
         session = doc.to_dict()
-        prior_views = session.get('views', 0)
-        session['views'] = prior_views + 1
-        doc.reference.set(session)
     else:
         session = {
             'color': random.choice(colors),
-            'views': 1
+            'views': 0
         }
-        sessions.add(session, document_id=session_id)
+
+    session['views'] += 1   # This counts as a view
+    transaction.set(doc_ref, session)
 
     session['session_id'] = session_id
     return session
@@ -53,7 +56,8 @@ def update_session(session_id):
 def home():
     template = '<body bgcolor={}>Views {}</body>'
 
-    session = update_session(request.cookies.get('session_id'))
+    transaction = db.transaction()
+    session = get_session_data(transaction, request.cookies.get('session_id'))
 
     resp = make_response(template.format(session['color'], session['views']))
     resp.set_cookie('session_id', session['session_id'], httponly=True)
