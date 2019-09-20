@@ -26,7 +26,6 @@ SECRETS_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/secrets-password.txt")
 
 # Setup environment variables
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service-account.json"
-export FIRESTORE_PROJECT_ID="getting-started-python-tests"
 
 # Run tests
 nox -s run_tests
