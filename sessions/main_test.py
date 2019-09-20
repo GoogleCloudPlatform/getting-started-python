@@ -13,10 +13,20 @@
 # limitations under the License.
 
 
-import main
 import pytest
 import re
 import uuid
+
+os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ['FIRESTORE_PROJECT_ID']
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
+    os.path.join(
+        os.path.dirname(__file__),
+        '..',
+        'firestore-service-account.json'
+    )
+)
+
+import main
 
 
 @pytest.fixture
