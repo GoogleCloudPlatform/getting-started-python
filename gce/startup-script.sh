@@ -17,7 +17,7 @@ set -v
 
 # Variables for finding source code
 PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
-REPOSITORY="[YOUR-REPOSITORY]"
+REPOSITORY="gce-onramp-sample"
 
 # Install Stackdriver logging agent
 curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
@@ -35,6 +35,9 @@ useradd -m -d /home/pythonapp pythonapp
 export HOME=/root
 git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID/r/$REPOSITORY /opt/app
+cd /opt/app/gce
+git checkout gce
+git pull origin gce
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
