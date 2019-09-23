@@ -10,12 +10,14 @@ DIRS = [
     # Hello world doesn't have system tests, just a lint test which will be
     # covered by the global lint here.
     # '1-hello-world',
-    #'2-structured-data',
-    #'3-binary-data',
-    #'4-auth',
-    #'5-logging',
-    #'6-pubsub',
-    #'7-gce',
+    '2-structured-data',
+    '3-binary-data',
+    '4-auth',
+    '5-logging',
+    '6-pubsub',
+    '7-gce',
+    'background/app',
+    'background/function',
     'sessions',
 ]
 
