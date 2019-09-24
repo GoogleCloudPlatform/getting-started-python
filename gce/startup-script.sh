@@ -35,9 +35,6 @@ useradd -m -d /home/pythonapp pythonapp
 export HOME=/root
 git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID/r/$REPOSITORY /opt/app
-cd /opt/app/gce
-git checkout gce
-git pull origin gce
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
