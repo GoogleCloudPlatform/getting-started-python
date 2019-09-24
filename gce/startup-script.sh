@@ -17,7 +17,7 @@ set -v
 
 # Variables for finding source code
 PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
-REPOSITORY="gce-onramp-sample"
+REPOSITORY=[YOUR_REPO_NAME]
 
 # Install Stackdriver logging agent
 curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
