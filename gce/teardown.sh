@@ -17,7 +17,6 @@
 set -x
 
 MY_INSTANCE_NAME='[your instance name goes here]'
-
 ZONE=us-central1-f
 
 gcloud compute instances delete $MY_INSTANCE_NAME \

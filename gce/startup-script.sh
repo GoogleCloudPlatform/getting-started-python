@@ -15,10 +15,6 @@
 # Echo commands
 set -v
 
-# Variables for finding source code
-PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
-REPOSITORY=[YOUR_REPO_NAME]
-
 # Install Stackdriver logging agent
 curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
 sudo bash install-logging-agent.sh
@@ -33,8 +29,7 @@ useradd -m -d /home/pythonapp pythonapp
 
 # Fetch source code
 export HOME=/root
-git config --global credential.helper gcloud.sh
-git clone https://source.developers.google.com/p/$PROJECTID/r/$REPOSITORY /opt/app
+git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
