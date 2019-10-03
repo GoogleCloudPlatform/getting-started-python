@@ -14,7 +14,7 @@
 
 set -ex
 
-MY_INSTANCE_NAME='[your instance name goes here]'
+MY_INSTANCE_NAME="my-instance-name"
 ZONE=us-central1-f
 
 gcloud compute instances create $MY_INSTANCE_NAME \
