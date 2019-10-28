@@ -51,14 +51,14 @@ def test_session(client):
     r = client.get('/')
     assert r.status_code == 200
     data = r.data.decode('utf-8')
-    assert 'Views 1' in data
+    assert '1 views' in data
 
-    match = re.search('bgcolor=([a-z]+)', data)
+    match = re.search('views for ([A-Za-z ]+)', data)
     assert match is not None
-    color = match.group(1)
+    greeting = match.group(1)
 
     r = client.get('/')
     assert r.status_code == 200
     data = r.data.decode('utf-8')
-    assert 'Views 2' in data
-    assert color in data
+    assert '2 views' in data
+    assert greeting in data
