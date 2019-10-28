@@ -22,7 +22,13 @@ from flask import Flask, make_response, request
 app = Flask(__name__)
 db = firestore.Client()
 sessions = db.collection('sessions')
-colors = ['red', 'blue', 'green', 'yellow', 'pink']
+greetings = [
+    'Hello World',
+    'Hallo Welt',
+    'Ciao Mondo',
+    'Salut le Monde',
+    'Hola Mundo',
+]
 
 
 @firestore.transactional
@@ -41,7 +47,7 @@ def get_session_data(transaction, session_id):
         session = doc.to_dict()
     else:
         session = {
-            'color': random.choice(colors),
+            'greeting': random.choice(greetings),
             'views': 0
         }
 
@@ -54,12 +60,16 @@ def get_session_data(transaction, session_id):
 
 @app.route('/', methods=['GET'])
 def home():
-    template = '<body bgcolor={}>Views {}</body>'
+    template = '<body>{} views for {}</body>'
 
     transaction = db.transaction()
     session = get_session_data(transaction, request.cookies.get('session_id'))
 
-    resp = make_response(template.format(session['color'], session['views']))
+    resp = make_response(template.format(
+        session['views'], 
+        session['greeting']
+        )
+    )
     resp.set_cookie('session_id', session['session_id'], httponly=True)
     return resp
 
