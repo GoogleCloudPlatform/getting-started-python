@@ -18,6 +18,7 @@ DIRS = [
     '7-gce',
     'background/app',
     'background/function',
+    'sessions',
 ]
 
 PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml', '-m', 'not e2e']
