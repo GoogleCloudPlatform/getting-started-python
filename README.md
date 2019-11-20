@@ -1,3 +1,6 @@
+# This branch is for legacy support of the Bookshelf step tutorials.
+# For the up-to-date version of this repository, see the `master` branch.
+
 # Getting started with Python on Google Cloud Platform
 
 [![Build Status](https://travis-ci.org/GoogleCloudPlatform/getting-started-python.svg)](https://travis-ci.org/GoogleCloudPlatform/getting-started-python)
