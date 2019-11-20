@@ -7,12 +7,11 @@ REPO_TOOLS_REQ = \
     'git+https://github.com/GoogleCloudPlatform/python-repo-tools.git'
 
 DIRS = [
-    # Hello world doesn't have system tests, just a lint test which will be
-    # covered by the global lint here.
     'authenticating-users',
     'background/app',
     'background/function',
     'sessions',
+    'bookshelf',
 ]
 
 PYTEST_COMMON_ARGS = ['--junitxml=sponge_log.xml', '-m', 'not e2e']
