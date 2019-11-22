@@ -42,7 +42,7 @@ app = Flask(__name__)
 app.config.update(
     SECRET_KEY='secret',
     PROJECT_ID=os.getenv('GOOGLE_CLOUD_PROJECT'),
-    CLOUD_STORAGE_BUCKET=os.getenv('GOOGLE_STORAGE_BUCKET'),
+    CLOUD_STORAGE_BUCKET=os.getenv('GOOGLE_STORAGE_BUCKET') or os.getenv('GOOGLE_CLOUD_PROJECT') + '_bucket',
     MAX_CONTENT_LENGTH=8 * 1024 * 1024,
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif'])
 )

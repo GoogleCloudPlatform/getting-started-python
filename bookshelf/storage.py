@@ -53,7 +53,7 @@ def upload_file(file_stream, filename, content_type):
 
     # [START bookshelf_cloud_storage_client]
     client = storage.Client(
-        project=current_app.config['PROJECT_ID'])()
+        project=current_app.config['PROJECT_ID'])
     bucket = client.bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
     blob = bucket.blob(filename)
 
