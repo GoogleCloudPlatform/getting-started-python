@@ -18,6 +18,12 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages() %}
+  {% for message in messages %}
+    <p>{{ message }}<p>
+  {% endfor %}
+{% endwith %}
+
 <h3>Books</h3>
 <a href="/books/add" class="btn btn-success btn-sm">
   <i class="glyphicon glyphicon-plus"></i>

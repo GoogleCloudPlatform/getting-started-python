@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START bookshelf_firestore_client_import]
 from google.cloud import firestore
+# [END bookshelf_firestore_client_import]
 
 def document_to_dict(doc):
     if not doc.exists:
@@ -42,16 +44,19 @@ def next_page(limit=10, cursor=None):
 
 
 def read(id):
+    # [START bookshelf_firestore_client]
     db = firestore.Client()
-    doc_ref = db.collection(u'Book').document(id)
-    return document_to_dict(doc_ref.get())
+    book_ref = db.collection(u'Book').document(id)
+    snapspot = book_ref.get()
+    # [END bookshelf_firestore_client]
+    return document_to_dict(snapshot)
 
 
 def update(data, id=None):
     db = firestore.Client()
-    doc_ref = db.collection(u'Book').document(id)
-    doc_ref.set(data)
-    return document_to_dict(doc_ref.get())
+    book_ref = db.collection(u'Book').document(id)
+    book_ref.set(data)
+    return document_to_dict(book_ref.get())
 
 
 create = update
@@ -59,5 +64,5 @@ create = update
 
 def delete(id):
     db = firestore.Client()
-    doc_ref = db.collection(u'Book').document(id)
-    doc_ref.delete()
+    book_ref = db.collection(u'Book').document(id)
+    book_ref.delete()

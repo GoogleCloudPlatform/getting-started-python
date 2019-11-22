@@ -23,11 +23,6 @@ from werkzeug import secure_filename
 from werkzeug.exceptions import BadRequest
 
 
-def _get_storage_client():
-    return storage.Client(
-        project=current_app.config['PROJECT_ID'])
-
-
 def _check_extension(filename, allowed_extensions):
     if ('.' not in filename or
             filename.split('.').pop().lower() not in allowed_extensions):
@@ -48,7 +43,6 @@ def _safe_filename(filename):
     return "{0}-{1}.{2}".format(basename, date, extension)
 
 
-# [START upload_file]
 def upload_file(file_stream, filename, content_type):
     """
     Uploads a file to a given Cloud Storage bucket and returns the public url
@@ -57,7 +51,9 @@ def upload_file(file_stream, filename, content_type):
     _check_extension(filename, current_app.config['ALLOWED_EXTENSIONS'])
     filename = _safe_filename(filename)
 
-    client = _get_storage_client()
+    # [START bookshelf_cloud_storage_client]
+    client = storage.Client(
+        project=current_app.config['PROJECT_ID'])()
     bucket = client.bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
     blob = bucket.blob(filename)
 
@@ -66,9 +62,9 @@ def upload_file(file_stream, filename, content_type):
         content_type=content_type)
 
     url = blob.public_url
+    # [END bookshelf_cloud_storage_client]
 
     if isinstance(url, six.binary_type):
         url = url.decode('utf-8')
 
     return url
-# [END upload_file]
