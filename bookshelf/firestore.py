@@ -47,7 +47,7 @@ def read(id):
     # [START bookshelf_firestore_client]
     db = firestore.Client()
     book_ref = db.collection(u'Book').document(id)
-    snapspot = book_ref.get()
+    snapshot = book_ref.get()
     # [END bookshelf_firestore_client]
     return document_to_dict(snapshot)
 
