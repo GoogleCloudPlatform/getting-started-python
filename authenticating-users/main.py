@@ -53,7 +53,7 @@ def get_metadata(item_name):
     path += item_name
     response = requests.get(
         '{}{}'.format(endpoint, path),
-        headers = {'Metadata-Flavor': 'Google'}
+        headers={'Metadata-Flavor': 'Google'}
     )
     metadata = response.text
     return metadata

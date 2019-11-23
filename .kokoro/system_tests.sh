@@ -28,4 +28,5 @@ SECRETS_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/secrets-password.txt")
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service-account.json"
 
 # Run tests
+nox -s lint
 nox -s run_tests

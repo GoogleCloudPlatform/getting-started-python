@@ -20,10 +20,11 @@
 import json
 import os
 
+from flask import Flask, redirect, render_template, request
 from google.cloud import firestore
 from google.cloud import pubsub
 
-from flask import Flask, render_template, redirect, request
+
 app = Flask(__name__)
 
 # Get client objects to reuse over multiple invocations

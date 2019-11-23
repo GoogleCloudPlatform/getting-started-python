@@ -26,7 +26,6 @@
 import base64
 import hashlib
 import json
-import os
 
 from google.cloud import firestore
 from google.cloud import translate
@@ -72,6 +71,7 @@ def document_name(message):
 
     # Note that document IDs should not contain the '/' character
     name = base64.b64encode(hashed, altchars=b'+-').decode('utf-8')
+    return name
 
 
 @firestore.transactional
@@ -81,7 +81,7 @@ def update_database(transaction, message):
 
     try:
         doc_ref.get(transaction=transaction)
-    except NotFound:
+    except firestore.NotFound:
         return  # Don't replace an existing translation
 
     transaction.set(doc_ref, message)

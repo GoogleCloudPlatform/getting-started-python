@@ -9,6 +9,7 @@ REPO_TOOLS_REQ = \
 DIRS = [
     # Hello world doesn't have system tests, just a lint test which will be
     # covered by the global lint here.
+    'authenticating-users',
     'background/app',
     'background/function',
     'sessions',
@@ -49,7 +50,7 @@ def run_test(session, dir):
         'pytest',
         *(PYTEST_COMMON_ARGS + session.posargs),
         # Pytest will return 5 when no tests are collected. This can happen
-        # on travis where slow and flaky tests are excluded.
+        # when slow and flaky tests are excluded.
         # See http://doc.pytest.org/en/latest/_modules/_pytest/main.html
         success_codes=[0, 5])
 
@@ -59,12 +60,3 @@ def run_test(session, dir):
 def run_tests(session, dir=None):
     """Run all tests for all directories (slow!)"""
     run_test(session, dir)
-
-
-@nox.session
-@nox.parametrize('dir', DIRS)
-def travis(session, dir=None):
-    """On travis, only run the py3.4 and cloudsql tests."""
-    run_tests(
-        session,
-        dir=dir)
