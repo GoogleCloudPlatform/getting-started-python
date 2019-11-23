@@ -12,10 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging, os
+import logging
+import os
 
-from flask import current_app, Flask, Markup, flash, redirect, render_template, url_for, request
-import firestore, storage, google.cloud.error_reporting, google.cloud.logging
+import firestore
+from flask import current_app, flash, Flask, Markup, redirect, render_template
+from flask import request, url_for
+from google.cloud import error_reporting
+import google.cloud.logging
+import storage
+
 
 # [START upload_image_file]
 def upload_image_file(file):
@@ -38,11 +44,13 @@ def upload_image_file(file):
     return public_url
 # [END upload_image_file]
 
+
 app = Flask(__name__)
 app.config.update(
     SECRET_KEY='secret',
     PROJECT_ID=os.getenv('GOOGLE_CLOUD_PROJECT'),
-    CLOUD_STORAGE_BUCKET=os.getenv('GOOGLE_STORAGE_BUCKET') or os.getenv('GOOGLE_CLOUD_PROJECT') + '_bucket',
+    CLOUD_STORAGE_BUCKET=os.getenv('GOOGLE_STORAGE_BUCKET')
+    or os.getenv('GOOGLE_CLOUD_PROJECT') + '_bucket',
     MAX_CONTENT_LENGTH=8 * 1024 * 1024,
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif'])
 )
@@ -56,16 +64,6 @@ if not app.testing:
     client = google.cloud.logging.Client(app.config['PROJECT_ID'])
     # Attaches a Google Stackdriver logging handler to the root logger
     client.setup_logging(logging.INFO)
-
-# Add an error handler. This is useful for debugging the live application,
-# however, you should disable the output of the exception for production
-# applications.
-@app.errorhandler(500)
-def server_error(e):
-    return """
-    An internal error occurred: <pre>{}</pre>
-    See logs for full stacktrace.
-    """.format(e), 500
 
 
 @app.route("/")
@@ -131,6 +129,7 @@ def delete(id):
     firestore.delete(id)
     return redirect(url_for('.list'))
 
+
 @app.route('/logs')
 def logs():
     logging.info('Hey, you triggered a custom log entry. Good job!')
@@ -138,21 +137,25 @@ def logs():
         <a href="https://console.cloud.google.com/logs">Cloud Console</a>'''))
     return redirect(url_for('.list'))
 
+
 @app.route('/errors')
 def errors():
     raise Exception('This is an intentional exception.')
+
 
 # Add an error handler that reports exceptions to Stackdriver Error
 # Reporting. Note that this error handler is only used when debug
 # is False
 @app.errorhandler(500)
 def server_error(e):
-    client = google.cloud.error_reporting.Client(app.config['PROJECT_ID'])
+    client = error_reporting.Client(app.config['PROJECT_ID'])
     client.report_exception(
-        http_context=google.cloud.error_reporting.build_flask_context(request))
+        http_context=error_reporting.build_flask_context(request))
     return """
-    An internal error occurred.
-    """, 500
+    An internal error occurred: <pre>{}</pre>
+    See logs for full stacktrace.
+    """.format(e), 500
+
 
 # This is only used when running locally. When running live, gunicorn runs
 # the application.

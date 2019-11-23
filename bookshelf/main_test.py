@@ -14,14 +14,12 @@
 
 import re
 
-from flaky import flaky
-import requests
-import pytest
-from six import BytesIO
-from google.cloud.exceptions import ServiceUnavailable
-from retrying import retry
-
 import main
+import pytest
+import requests
+from retrying import retry
+from six import BytesIO
+
 
 @pytest.yield_fixture
 def app(request):
@@ -33,6 +31,7 @@ def app(request):
 
     with app.test_request_context():
         yield app
+
 
 @pytest.yield_fixture
 def firestore():
@@ -69,6 +68,7 @@ def delete_all_books(firestore):
         for book in books:
             firestore.delete(book['id'])
 
+
 # Mark all test cases in this class as flaky, so that if errors occur they
 # can be retried. This is useful when databases are temporarily unavailable.
 # @flaky(rerun_filter=flaky_filter)
@@ -91,6 +91,7 @@ def test_list(app, firestore):
         "Should not show more than 10 books")
     assert 'More' in body, "Should have more than one page"
 
+
 def test_add(app):
     data = {
         'title': 'Test Book',
@@ -109,6 +110,7 @@ def test_add(app):
     assert 'Test Date Published' in body
     assert 'Test Description' in body
 
+
 def test_edit(app, firestore):
     existing = firestore.create({'title': "Temp Title"})
 
@@ -123,6 +125,7 @@ def test_edit(app, firestore):
     assert 'Updated Title' in body
     assert 'Temp Title' not in body
 
+
 def test_delete(app, firestore):
     existing = firestore.create({'title': "Temp Title"})
 
@@ -133,6 +136,7 @@ def test_delete(app, firestore):
 
     assert rv.status == '200 OK'
     assert not firestore.read(existing['id'])
+
 
 def test_upload_image(app):
     data = {
@@ -154,6 +158,7 @@ def test_upload_image(app):
     r = requests.get(img_tag)
     assert r.status_code == 200
     assert r.text == 'hello world'
+
 
 def test_upload_bad_file(app):
     data = {

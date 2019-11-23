@@ -16,6 +16,7 @@
 from google.cloud import firestore
 # [END bookshelf_firestore_client_import]
 
+
 def document_to_dict(doc):
     if not doc.exists:
         return None
@@ -31,7 +32,7 @@ def next_page(limit=10, cursor=None):
 
     if cursor:
         # Construct a new query starting at this document.
-        query = query.start_after({ u'title': cursor })
+        query = query.start_after({u'title': cursor})
 
     docs = query.stream()
     docs = list(map(document_to_dict, docs))
