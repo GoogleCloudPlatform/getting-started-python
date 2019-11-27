@@ -14,21 +14,8 @@
 
 import base64
 import json
-import os
-import pytest
 
 from google.cloud import firestore
-
-os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ['FIRESTORE_PROJECT_ID']
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..',
-        '..',
-        'firestore-service-account.json'
-    )
-)
-
 import main
 
 
@@ -41,7 +28,7 @@ def clear_collection(collection):
 
 
 def test_invocations():
-    db = firestore.Client(project=os.environ['FIRESTORE_PROJECT_ID'])
+    db = firestore.Client()
     main.db = db
 
     translations = db.collection('translations')

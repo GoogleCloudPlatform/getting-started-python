@@ -21,6 +21,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
+sponge_log.xml
 
 *.log
 

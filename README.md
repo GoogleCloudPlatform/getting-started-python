@@ -1,7 +1,5 @@
 # Getting started with Python on Google Cloud Platform
 
-[![Build Status](https://travis-ci.org/GoogleCloudPlatform/getting-started-python.svg)](https://travis-ci.org/GoogleCloudPlatform/getting-started-python)
-
 This repository is the complete sample code for the [Python Getting Started on Google Cloud Platform](http://cloud.google.com/python) tutorials. Please refer to the tutorials for instructions on configuring, running, and deploying these samples.
 
 The code for the samples is contained in individual folders in this repository.

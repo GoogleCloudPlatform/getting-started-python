@@ -15,8 +15,8 @@
 import random
 from uuid import uuid4
 
-from google.cloud import firestore
 from flask import Flask, make_response, request
+from google.cloud import firestore
 
 
 app = Flask(__name__)
@@ -66,7 +66,7 @@ def home():
     session = get_session_data(transaction, request.cookies.get('session_id'))
 
     resp = make_response(template.format(
-        session['views'], 
+        session['views'],
         session['greeting']
         )
     )

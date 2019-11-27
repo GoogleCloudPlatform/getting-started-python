@@ -13,27 +13,23 @@
 # limitations under the License.
 
 import os
-import pytest
 import uuid
 
+import google.auth
 from google.cloud import firestore
 from google.cloud import pubsub
-
-os.environ['GOOGLE_CLOUD_PROJECT'] = os.environ['FIRESTORE_PROJECT_ID']
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.realpath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..',
-        '..',
-        'firestore-service-account.json'
-    )
-)
-
-SUBSCRIPTION_NAME = 'projects/{}/subscriptions/{}'.format(
-    os.getenv('FIRESTORE_PROJECT_ID'), 'test-' + str(uuid.uuid4())
-)
-
 import main
+import pytest
+
+
+credentials, project_id = google.auth.default()
+os.environ['GOOGLE_CLOUD_PROJECT'] = project_id
+SUBSCRIPTION_NAME = 'projects/{}/subscriptions/{}'.format(
+    project_id, 'test-' + str(uuid.uuid4())
+)
+TOPIC_NAME = 'projects/{}/topics/{}'.format(
+    project_id, 'translate'
+)
 
 
 @pytest.yield_fixture
@@ -68,15 +64,12 @@ def publisher():
 @pytest.yield_fixture
 def subscriber():
     subscriber = pubsub.SubscriberClient()
-    topic_name = 'projects/{}/topics/{}'.format(
-        os.getenv('FIRESTORE_PROJECT_ID'), 'translate'
-    )
-    subscription = subscriber.create_subscription(
-        SUBSCRIPTION_NAME, topic_name
+    subscriber.create_subscription(
+        SUBSCRIPTION_NAME, TOPIC_NAME
     )
     yield subscriber
     subscriber.delete_subscription(SUBSCRIPTION_NAME)
-    
+
 
 def test_index(db, publisher):
     main.app.testing = True
@@ -104,7 +97,7 @@ def test_translate(db, publisher, subscriber):
 
     assert r.status_code < 400
 
-    response = subscriber.pull(SUBSCRIPTION_NAME, 1, timeout=2.0)
+    response = subscriber.pull(SUBSCRIPTION_NAME, 1, timeout=10.0)
     assert len(response.received_messages) == 1
     assert b'This is a test' in response.received_messages[0].message.data
     assert b'fr' in response.received_messages[0].message.data
