@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import logging
-import os
 
 import firestore
 from flask import current_app, flash, Flask, Markup, redirect, render_template
@@ -48,9 +47,6 @@ def upload_image_file(file):
 app = Flask(__name__)
 app.config.update(
     SECRET_KEY='secret',
-    PROJECT_ID=os.getenv('GOOGLE_CLOUD_PROJECT'),
-    CLOUD_STORAGE_BUCKET=os.getenv('GOOGLE_STORAGE_BUCKET')
-    or os.getenv('GOOGLE_CLOUD_PROJECT') + '_bucket',
     MAX_CONTENT_LENGTH=8 * 1024 * 1024,
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif'])
 )
@@ -61,7 +57,7 @@ app.testing = False
 # Configure logging
 if not app.testing:
     logging.basicConfig(level=logging.INFO)
-    client = google.cloud.logging.Client(app.config['PROJECT_ID'])
+    client = google.cloud.logging.Client()
     # Attaches a Google Stackdriver logging handler to the root logger
     client.setup_logging(logging.INFO)
 
@@ -148,7 +144,7 @@ def errors():
 # is False
 @app.errorhandler(500)
 def server_error(e):
-    client = error_reporting.Client(app.config['PROJECT_ID'])
+    client = error_reporting.Client()
     client.report_exception(
         http_context=error_reporting.build_flask_context(request))
     return """

@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import re
 
+import google.auth
 import main
 import pytest
 import requests
 from retrying import retry
 from six import BytesIO
+
+
+credentials, project_id = google.auth.default()
+os.environ['GOOGLE_CLOUD_PROJECT'] = project_id
 
 
 @pytest.yield_fixture

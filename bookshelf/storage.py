@@ -15,6 +15,7 @@
 from __future__ import absolute_import
 
 import datetime
+import os
 
 from flask import current_app
 from google.cloud import storage
@@ -51,10 +52,12 @@ def upload_file(file_stream, filename, content_type):
     _check_extension(filename, current_app.config['ALLOWED_EXTENSIONS'])
     filename = _safe_filename(filename)
 
+    bucketname = os.getenv('GOOGLE_STORAGE_BUCKET') or os.getenv(
+        'GOOGLE_CLOUD_PROJECT') + '_bucket'
+
     # [START bookshelf_cloud_storage_client]
-    client = storage.Client(
-        project=current_app.config['PROJECT_ID'])
-    bucket = client.bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
+    client = storage.Client()
+    bucket = client.bucket(bucketname)
     blob = bucket.blob(filename)
 
     blob.upload_from_string(
