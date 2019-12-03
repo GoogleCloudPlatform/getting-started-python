@@ -1,4 +1,4 @@
-BeautifulSoup4==4.6.0
+BeautifulSoup4==4.8.1
 flake8==3.5.0
 flaky==3.4.0
 mock==2.0.0
