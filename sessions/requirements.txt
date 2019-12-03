@@ -1,2 +1,2 @@
-google-cloud-firestore==1.4.0
+google-cloud-firestore==1.6.0
 flask>=1.0.0
