@@ -67,10 +67,7 @@ def list():
     start_after = request.args.get('start_after', None)
     books, last_title = firestore.next_page(start_after=start_after)
 
-    return render_template(
-        "list.html",
-        books=books,
-        last_title=last_title)
+    return render_template("list.html", books=books, last_title=last_title)
 
 
 @app.route('/books/<id>')
@@ -85,14 +82,10 @@ def add():
         data = request.form.to_dict(flat=True)
 
         # If an image was uploaded, update the data to point to the new image.
-        # [START image_url]
         image_url = upload_image_file(request.files.get('image'))
-        # [END image_url]
 
-        # [START image_url2]
         if image_url:
             data['imageUrl'] = image_url
-        # [END image_url2]
 
         book = firestore.create(data)
 
@@ -108,6 +101,7 @@ def edit(id):
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
 
+        # If an image was uploaded, update the data to point to the new image.
         image_url = upload_image_file(request.files.get('image'))
 
         if image_url:
