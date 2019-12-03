@@ -20,7 +20,6 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-coverage.xml
 *_log.xml
 *,cover
 sponge_log.xml
