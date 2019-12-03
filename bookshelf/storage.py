@@ -26,7 +26,7 @@ from werkzeug.exceptions import BadRequest
 
 def _check_extension(filename, allowed_extensions):
     file, ext = os.path.splitext(filename)
-    if (ext not in allowed_extensions):
+    if (ext.replace('.', '') not in allowed_extensions):
         raise BadRequest(
             "{0} has an invalid name or extension".format(filename))
 
