@@ -1,4 +1,4 @@
-flake8==3.5.0
-nox>=2018.10.9
+flake8==3.7.9
+nox==2019.11.9
 pytest==3.8.2
-requests>=2.20.0
+requests==2.22.0
