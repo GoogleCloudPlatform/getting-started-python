@@ -19,7 +19,6 @@ import google.auth
 import main
 import pytest
 import requests
-from retrying import retry
 from six import BytesIO
 
 
@@ -60,12 +59,6 @@ def firestore():
     delete_all_books(firestore)
 
 
-# The backend data stores can sometimes be flaky. It's useful to retry this
-# a few times before giving up.
-@retry(
-    stop_max_attempt_number=3,
-    wait_exponential_multiplier=100,
-    wait_exponential_max=2000)
 def delete_all_books(firestore):
     while True:
         books, _ = firestore.next_page(limit=50)
