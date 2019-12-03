@@ -10,6 +10,7 @@ DIRS = [
     'authenticating-users',
     'background/app',
     'background/function',
+    'gce',
     'sessions',
     'bookshelf',
 ]
