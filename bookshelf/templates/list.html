@@ -1,5 +1,5 @@
 {#
-# Copyright 2015 Google Inc.
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,10 +50,10 @@
 <p>No books found</p>
 {% endfor %}
 
-{% if cursor %}
+{% if last_title %}
 <nav>
   <ul class="pager">
-    <li><a href="?cursor={{cursor}}">More</a></li>
+    <li><a href="?start_after={{last_title}}">More</a></li>
   </ul>
 </nav>
 {% endif %}

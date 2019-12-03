@@ -1,4 +1,4 @@
-# Copyright 2015 Google Inc.
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,8 +50,8 @@ def firestore():
     this to ensure that resources are properly cleaned up.
     """
 
-    # Ensure no books exist before running. This typically helps if tests
-    # somehow left the database in a bad state.
+    # Ensure no books exist before running the tests. This typically helps if
+    # tests somehow left the database in a bad state.
     delete_all_books(firestore)
 
     yield firestore
@@ -75,13 +75,6 @@ def delete_all_books(firestore):
             firestore.delete(book['id'])
 
 
-# Mark all test cases in this class as flaky, so that if errors occur they
-# can be retried. This is useful when databases are temporarily unavailable.
-# @flaky(rerun_filter=flaky_filter)
-# Tell pytest to use both the app and model fixtures for all test cases.
-# This ensures that configuration is properly applied and that all database
-# resources created during tests are cleaned up. These fixtures are defined
-# in conftest.py
 def test_list(app, firestore):
     for i in range(1, 12):
         firestore.create({'title': u'Book {0}'.format(i)})

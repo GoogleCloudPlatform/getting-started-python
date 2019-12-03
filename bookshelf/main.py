@@ -1,4 +1,4 @@
-# Copyright 2015 Google Inc.
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,13 +64,13 @@ if not app.testing:
 
 @app.route("/")
 def list():
-    cursor = request.args.get('cursor', None)
-    books, next_cursor = firestore.next_page(cursor=cursor)
+    start_after = request.args.get('start_after', None)
+    books, last_title = firestore.next_page(start_after=start_after)
 
     return render_template(
         "list.html",
         books=books,
-        cursor=next_cursor)
+        last_title=last_title)
 
 
 @app.route('/books/<id>')

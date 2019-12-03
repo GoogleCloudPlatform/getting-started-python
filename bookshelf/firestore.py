@@ -1,4 +1,4 @@
-# Copyright 2015 Google Inc.
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,23 +25,23 @@ def document_to_dict(doc):
     return doc_dict
 
 
-def next_page(limit=10, cursor=None):
+def next_page(limit=10, start_after=None):
     db = firestore.Client()
 
     query = db.collection(u'Book').limit(limit).order_by(u'title')
 
-    if cursor:
+    if start_after:
         # Construct a new query starting at this document.
-        query = query.start_after({u'title': cursor})
+        query = query.start_after({u'title': start_after})
 
     docs = query.stream()
     docs = list(map(document_to_dict, docs))
 
-    next_cursor = None
+    last_title = None
     if limit == len(docs):
-        # Get the last document from the results and set as the next cursor.
-        next_cursor = docs[-1][u'title']
-    return docs, next_cursor
+        # Get the last document from the results and set as the last title.
+        last_title = docs[-1][u'title']
+    return docs, last_title
 
 
 def read(id):

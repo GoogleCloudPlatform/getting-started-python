@@ -1,4 +1,4 @@
-# Copyright 2015 Google Inc.
+# Copyright 2019 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ from werkzeug.exceptions import BadRequest
 
 
 def _check_extension(filename, allowed_extensions):
-    if ('.' not in filename or
-            filename.split('.').pop().lower() not in allowed_extensions):
+    file, ext = os.path.splitext(filename)
+    if (ext not in allowed_extensions):
         raise BadRequest(
             "{0} has an invalid name or extension".format(filename))
 
