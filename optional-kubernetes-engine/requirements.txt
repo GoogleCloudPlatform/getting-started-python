@@ -13,4 +13,4 @@ PyMongo==3.7.2
 six==1.11.0
 requests[security]==2.20.1
 honcho==1.0.1
-psq==0.7.0
+psq==0.8.0
