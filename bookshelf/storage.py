@@ -28,7 +28,7 @@ def _check_extension(filename, allowed_extensions):
     file, ext = os.path.splitext(filename)
     if (ext.replace('.', '') not in allowed_extensions):
         raise BadRequest(
-            "{0} has an invalid name or extension".format(filename))
+            '{0} has an invalid name or extension'.format(filename))
 
 
 def _safe_filename(filename):

@@ -44,18 +44,18 @@ def next_page(limit=10, start_after=None):
     return docs, last_title
 
 
-def read(id):
+def read(book_id):
     # [START bookshelf_firestore_client]
     db = firestore.Client()
-    book_ref = db.collection(u'Book').document(id)
+    book_ref = db.collection(u'Book').document(book_id)
     snapshot = book_ref.get()
     # [END bookshelf_firestore_client]
     return document_to_dict(snapshot)
 
 
-def update(data, id=None):
+def update(data, book_id=None):
     db = firestore.Client()
-    book_ref = db.collection(u'Book').document(id)
+    book_ref = db.collection(u'Book').document(book_id)
     book_ref.set(data)
     return document_to_dict(book_ref.get())
 

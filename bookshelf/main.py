@@ -23,22 +23,22 @@ import storage
 
 
 # [START upload_image_file]
-def upload_image_file(file):
+def upload_image_file(img):
     """
     Upload the user-uploaded file to Google Cloud Storage and retrieve its
     publicly-accessible URL.
     """
-    if not file:
+    if not img:
         return None
 
     public_url = storage.upload_file(
-        file.read(),
-        file.filename,
-        file.content_type
+        img.read(),
+        img.filename,
+        img.content_type
     )
 
     current_app.logger.info(
-        "Uploaded file %s as %s.", file.filename, public_url)
+        'Uploaded file %s as %s.', img.filename, public_url)
 
     return public_url
 # [END upload_image_file]
@@ -62,18 +62,18 @@ if not app.testing:
     client.setup_logging(logging.INFO)
 
 
-@app.route("/")
+@app.route('/')
 def list():
     start_after = request.args.get('start_after', None)
     books, last_title = firestore.next_page(start_after=start_after)
 
-    return render_template("list.html", books=books, last_title=last_title)
+    return render_template('list.html', books=books, last_title=last_title)
 
 
-@app.route('/books/<id>')
-def view(id):
-    book = firestore.read(id)
-    return render_template("view.html", book=book)
+@app.route('/books/<book_id>')
+def view(book_id):
+    book = firestore.read(book_id)
+    return render_template('view.html', book=book)
 
 
 @app.route('/books/add', methods=['GET', 'POST'])
@@ -89,14 +89,14 @@ def add():
 
         book = firestore.create(data)
 
-        return redirect(url_for('.view', id=book['id']))
+        return redirect(url_for('.view', book_id=book['id']))
 
-    return render_template("form.html", action="Add", book={})
+    return render_template('form.html', action='Add', book={})
 
 
-@app.route('/books/<id>/edit', methods=['GET', 'POST'])
-def edit(id):
-    book = firestore.read(id)
+@app.route('/books/<book_id>/edit', methods=['GET', 'POST'])
+def edit(book_id):
+    book = firestore.read(book_id)
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
@@ -107,16 +107,16 @@ def edit(id):
         if image_url:
             data['imageUrl'] = image_url
 
-        book = firestore.update(data, id)
+        book = firestore.update(data, book_id)
 
-        return redirect(url_for('.view', id=book['id']))
+        return redirect(url_for('.view', book_id=book['id']))
 
-    return render_template("form.html", action="Edit", book=book)
+    return render_template('form.html', action='Edit', book=book)
 
 
-@app.route('/books/<id>/delete')
-def delete(id):
-    firestore.delete(id)
+@app.route('/books/<book_id>/delete')
+def delete(book_id):
+    firestore.delete(book_id)
     return redirect(url_for('.list'))
 
 
