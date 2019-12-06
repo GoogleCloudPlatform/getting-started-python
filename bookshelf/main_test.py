@@ -28,7 +28,7 @@ os.environ['GOOGLE_CLOUD_PROJECT'] = project_id
 
 @pytest.yield_fixture
 def app(request):
-    """This fixtures provides a Flask app instance configured for testing.
+    """This fixture provides a Flask app instance configured for testing.
 
     It also ensures the tests run within a request context, allowing
     any calls to flask.request, flask.current_app, etc. to work."""
@@ -42,7 +42,7 @@ def app(request):
 def firestore():
 
     import firestore
-    """This fixture provides a modified version of the app's firebase model that
+    """This fixture provides a modified version of the app's Firebase model that
     tracks all created items and deletes them at the end of the test.
 
     Any tests that directly or indirectly interact with the database should use
