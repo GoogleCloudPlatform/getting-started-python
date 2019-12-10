@@ -23,7 +23,7 @@ gcloud compute instances create $MY_INSTANCE_NAME \
     --image-project=debian-cloud \
     --machine-type=g1-small \
     --scopes userinfo-email,cloud-platform \
-    --metadata-from-file startup-script=gce/startup-script.sh \
+    --metadata-from-file startup-script=startup-script.sh \
     --zone $ZONE \
     --tags http-server
 # [END getting_started_gce_create_instance]
