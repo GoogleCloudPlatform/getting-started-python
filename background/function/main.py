@@ -28,7 +28,7 @@ import hashlib
 import json
 
 from google.cloud import firestore
-from google.cloud import translate
+from google.cloud import translate_v2 as translate
 # [END getting_started_background_translate_setup]
 
 # [START getting_started_background_translate_init]
