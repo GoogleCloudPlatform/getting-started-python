@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START getting_started_sessions_all]
 import random
 from uuid import uuid4
 
@@ -60,7 +61,7 @@ def get_session_data(transaction, session_id):
 
 @app.route('/', methods=['GET'])
 def home():
-    template = '<body>{} views for {}</body>'
+    template = '<body>{} views for "{}"</body>'
 
     transaction = db.transaction()
     session = get_session_data(transaction, request.cookies.get('session_id'))
@@ -76,3 +77,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080)
+# [END getting_started_sessions_all]

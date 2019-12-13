@@ -43,7 +43,7 @@ def test_session(client):
     data = r.data.decode('utf-8')
     assert '1 views' in data
 
-    match = re.search('views for ([A-Za-z ]+)', data)
+    match = re.search('views for "([A-Za-z ]+)"', data)
     assert match is not None
     greeting = match.group(1)
 
