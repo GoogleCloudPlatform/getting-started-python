@@ -20,8 +20,8 @@ import os
 from flask import current_app
 from google.cloud import storage
 import six
-from werkzeug.utils import secure_filename
 from werkzeug.exceptions import BadRequest
+from werkzeug.utils import secure_filename
 
 
 def _check_extension(filename, allowed_extensions):
