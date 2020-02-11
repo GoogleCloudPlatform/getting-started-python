@@ -33,8 +33,8 @@ def _check_extension(filename, allowed_extensions):
 
 def _safe_filename(filename):
     """
-    Generates a safe filename that is unlikely to collide with existing objects
-    in Google Cloud Storage.
+    Generates a safe filename that is unlikely to collide with existing
+    objects in Google Cloud Storage.
 
     ``filename.ext`` is transformed into ``filename-YYYY-MM-DD-HHMMSS.ext``
     """
