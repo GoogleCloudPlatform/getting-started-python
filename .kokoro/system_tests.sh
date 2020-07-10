@@ -18,7 +18,8 @@ set -eo pipefail
 
 export PATH=${PATH}:${HOME}/gcloud/google-cloud-sdk/bin
 
-cd github/getting-started-python
+cd "${PROJECT_ROOT:-github/getting-started-python}"
+
 
 # Unencrypt and extract secrets
 SECRETS_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/secrets-password.txt")
@@ -26,6 +27,13 @@ SECRETS_PASSWORD=$(cat "${KOKORO_GFILE_DIR}/secrets-password.txt")
 
 # Setup environment variables
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service-account.json"
+
+# This block is executed only with Trampoline V2.
+if [[ -n "${TRAMPOLINE_VERSION:-}" ]]; then
+    # Install nox as a user and add it to the PATH.
+    python3 -m pip install --user nox
+    export PATH="${PATH}:${HOME}/.local/bin"
+fi
 
 # Run tests
 nox -s lint
