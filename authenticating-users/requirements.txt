@@ -1,6 +1,6 @@
 # [START getting_started_requirements]
-Flask==1.1.1
-cryptography==2.8
-python-jose[cryptography]==3.0.1
+Flask==1.1.2
+cryptography==2.9.2
+python-jose[cryptography]==3.1.0
 requests==2.22.0
 # [END getting_started_requirements]

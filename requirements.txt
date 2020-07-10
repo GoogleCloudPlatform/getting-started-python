@@ -1,4 +1,4 @@
-flake8==3.7.9
+flake8==3.8.3
 nox==2019.11.9
-pytest==3.10.1
+pytest==5.4.3
 requests==2.22.0
