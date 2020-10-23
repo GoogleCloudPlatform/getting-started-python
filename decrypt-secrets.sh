@@ -14,7 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-password=$1
+set -euo pipefail
 
-openssl aes-256-cbc -k "$password" -in secrets.tar.enc -out secrets.tar -d
-tar xvf secrets.tar
+# Always cd to the project root.
+readonly root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd ${root}
+
+# Use SECRET_MANAGER_PROJECT if set, fallback to cloud-devrel-kokoro-resources.
+readonly project_id="${SECRET_MANAGER_PROJECT:-cloud-devrel-kokoro-resources}"
+
+# If there's already a secret file, skip retrieving the secret.
+if [[ -f "service-account.json" ]]; then
+    echo "The secret already exists, skipping."
+    exit 0
+fi
+
+gcloud secrets versions access latest \
+       --secret="getting-started-python-service-account" \
+       --project="${project_id}" \
+       > service-account.json
