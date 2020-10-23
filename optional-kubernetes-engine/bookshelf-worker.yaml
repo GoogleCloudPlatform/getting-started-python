@@ -15,7 +15,7 @@
 # This file configures the bookshelf task worker. The worker is responsible
 # for processing book requests and updating book information.
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bookshelf-worker
@@ -27,6 +27,10 @@ metadata:
 #   https://cloud.google.com/kubernetes-engine/docs/pods/
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: bookshelf
+      tier: worker
   template:
     metadata:
       labels:

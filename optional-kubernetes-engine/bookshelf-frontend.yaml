@@ -15,7 +15,7 @@
 # This file configures the bookshelf application frontend. The frontend serves
 # public web traffic.
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bookshelf-frontend
@@ -27,6 +27,10 @@ metadata:
 #   https://cloud.google.com/kubernetes-engine/docs/pods/
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: bookshelf
+      tier: frontend    
   template:
     metadata:
       labels:
