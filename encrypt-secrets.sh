@@ -14,9 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-read -s -p "Enter password for encryption: " password
-echo
+set -euo pipefail
 
-tar cvf secrets.tar service-account.json
-openssl aes-256-cbc -k "$password" -in secrets.tar -out secrets.tar.enc
-rm secrets.tar
+# Always cd to the project root.
+readonly root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd ${root}
+
+# Use SECRET_MANAGER_PROJECT if set, fallback to cloud-devrel-kokoro-resources.
+readonly project_id="${SECRET_MANAGER_PROJECT:-cloud-devrel-kokoro-resources}"
+
+gcloud secrets versions add "getting-started-python-service-account" \
+       --project="${project_id}" \
+       --data-file="service-account.json"
