@@ -63,6 +63,8 @@ def upload_file(file_stream, filename, content_type):
     blob.upload_from_string(
         file_stream,
         content_type=content_type)
+    # Ensure the file is publicly readable.
+    blob.make_public()
 
     url = blob.public_url
     # [END bookshelf_cloud_storage_client]
