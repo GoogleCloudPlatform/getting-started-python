@@ -1,4 +1,4 @@
 flake8==3.8.4
 nox==2020.8.22
 pytest==6.1.1
-requests==2.24.0
+requests==2.25.0
