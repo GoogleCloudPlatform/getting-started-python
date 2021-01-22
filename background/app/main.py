@@ -79,6 +79,6 @@ def translate():
     topic_name = 'projects/{}/topics/{}'.format(
         os.getenv('GOOGLE_CLOUD_PROJECT'), 'translate'
     )
-    publisher.publish(topic_name, json.dumps(message).encode('utf8'))
+    publisher.publish(request = {'topic': topic_name, 'messages': json.dumps(message).encode('utf8')})
     return redirect('/')
 # [END getting_started_background_app_request]

@@ -65,10 +65,9 @@ def publisher():
 def subscriber():
     subscriber = pubsub.SubscriberClient()
     subscriber.create_subscription(
-        SUBSCRIPTION_NAME, TOPIC_NAME
-    )
+        request = {'name': SUBSCRIPTION_NAME, 'topic': TOPIC_NAME})
     yield subscriber
-    subscriber.delete_subscription(SUBSCRIPTION_NAME)
+    subscriber.delete_subscription(request = {'subscription': SUBSCRIPTION_NAME})
 
 
 def test_index(db, publisher):
@@ -97,7 +96,7 @@ def test_translate(db, publisher, subscriber):
 
     assert r.status_code < 400
 
-    response = subscriber.pull(SUBSCRIPTION_NAME, 1, timeout=10.0)
+    response = subscriber.pull(request = {'subscription': SUBSCRIPTION_NAME, 'max_messages': 1}, timeout=10.0)
     assert len(response.received_messages) == 1
     assert b'This is a test' in response.received_messages[0].message.data
     assert b'fr' in response.received_messages[0].message.data
