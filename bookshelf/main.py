@@ -59,7 +59,7 @@ if not app.testing:
     logging.basicConfig(level=logging.INFO)
     client = google.cloud.logging.Client()
     # Attaches a Google Stackdriver logging handler to the root logger
-    client.setup_logging(logging.INFO)
+    client.setup_logging()
 
 
 @app.route('/')
