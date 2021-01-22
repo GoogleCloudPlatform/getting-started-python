@@ -82,10 +82,7 @@ def translate():
         os.getenv("GOOGLE_CLOUD_PROJECT"), "translate"
     )
     publisher.publish(
-        request={
-            "topic": topic_name,
-            "messages": json.dumps(message).encode("utf8"),
-        }
+        topic=topic_name, data=json.dumps(message).encode("utf8")
     )
     return redirect("/")
 
