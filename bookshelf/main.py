@@ -151,3 +151,10 @@ def server_error(e):
 # the application.
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
+
+# This region tag is solely for testing our internal tooling.
+# Please ignore this portion.
+# [START dummy_region_tag]
+def dummy_func():
+    pass
+# [END dummy_region_tag]
