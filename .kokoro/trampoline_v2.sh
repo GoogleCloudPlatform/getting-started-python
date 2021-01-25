@@ -15,6 +15,12 @@
 
 # trampoline_v2.sh
 #
+# If you want to make a change to this file, consider doing so at:
+# https://github.com/googlecloudplatform/docker-ci-helper
+#
+# This script is for running CI builds. For Kokoro builds, we
+# set this script to `build_file` field in the Kokoro configuration.
+
 # This script does 3 things.
 #
 # 1. Prepare the Docker image for the test
@@ -22,15 +28,6 @@
 # 3. Upload the newly built Docker image
 #
 # in a way that is somewhat compatible with trampoline_v1.
-#
-# To run this script, first download few files from gcs to /dev/shm.
-# (/dev/shm is passed into the container as KOKORO_GFILE_DIR).
-#
-# gsutil cp gs://cloud-devrel-kokoro-resources/python-docs-samples/secrets_viewer_service_account.json /dev/shm
-# gsutil cp gs://cloud-devrel-kokoro-resources/python-docs-samples/automl_secrets.txt /dev/shm
-#
-# Then run the script.
-# .kokoro/trampoline_v2.sh
 #
 # These environment variables are required:
 # TRAMPOLINE_IMAGE: The docker image to use.
@@ -43,16 +40,17 @@
 # TRAMPOLINE_BUILD_FILE: The script to run in the docker container.
 # TRAMPOLINE_WORKSPACE: The workspace path in the docker container.
 #                       Defaults to /workspace.
-# TRAMPOLINE_SKIP_DOWNLOAD_IMAGE: Skip downloading the image when you
-#                                 know you have the image locally.
-#
 # Potentially there are some repo specific envvars in .trampolinerc in
 # the project root.
-
+#
+# Here is an example for running this script.
+#   TRAMPOLINE_IMAGE=gcr.io/cloud-devrel-kokoro-resources/node:10-user \
+#     TRAMPOLINE_BUILD_FILE=.kokoro/system-test.sh \
+#     .kokoro/trampoline_v2.sh
 
 set -euo pipefail
 
-TRAMPOLINE_VERSION="2.0.2"
+TRAMPOLINE_VERSION="2.0.10"
 
 if command -v tput >/dev/null && [[ -n "${TERM:-}" ]]; then
   readonly IO_COLOR_RED="$(tput setaf 1)"
@@ -162,9 +160,10 @@ if [[ -n "${KOKORO_BUILD_ID:-}" ]]; then
 	"KOKORO_GITHUB_COMMIT"
 	"KOKORO_GITHUB_PULL_REQUEST_NUMBER"
 	"KOKORO_GITHUB_PULL_REQUEST_COMMIT"
-	# For Build Cop Bot
+	# For Flaky Bot
 	"KOKORO_GITHUB_COMMIT_URL"
 	"KOKORO_GITHUB_PULL_REQUEST_URL"
+	"KOKORO_BUILD_ARTIFACTS_SUBDIR"
     )
 elif [[ "${TRAVIS:-}" == "true" ]]; then
     RUNNING_IN_CI="true"
@@ -232,21 +231,6 @@ elif [[ "${CIRCLECI:-}" == "true" ]]; then
 fi
 
 # Configure the service account for pulling the docker image.
-if [[ -n "${TRAMPOLINE_SERVICE_ACCOUNT:-}" ]]; then
-
-    mkdir -p "${tmpdir}/gcloud"
-    gcloud_config_dir="${tmpdir}/gcloud"
-
-    log_yellow "Using isolated gcloud config: ${gcloud_config_dir}."
-    export CLOUDSDK_CONFIG="${gcloud_config_dir}"
-
-    log_yellow "Using ${TRAMPOLINE_SERVICE_ACCOUNT} for authentication."
-    gcloud auth activate-service-account \
-	   --key-file "${TRAMPOLINE_SERVICE_ACCOUNT}"
-    log_yellow "Configuring Container Registry access"
-    gcloud auth configure-docker --quiet
-fi
-
 function repo_root() {
     local dir="$1"
     while [[ ! -d "${dir}/.git" ]]; do
@@ -269,6 +253,23 @@ fi
 log_yellow "Changing to the project root: ${PROJECT_ROOT}."
 cd "${PROJECT_ROOT}"
 
+# To support relative path for `TRAMPOLINE_SERVICE_ACCOUNT`, we need
+# to use this environment variable in `PROJECT_ROOT`.
+if [[ -n "${TRAMPOLINE_SERVICE_ACCOUNT:-}" ]]; then
+
+    mkdir -p "${tmpdir}/gcloud"
+    gcloud_config_dir="${tmpdir}/gcloud"
+
+    log_yellow "Using isolated gcloud config: ${gcloud_config_dir}."
+    export CLOUDSDK_CONFIG="${gcloud_config_dir}"
+
+    log_yellow "Using ${TRAMPOLINE_SERVICE_ACCOUNT} for authentication."
+    gcloud auth activate-service-account \
+	   --key-file "${TRAMPOLINE_SERVICE_ACCOUNT}"
+    log_yellow "Configuring Container Registry access"
+    gcloud auth configure-docker --quiet
+fi
+
 required_envvars=(
     # The basic trampoline configurations.
     "TRAMPOLINE_IMAGE"
@@ -288,23 +289,35 @@ do
     fi
 done
 
-if [[ "${TRAMPOLINE_SKIP_DOWNLOAD_IMAGE:-false}" == "true" ]]; then
-    log_yellow "Re-using the local Docker image."
-    has_cache="true"
-else
-    log_yellow "Preparing Docker image."
+# We want to support legacy style TRAMPOLINE_BUILD_FILE used with V1
+# script: e.g. "github/repo-name/.kokoro/run_tests.sh"
+TRAMPOLINE_BUILD_FILE="${TRAMPOLINE_BUILD_FILE#github/*/}"
+log_yellow "Using TRAMPOLINE_BUILD_FILE: ${TRAMPOLINE_BUILD_FILE}"
+
+# ignore error on docker operations and test execution
+set +e
+
+log_yellow "Preparing Docker image."
+# We only download the docker image in CI builds.
+if [[ "${RUNNING_IN_CI:-}" == "true" ]]; then
     # Download the docker image specified by `TRAMPOLINE_IMAGE`
 
-    set +e  # ignore error on docker operations
     # We may want to add --max-concurrent-downloads flag.
 
     log_yellow "Start pulling the Docker image: ${TRAMPOLINE_IMAGE}."
     if docker pull "${TRAMPOLINE_IMAGE}"; then
 	log_green "Finished pulling the Docker image: ${TRAMPOLINE_IMAGE}."
-	has_cache="true"
+	has_image="true"
     else
 	log_red "Failed pulling the Docker image: ${TRAMPOLINE_IMAGE}."
-	has_cache="false"
+	has_image="false"
+    fi
+else
+    # For local run, check if we have the image.
+    if docker images "${TRAMPOLINE_IMAGE}" | grep "${TRAMPOLINE_IMAGE%:*}"; then
+	has_image="true"
+    else
+	has_image="false"
     fi
 fi
 
@@ -330,12 +343,12 @@ if [[ "${TRAMPOLINE_DOCKERFILE:-none}" != "none" ]]; then
 	"--build-arg" "UID=${user_uid}"
 	"--build-arg" "USERNAME=${user_name}"
     )
-    if [[ "${has_cache}" == "true" ]]; then
+    if [[ "${has_image}" == "true" ]]; then
 	docker_build_flags+=("--cache-from" "${TRAMPOLINE_IMAGE}")
     fi
 
     log_yellow "Start building the docker image."
-    if [[ "${TRAMPOLINE_SHOW_COMMAND:-false}" == "true" ]]; then
+    if [[ "${TRAMPOLINE_VERBOSE:-false}" == "true" ]]; then
 	echo "docker build" "${docker_build_flags[@]}" "${context_dir}"
     fi
 
@@ -366,8 +379,8 @@ if [[ "${TRAMPOLINE_DOCKERFILE:-none}" != "none" ]]; then
 	fi
     fi
 else
-    if [[ "${has_cache}" != "true" ]]; then
-	log_red "failed to download the image ${TRAMPOLINE_IMAGE}, aborting."
+    if [[ "${has_image}" != "true" ]]; then
+	log_red "We do not have ${TRAMPOLINE_IMAGE} locally, aborting."
 	exit 1
     fi
 fi

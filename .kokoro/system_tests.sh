@@ -39,9 +39,9 @@ fi
 nox -s lint
 nox -s run_tests
 
-# If this is a nightly build, send the test log to the Build Cop Bot.
-# See https://github.com/googleapis/repo-automation-bots/tree/master/packages/buildcop.
+# If this is a nightly build, send the test log to the Flaky Bot.
+# See https://github.com/googleapis/repo-automation-bots/tree/HEAD/packages/flakybot.
 if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system_tests"* ]]; then
-    chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
-    $KOKORO_GFILE_DIR/linux_amd64/buildcop
+    chmod +x $KOKORO_GFILE_DIR/linux_amd64/flakybot
+    $KOKORO_GFILE_DIR/linux_amd64/flakybot
 fi
