@@ -1,4 +1,4 @@
 flake8==3.9.0
 nox==2020.12.31
-pytest==6.2.2
+pytest==6.2.3
 requests==2.25.1
