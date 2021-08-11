@@ -12,7 +12,7 @@ pip-delete-this-directory.txt
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
 *.log
 .git
 .mypy_cache
