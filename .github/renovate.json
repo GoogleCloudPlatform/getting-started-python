@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "config:base",
+    ":preserveSemverRanges",
+    ":disableDependencyDashboard"
+  ],
+  "ignorePaths": [
+    "optional-kubernetes-engine"
+  ]
+}
