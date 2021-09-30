@@ -1,6 +1,6 @@
 # [START getting_started_requirements]
 Flask==2.0.1
-cryptography==3.4.8
+cryptography==35.0.0
 python-jose[cryptography]==3.3.0
 requests==2.26.0
 # [END getting_started_requirements]
