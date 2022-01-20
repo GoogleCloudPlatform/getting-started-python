@@ -29,6 +29,8 @@ if [[ -f "service-account.json" ]]; then
     exit 0
 fi
 
+gcloud config list account --format "value(core.account)"
+
 gcloud secrets versions access latest \
        --secret="getting-started-python-service-account" \
        --project="${project_id}" \
