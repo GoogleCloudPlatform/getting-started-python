@@ -55,7 +55,7 @@ def run_test(session, dir):
         success_codes=[0, 5])
 
 
-@nox.session
+@nox.session(python="3.7")
 @nox.parametrize('dir', DIRS)
 def run_tests(session, dir=None):
     """Run all tests for all directories (slow!)"""
