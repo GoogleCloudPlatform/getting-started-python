@@ -26,7 +26,7 @@ credentials, project_id = google.auth.default()
 os.environ['GOOGLE_CLOUD_PROJECT'] = project_id
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def app(request):
     """This fixture provides a Flask app instance configured for testing.
 
@@ -38,7 +38,7 @@ def app(request):
         yield app
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def firestore():
 
     import firestore

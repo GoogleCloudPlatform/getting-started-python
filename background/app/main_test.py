@@ -30,7 +30,7 @@ SUBSCRIPTION_NAME = "projects/{}/subscriptions/{}".format(
 TOPIC_NAME = "projects/{}/topics/{}".format(project_id, "translate")
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def db():
     def clear_collection(collection):
         """Removes every document from the collection, to make it easy to see
@@ -54,13 +54,13 @@ def db():
     yield client
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def publisher():
     client = pubsub.PublisherClient()
     yield client
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def subscriber():
     subscriber = pubsub.SubscriberClient()
     subscriber.create_subscription(

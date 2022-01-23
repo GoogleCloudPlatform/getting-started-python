@@ -22,7 +22,7 @@ import pytest
 from retrying import retry
 
 
-@pytest.yield_fixture(params=['datastore', 'mongodb'])
+@pytest.fixture(params=['datastore', 'mongodb'])
 def app(request):
     """This fixtures provides a Flask app instance configured for testing.
 
@@ -43,7 +43,7 @@ def app(request):
         yield app
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def model(monkeypatch, app):
     """This fixture provides a modified version of the app's model that tracks
     all created items and deletes them at the end of the test.
