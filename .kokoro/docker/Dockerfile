@@ -35,11 +35,25 @@ RUN apt update \
     zlib1g-dev \
  && apt clean
 
+###################### Install python 3.7.12
+
+# Download python 3.7.12
+RUN wget https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz
+
+# Extract files
+RUN tar -xvf Python-3.7.12.tgz
+
+# Install python 3.7.12
+RUN ./Python-3.7.12/configure --enable-optimizations
+RUN make altinstall
+
+###################### Check python version
+
 RUN python --version
 RUN which python
 
 # Setup Cloud SDK
-ENV CLOUD_SDK_VERSION 324.0.0
+ENV CLOUD_SDK_VERSION 369.0.0
 # Use system python for cloud sdk.
 ENV CLOUDSDK_PYTHON /usr/bin/python
 RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$CLOUD_SDK_VERSION-linux-x86_64.tar.gz
@@ -51,6 +65,6 @@ ENV PATH /google-cloud-sdk/bin:$PATH
 ENV PATH ~/.local/bin:/root/.local/bin:$PATH
 
 # Install the current version of nox.
-RUN python3 -m pip install --user --no-cache-dir nox==2020.12.31
+RUN python3 -m pip install --user --no-cache-dir nox==2022.1.7
 
 CMD ["nox"]
