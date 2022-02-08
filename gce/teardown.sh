@@ -16,8 +16,8 @@
 
 set -x
 
-MY_INSTANCE_NAME="my-instance-name"
-ZONE=us-central1-f
+MY_INSTANCE_NAME="my-app-instance"
+ZONE=us-central1-a
 
 gcloud compute instances delete $MY_INSTANCE_NAME \
     --zone=$ZONE --delete-disks=all
