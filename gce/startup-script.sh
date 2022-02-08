@@ -22,7 +22,7 @@ sudo bash install-logging-agent.sh
 
 # Install or update needed software
 apt-get update
-apt-get install -yq git supervisor python python-pip
+apt-get install -yq git supervisor python python-pip python3-distutils
 pip install --upgrade pip virtualenv
 
 # Account to own server process
@@ -34,7 +34,7 @@ git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
-source /opt/app/gce/env/bin/activate
+/bin/bash -c "source /opt/app/gce/env/bin/activate"
 /opt/app/gce/env/bin/pip install -r /opt/app/gce/requirements.txt
 
 # Set ownership to newly created account
