@@ -25,8 +25,6 @@ jobs:
   build:
     name: Download latest add-logging-agent-repo.sh script.
     runs-on: ubuntu-latest
-    # don't run the workflow on forks
-    if: ${{github.repository == 'googlecloudplatform/getting-started-python'}}
     steps:
       - name: Download script. 
         id: update-add-logging-agent-repo
