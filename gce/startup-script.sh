@@ -16,9 +16,12 @@
 set -v
 
 # [START getting_started_gce_startup_script]
-# Install Stackdriver logging agent
-curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
-sudo bash install-logging-agent.sh
+# Fetch source code
+export HOME=/root
+git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
+
+# Install Cloud Logging agent
+sudo bash /opt/app/gce/add-logging-agent-repo.sh --also-install
 
 # Install or update needed software
 apt-get update
@@ -27,10 +30,6 @@ pip install --upgrade pip virtualenv
 
 # Account to own server process
 useradd -m -d /home/pythonapp pythonapp
-
-# Fetch source code
-export HOME=/root
-git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
