@@ -15,11 +15,11 @@
 name: A workflow for updating the add-logging-agent-repo.sh script.
 # Controls when the action will run.
 
-on:
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    # Run this Github Action every Tuesday at 7 AM UTC
-    - cron:  '0 7 * * 2'
+on: workflow_dispatch
+  # schedule:
+  #   # * is a special character in YAML so you have to quote this string
+  #   # Run this Github Action every Tuesday at 7 AM UTC
+  #   - cron:  '0 7 * * 2'
 
 jobs:
   build:
