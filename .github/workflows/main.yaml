@@ -28,5 +28,4 @@ jobs:
     steps:
       - name: Download script. 
         id: update-add-logging-agent-repo
-        run: curl -sSO https://dl.google.com/cloudagents/add-logging-agent-repo.sh
-        working-directory: ./gce
+        run: curl -o gce/add-logging-agent-repo.sh -sSO https://dl.google.com/cloudagents/add-logging-agent-repo.sh
