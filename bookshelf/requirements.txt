@@ -1,4 +1,4 @@
-Flask==2.0.3
+Flask==2.1.0
 google-cloud-firestore==2.4.0
 google-cloud-storage==2.2.1
 google-cloud-logging==3.0.0
