@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Echo commands
-set -v
+# Echo commands and fail on error
+set -ev
 
 # [START getting_started_gce_startup_script]
-# Fetch source code
-export HOME=/root
-git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
-
-# Install Cloud Logging agent
-sudo bash /opt/app/gce/add-logging-agent-repo.sh --also-install
-
 # Install or update needed software
 apt-get update
 apt-get install -yq git supervisor python python-pip python3-distutils
 pip install --upgrade pip virtualenv
+
+# Fetch source code
+export HOME=/root
+git clone https://github.com/busunkim96/getting-started-python.git /opt/app
+
+# Install Cloud Logging agent
+sudo bash /opt/app/gce/add-logging-agent-repo.sh --also-install
 
 # Account to own server process
 useradd -m -d /home/pythonapp pythonapp
