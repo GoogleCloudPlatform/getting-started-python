@@ -13,6 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# *NOTE*: The source of truth for this script is:
+# https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+# See https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/installation
+# for installation instructions.
+# It is committed to this repository to follow security best practices.
+#
+#
 # Add repository for the Google ops agent.
 #
 # This script adds the required apt or yum repository and installs or uninstalls
