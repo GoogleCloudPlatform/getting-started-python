@@ -25,8 +25,8 @@ pip install --upgrade pip virtualenv
 export HOME=/root
 git clone https://github.com/busunkim96/getting-started-python.git /opt/app
 
-# Install Cloud Logging agent
-sudo bash /opt/app/gce/add-logging-agent-repo.sh --also-install
+# Install Cloud Ops Agent
+sudo bash /opt/app/gce/add-google-cloud-ops-agent-repo.sh --also-install
 
 # Account to own server process
 useradd -m -d /home/pythonapp pythonapp
