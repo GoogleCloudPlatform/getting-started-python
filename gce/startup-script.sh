@@ -12,25 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Echo commands
-set -v
+# Echo commands and fail on error
+set -ev
 
 # [START getting_started_gce_startup_script]
-# Install Stackdriver logging agent
-curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
-sudo bash install-logging-agent.sh
-
 # Install or update needed software
 apt-get update
 apt-get install -yq git supervisor python python-pip python3-distutils
 pip install --upgrade pip virtualenv
 
-# Account to own server process
-useradd -m -d /home/pythonapp pythonapp
-
 # Fetch source code
 export HOME=/root
 git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
+
+# Install Cloud Ops Agent
+sudo bash /opt/app/gce/add-google-cloud-ops-agent-repo.sh --also-install
+
+# Account to own server process
+useradd -m -d /home/pythonapp pythonapp
 
 # Python environment setup
 virtualenv -p python3 /opt/app/gce/env
