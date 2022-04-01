@@ -23,7 +23,7 @@ pip install --upgrade pip virtualenv
 
 # Fetch source code
 export HOME=/root
-git clone https://github.com/busunkim96/getting-started-python.git /opt/app
+git clone https://github.com/GoogleCloudPlatform/getting-started-python.git /opt/app
 
 # Install Cloud Ops Agent
 sudo bash /opt/app/gce/add-google-cloud-ops-agent-repo.sh --also-install
