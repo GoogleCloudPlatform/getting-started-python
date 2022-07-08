@@ -1,2 +1,2 @@
-google-cloud-firestore==2.5.2
+google-cloud-firestore==2.5.3
 flask==2.1.2
