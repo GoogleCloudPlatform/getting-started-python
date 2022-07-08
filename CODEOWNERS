@@ -7,4 +7,4 @@
 
 # The python-samples-owners team is the default owner for anything not
 # explicitly taken by someone else.
-*                               @GoogleCloudPlatform/python-samples-owners
+*                               @GoogleCloudPlatform/python-samples-reviewers
