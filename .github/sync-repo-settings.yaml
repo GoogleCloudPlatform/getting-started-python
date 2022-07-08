@@ -36,5 +36,5 @@ permissionRules:
   - team: yoshi-admins
     # Access level required, one of push|pull|admin
     permission: admin
-  - team: python-samples-owners
+  - team: python-samples-reviewers
     permission: admin
