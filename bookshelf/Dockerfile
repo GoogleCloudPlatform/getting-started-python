@@ -11,4 +11,4 @@ COPY . ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the web service on container startup.
-ENTRYPOINT [ "python3", "main.py" ]
+ENTRYPOINT [ "gunicorn", "--bind", "0.0.0.0:8080", "main:app" ]
