@@ -46,7 +46,7 @@ def firestore():
     Any tests that directly or indirectly interact with the database should
     use this to ensure that resources are properly cleaned up.
     """
-    
+
     import firestore
 
     # Ensure no books exist before running the tests. This typically helps if
