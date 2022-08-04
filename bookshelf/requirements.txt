@@ -1,5 +1,5 @@
 Flask==2.1.2
-google-cloud-firestore==2.5.3
+google-cloud-firestore==2.6.0
 google-cloud-storage==2.5.0
 google-cloud-error-reporting==1.5.3
 google-cloud-logging==3.2.0
