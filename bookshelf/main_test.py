@@ -42,11 +42,11 @@ def app(request):
 def firestore():
 
     import firestore
-    """This fixture provides a modified version of the app's Firebase model that
-    tracks all created items and deletes them at the end of the test.
+    """This fixture provides a modified version of the app's Firebase model
+    that tracks all created items and deletes them at the end of the test.
 
-    Any tests that directly or indirectly interact with the database should use
-    this to ensure that resources are properly cleaned up.
+    Any tests that directly or indirectly interact with the database should
+    use this to ensure that resources are properly cleaned up.
     """
 
     # Ensure no books exist before running the tests. This typically helps if
