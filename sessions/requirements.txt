@@ -1,2 +1,2 @@
 google-cloud-firestore==2.6.0
-flask==2.2.1
+flask==2.2.2
