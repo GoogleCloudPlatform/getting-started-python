@@ -1,2 +1,2 @@
 google-cloud-translate==3.8.0
-google-cloud-firestore==2.6.0
+google-cloud-firestore==2.6.1
