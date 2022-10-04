@@ -1,7 +1,7 @@
 Flask==2.2.2
 google-cloud-firestore==2.7.0
 google-cloud-storage==2.5.0
-google-cloud-error-reporting==1.6.1
+google-cloud-error-reporting==1.6.2
 google-cloud-logging==3.2.4
 gunicorn==20.1.0
 six==1.16.0
