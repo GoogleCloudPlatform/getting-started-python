@@ -1,3 +1,3 @@
-google-cloud-firestore==2.7.1
-google-cloud-pubsub==2.13.7
+google-cloud-firestore==2.7.2
+google-cloud-pubsub==2.13.11
 flask==2.2.2
