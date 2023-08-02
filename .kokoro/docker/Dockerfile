@@ -31,7 +31,7 @@ RUN apt update \
     libxslt1-dev \
     openssl \
     portaudio19-dev \
-    python-pyaudio \
+    python3-pyaudio \
     zlib1g-dev \
  && apt clean
 
