@@ -32,6 +32,7 @@ RUN apt update \
     openssl \
     portaudio19-dev \
     zlib1g-dev \
+    build-essential \
  && apt clean
 
 ###################### Install python 3.12.2
