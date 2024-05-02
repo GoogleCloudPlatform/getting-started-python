@@ -22,7 +22,7 @@ def fake_validate(assertion):
         return None, None
 
 
-main.validate_assertion = fake_validate
+main.validate_iap_jwt = fake_validate
 
 
 def test_home_page():
