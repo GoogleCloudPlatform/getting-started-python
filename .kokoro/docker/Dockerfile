@@ -15,8 +15,8 @@
 FROM gcr.io/cloud-devrel-kokoro-resources/python-base:latest
 
 # Install libraries needed by third-party python packages that we depend on.
-RUN apt update \
-  && apt install -y \
+RUN apt-get update \
+  && apt-get install -y \
     graphviz \
     libcurl4-openssl-dev \
     libffi-dev \
@@ -31,7 +31,7 @@ RUN apt update \
     libxslt1-dev \
     openssl \
     zlib1g-dev \
- && apt clean
+ && apt-get clean
 
 
 ###################### Check python version
