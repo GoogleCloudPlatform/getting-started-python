@@ -15,8 +15,8 @@
 FROM gcr.io/cloud-devrel-kokoro-resources/python-base:latest
 
 # Install libraries needed by third-party python packages that we depend on.
-RUN apt update \
-  && apt install -y \
+RUN apt-get update \
+  && apt-get install -y \
     graphviz \
     libcurl4-openssl-dev \
     libffi-dev \
@@ -30,32 +30,19 @@ RUN apt update \
     libxml2-dev \
     libxslt1-dev \
     openssl \
-    portaudio19-dev \
-    python-pyaudio \
     zlib1g-dev \
- && apt clean
+ && apt-get clean
 
-###################### Install python 3.7.12
-
-# Download python 3.7.12
-RUN wget https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz
-
-# Extract files
-RUN tar -xvf Python-3.7.12.tgz
-
-# Install python 3.7.12
-RUN ./Python-3.7.12/configure --enable-optimizations
-RUN make altinstall
 
 ###################### Check python version
 
-RUN python --version
-RUN which python
+RUN python3 --version
+RUN which python3
 
 # Setup Cloud SDK
-ENV CLOUD_SDK_VERSION 369.0.0
+ENV CLOUD_SDK_VERSION 489.0.0
 # Use system python for cloud sdk.
-ENV CLOUDSDK_PYTHON /usr/bin/python
+ENV CLOUDSDK_PYTHON python3.12
 RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$CLOUD_SDK_VERSION-linux-x86_64.tar.gz
 RUN tar xzf google-cloud-sdk-$CLOUD_SDK_VERSION-linux-x86_64.tar.gz
 RUN /google-cloud-sdk/install.sh
