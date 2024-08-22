@@ -50,8 +50,8 @@ ENV PATH /usr/local/bin/python3.10:$PATH
 
 ###################### Check python version
 
-RUN python --version
-RUN which python
+RUN python3 --version
+RUN which python3
 
 # Setup Cloud SDK
 ENV CLOUD_SDK_VERSION 420.0.0
