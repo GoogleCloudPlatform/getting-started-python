@@ -57,8 +57,7 @@ def audience():
     return AUDIENCE
 # [END getting_started_auth_audience]
 
-
-# [START iap_validate_jwt]
+# [START getting_started_auth_validate_assertion]
 def validate_iap_jwt(iap_jwt) -> tuple[str, str]:
     """Checks that the JWT assertion is valid (properly signed, for the
     correct audience) and if so, returns strings for the requesting user's
@@ -80,7 +79,7 @@ def validate_iap_jwt(iap_jwt) -> tuple[str, str]:
     except Exception as e:
         print('Failed to validate assertion: {}'.format(e), file=sys.stderr)
         return None, None
-# [END iap_validate_jwt]
+# [END getting_started_auth_validate_assertion]
 
 
 # [START getting_started_auth_front_controller]
