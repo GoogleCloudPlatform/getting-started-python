@@ -57,13 +57,13 @@ def audience():
     return AUDIENCE
 # [END getting_started_auth_audience]
 
+
 # [START getting_started_auth_validate_assertion]
 def validate_iap_jwt(iap_jwt) -> tuple[str, str]:
     """Checks that the JWT assertion is valid (properly signed, for the
     correct audience) and if so, returns strings for the requesting user's
     email and a persistent user ID. If not valid, returns None for each field.
 
-    Source: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/iap/validate_jwt.py
     """
     from google.auth.transport import requests as google_auth_requests
     from google.oauth2 import id_token
