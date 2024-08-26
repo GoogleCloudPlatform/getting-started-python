@@ -20,9 +20,8 @@
 import json
 import os
 
-from flask import Flask, redirect, render_template, request, escape
-from google.cloud import firestore
-from google.cloud import pubsub
+from flask import escape, Flask, redirect, render_template, request
+from google.cloud import firestore, pubsub
 
 
 app = Flask(__name__)
