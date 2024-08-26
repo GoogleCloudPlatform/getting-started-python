@@ -64,7 +64,7 @@ def translate():
     to_language = request.form.get("lang", "")
 
     if source_string == "":
-        return f"Invalid request, you must provide a value.", 400
+        return "Invalid request, you must provide a value.", 400
 
     if to_language not in ACCEPTABLE_LANGUAGES:
         return f"Unsupported language: {to_language}", 400
@@ -76,7 +76,9 @@ def translate():
         "OriginalLanguage": "",
     }
 
-    topic_name = f"projects/{os.getenv('GOOGLE_CLOUD_PROJECT')}/topics/translate"
+    topic_name = (
+        f"projects/{os.getenv('GOOGLE_CLOUD_PROJECT')}/topics/translate"
+    )
     publisher.publish(
         topic=topic_name, data=json.dumps(message).encode("utf-8")
     )
