@@ -37,7 +37,6 @@ def db():
         """
         for doc in collection.stream():
             doc.reference.delete()
-    
 
     bucket_name = 'system-test-bucket'
     client = firestore.Client()
@@ -54,6 +53,7 @@ def db():
         },
         document_id="test translation",
     )
+    assert bucket in locals()
     yield client
 
 
