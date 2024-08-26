@@ -37,8 +37,9 @@ def db():
         """
         for doc in collection.stream():
             doc.reference.delete()
-        bucket_name = 'system-test-bucket'
+    
 
+    bucket_name = 'system-test-bucket'
     client = firestore.Client()
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
