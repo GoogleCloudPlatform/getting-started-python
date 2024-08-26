@@ -20,7 +20,7 @@
 import json
 import os
 
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, escape
 from google.cloud import firestore
 from google.cloud import pubsub
 
@@ -61,7 +61,7 @@ def translate():
     language (form field 'lang'), by sending a PubSub message to a topic.
     """
     source_string = request.form.get("v", "")
-    to_language = request.form.get("lang", "")
+    to_language = escape(request.form.get("lang", ""))
 
     if source_string == "":
         return "Invalid request, you must provide a value.", 400
