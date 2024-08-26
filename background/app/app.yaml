@@ -13,5 +13,5 @@
 # limitations under the License.
 
 # [START getting_started_background_config]
-runtime: python37
+runtime: python312
 # [END getting_started_background_config]
