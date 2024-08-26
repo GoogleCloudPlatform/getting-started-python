@@ -17,11 +17,12 @@
 """
 
 # [START getting_started_background_app_main]
-import json
-import os
 
 from flask import Flask, redirect, render_template, request
+import json
+import os
 from markupsafe import escape
+
 from google.cloud import firestore, pubsub
 
 
