@@ -214,7 +214,7 @@ handle_debian() {
       echo "Adding agent repository for ${ID}."
       ${DRY_RUN} tee <<<"${REPO_DATA}" /etc/apt/sources.list.d/google-cloud-ops-agent.list
       ${DRY_RUN} curl --connect-timeout 5 -s -f "https://${REPO_HOST}/apt/doc/apt-key.gpg" \
-        | ${DRY_RUN} gpg --dearmor -o "${kr_path}"
+        | ${DRY_RUN} gpg --no-default-keyring --keyring "${kr_path}"
       CHANGED=1
     fi
   }
