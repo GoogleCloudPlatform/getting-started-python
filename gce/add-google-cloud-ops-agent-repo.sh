@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2020 Google Inc. All rights reserved.
+# Copyright 2020,2024 Google, LLC and contributors ; All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -207,13 +207,14 @@ handle_debian() {
       ${DRY_RUN} apt-get update; ${DRY_RUN} apt-get -y install ca-certificates; CHANGED=1;
     }
     local CODENAME="${REPO_CODENAME:-"$(lsb_release -sc)"}"
+    local kr_path="/usr/share/keyrings/google-cloud-ops-agent.gpg"
     local REPO_NAME="google-cloud-ops-agent-${CODENAME}-${REPO_SUFFIX:-all}"
-    local REPO_DATA="deb https://${REPO_HOST}/apt ${REPO_NAME} main"
+    local REPO_DATA="deb [signed-by=${kr_path}] https://${REPO_HOST}/apt ${REPO_NAME} main"
     if ! cmp -s <<<"${REPO_DATA}" - /etc/apt/sources.list.d/google-cloud-ops-agent.list; then
       echo "Adding agent repository for ${ID}."
       ${DRY_RUN} tee <<<"${REPO_DATA}" /etc/apt/sources.list.d/google-cloud-ops-agent.list
       ${DRY_RUN} curl --connect-timeout 5 -s -f "https://${REPO_HOST}/apt/doc/apt-key.gpg" \
-        | ${DRY_RUN} apt-key add -
+        | ${DRY_RUN} gpg --dearmor -o "${kr_path}"
       CHANGED=1
     fi
   }
