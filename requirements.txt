@@ -1,5 +1,5 @@
 flake8===5.0.4; python_version < '3.8'
-flake8==6.0.0; python_version >= '3.8'
-pytest==7.3.1
-nox==2023.4.22
+flake8==7.3.0; python_version >= '3.8'
+pytest==9.0.2
+nox==2025.11.12
 requests==2.31.0
