@@ -16,8 +16,7 @@ import os
 import uuid
 
 import google.auth
-from google.cloud import firestore
-from google.cloud import pubsub
+from google.cloud import firestore, pubsub, storage
 import main
 import pytest
 
@@ -39,7 +38,10 @@ def db():
         for doc in collection.stream():
             doc.reference.delete()
 
+    bucket_name = 'system-test-bucket'
     client = firestore.Client()
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
     translations = client.collection("translations")
     clear_collection(translations)
     translations.add(
@@ -51,6 +53,7 @@ def db():
         },
         document_id="test translation",
     )
+    assert bucket in locals()
     yield client
 
 

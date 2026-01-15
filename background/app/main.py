@@ -21,8 +21,8 @@ import json
 import os
 
 from flask import Flask, redirect, render_template, request
-from google.cloud import firestore
-from google.cloud import pubsub
+from google.cloud import firestore, pubsub
+from markupsafe import escape
 
 
 app = Flask(__name__)
@@ -61,15 +61,13 @@ def translate():
     language (form field 'lang'), by sending a PubSub message to a topic.
     """
     source_string = request.form.get("v", "")
-    to_language = request.form.get("lang", "")
+    to_language = escape(request.form.get("lang", ""))
 
     if source_string == "":
-        error_message = "Empty value"
-        return error_message, 400
+        return "Invalid request, you must provide a value.", 400
 
     if to_language not in ACCEPTABLE_LANGUAGES:
-        error_message = "Unsupported language: {}".format(to_language)
-        return error_message, 400
+        return f"Unsupported language: {to_language}", 400
 
     message = {
         "Original": source_string,
@@ -78,11 +76,11 @@ def translate():
         "OriginalLanguage": "",
     }
 
-    topic_name = "projects/{}/topics/{}".format(
-        os.getenv("GOOGLE_CLOUD_PROJECT"), "translate"
+    topic_name = (
+        f"projects/{os.getenv('GOOGLE_CLOUD_PROJECT')}/topics/translate"
     )
     publisher.publish(
-        topic=topic_name, data=json.dumps(message).encode("utf8")
+        topic=topic_name, data=json.dumps(message).encode("utf-8")
     )
     return redirect("/")
 
