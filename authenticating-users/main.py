@@ -18,26 +18,7 @@ import sys
 from flask import Flask
 app = Flask(__name__)
 
-CERTS = None
 AUDIENCE = None
-
-
-# [START getting_started_auth_certs]
-def certs():
-    """Returns a dictionary of current Google public key certificates for
-    validating Google-signed JWTs. Since these change rarely, the result
-    is cached on first request for faster subsequent responses.
-    """
-    import requests
-
-    global CERTS
-    if CERTS is None:
-        response = requests.get(
-            'https://www.gstatic.com/iap/verify/public_key'
-        )
-        CERTS = response.json()
-    return CERTS
-# [END getting_started_auth_certs]
 
 
 # [START getting_started_auth_metadata]
@@ -78,21 +59,23 @@ def audience():
 
 
 # [START getting_started_auth_validate_assertion]
-def validate_assertion(assertion):
+def validate_iap_jwt(iap_jwt) -> tuple[str, str]:
     """Checks that the JWT assertion is valid (properly signed, for the
     correct audience) and if so, returns strings for the requesting user's
     email and a persistent user ID. If not valid, returns None for each field.
+
     """
-    from jose import jwt
+    from google.auth.transport import requests as google_auth_requests
+    from google.oauth2 import id_token
 
     try:
-        info = jwt.decode(
-            assertion,
-            certs(),
-            algorithms=['ES256'],
-            audience=audience()
-            )
-        return info['email'], info['sub']
+        decoded_jwt = id_token.verify_token(
+            iap_jwt,
+            google_auth_requests.Request(),
+            audience=audience(),
+            certs_url="https://www.gstatic.com/iap/verify/public_key",
+        )
+        return decoded_jwt["email"], decoded_jwt["sub"]
     except Exception as e:
         print('Failed to validate assertion: {}'.format(e), file=sys.stderr)
         return None, None
@@ -105,7 +88,7 @@ def say_hello():
     from flask import request
 
     assertion = request.headers.get('X-Goog-IAP-JWT-Assertion')
-    email, id = validate_assertion(assertion)
+    email, id = validate_iap_jwt(assertion)
     page = "<h1>Hello {}</h1>".format(email)
     return page
 # [END getting_started_auth_front_controller]
