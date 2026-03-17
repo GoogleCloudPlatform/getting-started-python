@@ -1,2 +1,3 @@
 google-cloud-firestore==2.11.1
 flask==2.2.5
+Werkzeug<3.0.0
