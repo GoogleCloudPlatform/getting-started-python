@@ -5,3 +5,4 @@ google-cloud-error-reporting==1.9.1
 google-cloud-logging==3.5.0
 gunicorn==20.1.0
 six==1.16.0
+Werkzeug<3.0.0
